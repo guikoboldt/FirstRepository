@@ -30,7 +30,7 @@ namespace teste
                 Console.WriteLine(line);
             }
 
-            //var statements = GetLines(path).ToArray();
+            var statements = getLines(path).ToArray();
             ////string b = "Hey you!";
             //List<string> test = new List<string>(from a in statements  select a); //from - variable - location - where - select
             //foreach (var text in test)
