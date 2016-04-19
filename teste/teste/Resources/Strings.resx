@@ -130,10 +130,6 @@
   <data name="UserName" xml:space="preserve">
     <value>User Name</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="MyPhoto" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Image1.bmp;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Bettor" xml:space="preserve">
     <value>Bettor</value>
   </data>
@@ -145,5 +141,12 @@
   </data>
   <data name="DidNotBet" xml:space="preserve">
     <value>did not bet!</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="dog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\dog.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flag" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\flag.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

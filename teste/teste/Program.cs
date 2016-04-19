@@ -1,9 +1,11 @@
-﻿using System;
+﻿using ADayOfBets.Resources;
+using ADayOfBets.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using teste.Resources;
+using System.Windows;
 
 namespace teste
 {
@@ -22,11 +24,16 @@ namespace teste
         //    }
         //}
 
-        static void Main(string[] args)
-        {
-            Strings.Culture = new System.Globalization.CultureInfo("pt-BR"); //define culture language
-            Console.WriteLine(Strings.UserName); //calls the UserName key on Strings file on Resources Folder
-            Console.ReadLine();
+        static void Main(string[] args) { 
+
+
+
+
+            MainWindow test;
+            
+            //Strings.Culture = new System.Globalization.CultureInfo("pt-BR"); //define culture language
+            //Console.WriteLine(Strings.UserName); //calls the UserName key on Strings file on Resources Folder
+            //Console.ReadLine();
         //    var path = teste.Resources.Strings.TestFileName;
         //    Strings.Culture = new System.Globalization.CultureInfo("pt-BR");
         //    var foto = Strings.MyPhoto;

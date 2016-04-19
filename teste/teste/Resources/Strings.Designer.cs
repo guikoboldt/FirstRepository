@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace teste.Resources {
+namespace ADayOfBets.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace teste.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("teste.Resources.Strings", typeof(Strings).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ADayOfBets.Resources.Strings", typeof(Strings).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -106,21 +106,31 @@ namespace teste.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to have.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string Have {
+        public static System.Drawing.Bitmap dog {
             get {
-                return ResourceManager.GetString("Have", resourceCulture);
+                object obj = ResourceManager.GetObject("dog", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap MyPhoto {
+        public static System.Drawing.Bitmap flag {
             get {
-                object obj = ResourceManager.GetObject("MyPhoto", resourceCulture);
+                object obj = ResourceManager.GetObject("flag", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to have.
+        /// </summary>
+        public static string Have {
+            get {
+                return ResourceManager.GetString("Have", resourceCulture);
             }
         }
         

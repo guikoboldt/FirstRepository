@@ -1,11 +1,11 @@
-﻿using System;
+﻿using ADayOfBets.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using teste.Resources;
 
 namespace teste.Entities
 {
@@ -15,7 +15,7 @@ namespace teste.Entities
         private Bet playerBet; //player's bet
         private int cash; //player's cash
 
-        private RadioButton myRadioButton;
+        //private RadioButton myRadioButton;
         private Label label;
 
         public Player(string name, int cash)
@@ -26,13 +26,13 @@ namespace teste.Entities
 
         public void UpdateLabels()
         {
-            label = Strings.Bet + playerBet.GetDescription();
-            myRadioButton.text = GetName() + string.Format(Strings.Have + ": {0:C}", GetCash()); 
+            //label = Strings.Bet + playerBet.GetDescription();
+            //myRadioButton.text = GetName() + string.Format(Strings.Have + ": {0:C}", GetCash()); 
         }
 
         public void ClearBet()
         {
-            playerBet.setAmount(0); //set the player's bet to 0
+            playerBet.SetAmount(0); //set the player's bet to 0
         }
 
         public bool PlaceBet(int amount, int dog)
@@ -40,7 +40,7 @@ namespace teste.Entities
             bool enoughtMoney= false;
             if (cash >= 5) //minimum value to place a bet is $5
             {
-                playerBet = new Bet(amount, dog);
+                playerBet = new Bet(amount, dog, this);
                 enoughtMoney = true;
             }
             return enoughtMoney;

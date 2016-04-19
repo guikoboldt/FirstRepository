@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ADayOfBets.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,18 +13,39 @@ namespace teste.Entities
         private int dog; //dog's id
         private Player bettor; //who's beting
 
+        public Bet(int amount, int dog, Player bettor)
+        {
+            SetAmount(amount);
+            SetDog(dog);
+            SetBettor(bettor);
+        }
+
         public string GetDescription()
         {
             string message;
             if (GetAmount() != 0)
             {
-                message = teste.Resources.Strings.Bettor + ": " + bettor.GetName() + " " + teste.Resources.Strings.BetMoney + ": " + GetAmount() + " " + teste.Resources.Strings.BetDog + ": " + GetDog();
+                message = Strings.Bettor + ": " + bettor.GetName() + " " + Strings.BetMoney + ": " + GetAmount() + " " + Strings.BetDog + ": " + GetDog();
             }
             else
             {
-                message = bettor.GetName() + teste.Resources.Strings.DidNotBet;
+                message = bettor.GetName() + Strings.DidNotBet;
             }
             return message;
+        }
+
+        public int PayOut(int winner) //player will inform the winner dog to the Bet, and then Bet will check if the winner equals the player's dog
+        {
+            int results;
+            if (winner.Equals(dog))
+            {
+                results = this.amount;
+            }
+            else
+            {
+                results = -(this.amount);
+            }
+            return results;
         }
 
         public void SetAmount(int amount)
