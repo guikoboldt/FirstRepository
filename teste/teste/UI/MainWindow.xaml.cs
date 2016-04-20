@@ -24,18 +24,18 @@ namespace ADayOfBets.UI
         public MainWindow()
         {
             InitializeComponent();
+            Show();
+            //using (var ms = new System.IO.MemoryStream())
+            //{
+            //    Strings.dog.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
 
-            using (var ms = new System.IO.MemoryStream())
-            {
-                Strings.dog.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-
-                ms.Position = 0;
-                var bitmap = new BitmapImage();
-                bitmap.BeginInit();
-                bitmap.StreamSource = ms;
-                bitmap.EndInit();
-                dogImage1.Source = bitmap;
-            }
+            //    ms.Position = 0;
+            //    var bitmap = new BitmapImage();
+            //    bitmap.BeginInit();
+            //    bitmap.StreamSource = ms;
+            //    bitmap.EndInit();
+            //    dogImage1.Source = bitmap;
+            //}
         }
     }
 }

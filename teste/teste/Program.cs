@@ -24,13 +24,13 @@ namespace teste
         //    }
         //}
 
-        static void Main(string[] args) { 
+        static void Main(string[] args) {
 
 
 
 
-            MainWindow test;
-            
+            MainWindow test = new MainWindow();
+            test.Show();
             //Strings.Culture = new System.Globalization.CultureInfo("pt-BR"); //define culture language
             //Console.WriteLine(Strings.UserName); //calls the UserName key on Strings file on Resources Folder
             //Console.ReadLine();
