@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.VisualBasic.Devices;
-using System.Threading;
+
 
 namespace ShowDiagnostics
 {
@@ -23,107 +24,109 @@ namespace ShowDiagnostics
     /// </summary>
     public partial class MainWindow : Window
     {
+        private ComputerInfo cp = new ComputerInfo();
+        private double ramAvailableInfo;
+        private double ramTotalInfo;
+        private PerformanceCounter ramInfo = new PerformanceCounter("Memory", "Available MBytes");
+        private PerformanceCounter cpuInfo = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+        private PerformanceCounter diskUsageInfo = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
+        private PerformanceCounter networkInfo;
+        private Timer update = new Timer(2000);
+
         public MainWindow()
         {
+            networkInfo = new PerformanceCounter("Network Interface", "Bytes Received/sec", CheckNetworkInterface()); //iniciate the network counter
             InitializeComponent();
-            cpuInformation.Text = GetCpuInformation() + " %";
-            ramInformation.Text = GetRamInformation() + " GB";
-            diskInfo.Text = GetDiskActive() + " %";
-            networkInfoSend.Text = GetNetworkInfoSend() + " kb/sec";
-            networkInfoReceived.Text = GetNetworkInfoReceived() + " mb/sec";
+            update.Enabled = true;
+            update.Elapsed += (s, e) => { Application.Current.Dispatcher.Invoke(new System.Action(() => this.ShowInformation() )); }; //binding for showInformation method
+            //update.Interval = 10000; //10000 ticks= 10s
+            update.Start();
+            //showInformation();
         }
 
         public void SaveLog()
         {
-            var path = "diagnosticLog.txt";
-
-            var file = new System.IO.StreamWriter(path); //read the file and put it into file variable
-            var date = DateTime.Today.ToLongDateString() + " " + DateTime.Now.ToLongTimeString();
-            file.WriteLine(date);
-            file.WriteLine(cpuInformation.Text);
-            file.WriteLine(ramInformation.Text);
-            file.WriteLine(diskInfo.Text);
-            file.WriteLine(networkInfoSend.Text);
-            file.WriteLine(networkInfoReceived.Text + "\n");
-                
-            
-
+            // var path = "diagnosticLog.txt";
+            var file = new System.IO.StreamWriter("diagnosticLog.txt"); //read the file and put it into file variable
+            file.WriteLine(DateTime.Now);
+            file.WriteLine("CPU :" + cpuInformation.Text);
+            file.WriteLine("RAM :" + ramInformation.Text);
+            file.WriteLine("Disk Usage :" + diskInformation.Text);
+            file.WriteLine("Network Send :" + networkInfoSend.Text);
+            file.WriteLine("Network Received  :" + networkInfoReceived.Text + "\n");
             file.Close();
         }
 
-        public string GetRamInformation()
+        public double GetRamInformation()
         {
-            PerformanceCounter ramInfo = new PerformanceCounter("Memory", "Available MBytes");
-            var ramAvailableInfo = Math.Round(((Double)ramInfo.NextValue() / 1024), 2); //amount memory available in GB
+            ramAvailableInfo = Math.Round(((Double)ramInfo.NextValue() / 1024), 2); //amount memory available in GB
+            ramTotalInfo = Math.Round((((((Double)cp.TotalPhysicalMemory) / 1024) / 1024) / 1024), 2); //Amount memory installed in GB
 
-            ComputerInfo cp = new ComputerInfo();
-            var ramTotalInfo = Math.Round((((((Double)cp.TotalPhysicalMemory) / 1024) / 1024) / 1024), 2); //Amount memory installed in GB
-
-            return (ramTotalInfo - ramAvailableInfo).ToString();
+            return (ramTotalInfo - ramAvailableInfo);
         }
 
-        public string GetCpuInformation()
+        public double GetCpuInformation()
         {
-            PerformanceCounter cpuInfo = new PerformanceCounter("Processor", "% Processor Time", "_Total");
             var cpuInformation = cpuInfo.NextValue();
-            while (cpuInformation == 0)
-            {
-                Thread.Sleep(50); //miliseconds
-                cpuInformation = cpuInfo.NextValue();
-            }
+            //while (cpuInformation == 0)
+            //{
+            //    Thread.Sleep(50); //miliseconds
+            //    cpuInformation = cpuInfo.NextValue();
+            //}
             cpuInformation = (float)Math.Round(cpuInformation, 0);
-            return cpuInformation.ToString();
+            return cpuInformation;
         }
 
-        public string GetDiskActive()
+        public double GetDiskActive()
         {
-            var diskInfo = new PerformanceCounter("LogicalDisk", "% Disk Time", "_Total");
-            var diskInformation = diskInfo.NextValue();
-            while (diskInformation == 0)
-            {
-                Thread.Sleep(50);
-                diskInformation = diskInfo.NextValue();
+            var disUsageInformation = diskUsageInfo.NextValue();
+            //while (diskInformation == 0)
+            //{
+            //    Thread.Sleep(50);
+            //    diskInformation = diskInfo.NextValue();
+            //}
+            disUsageInformation = (float) Math.Round(disUsageInformation, 0);
+            if (disUsageInformation > 100)
+            { //sometimes the information get over than 100 %, it's normal when computer is too busy
+                disUsageInformation = 100;
             }
-            diskInformation = (float)Math.Round(diskInformation, 0);
-            return diskInformation.ToString();
+                return disUsageInformation;
         }
 
-        public string GetNetworkInfoSend()
+        public double GetNetworkInfoSend()
         {
-            var networkInstance = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
-            //var NetworkInstance = new PerformanceCounterCategory("Network Interface");
-            //var instanceType = NetworkInstance.GetType();
-            string instance = "";
-            for (int i = 0; i < networkInstance.Length; i++)
-            {
-                if (networkInstance[i].OperationalStatus.ToString().Equals("Up") && (networkInstance[i].NetworkInterfaceType.ToString().Equals("Ethernet") || networkInstance[i].NetworkInterfaceType.ToString().StartsWith("Wireless")))
-                {
-                    instance = networkInstance[i].Description;
-                    break;
-                }
-            }
-
-            instance = instance.Replace("(","[");
-            instance = instance.Replace(")","]");
-            var networkInfo = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
-            var networkSend = networkInfo.NextValue();
-            while (networkSend == 0)
-            {
-                Thread.Sleep(50);
-                networkSend = networkInfo.NextValue();
-            }
-            networkSend = (float)Math.Round(((networkSend / 1024) * 8), 0); // /2014 = KB, * 8 = kb
-            return networkSend.ToString();
+            //networkInfo = new PerformanceCounter("Network Interface", "Bytes Sent/sec", instance);
+            //var networkSend = networkInfo.NextValue();
+            //while (networkSend == 0)
+            //{
+            //    Thread.Sleep(50);
+            //    networkSend = networkInfo.NextValue();
+            //}
+            var networkSend = (float)Math.Round(((networkInfo.NextValue() / 1024) * 8), 0); // /2014 = KB, * 8 = kb
+            return networkSend;
             //return instance;
-
         }
 
-        public string GetNetworkInfoReceived()
+        public double GetNetworkInfoReceived()
         {
+            //networkInfo = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
+            //var networkReceived = networkInfo.NextValue();
+            //while (networkReceived == 0)
+            //{
+            //    Thread.Sleep(50);
+            //    networkReceived = networkInfo.NextValue();
+            //}
+            var networkReceived = (float) Math.Round(((networkInfo.NextValue() / 1024) * 8), 0); /// 1024 = KB, * 8 = kb
+            return networkReceived;
+            //return instanceArray.ToString();
+        }
+
+        public string CheckNetworkInterface()
+        {
+            string instance = " ";
             var networkInstance = System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces();
             //var NetworkInstance = new PerformanceCounterCategory("Network Interface");
             //var instanceType = NetworkInstance.GetType();
-            string instance = "";
             for (int i = 0; i < networkInstance.Length; i++)
             {
                 if (networkInstance[i].OperationalStatus.ToString().Equals("Up") && (networkInstance[i].NetworkInterfaceType.ToString().Equals("Ethernet") || networkInstance[i].NetworkInterfaceType.ToString().StartsWith("Wireless")))
@@ -135,25 +138,18 @@ namespace ShowDiagnostics
 
             instance = instance.Replace("(", "[");
             instance = instance.Replace(")", "]");
-            var networkInfo = new PerformanceCounter("Network Interface", "Bytes Received/sec", instance);
-            var networkReceived = networkInfo.NextValue();
-            while (networkReceived == 0)
-            {
-                Thread.Sleep(50);
-                networkReceived = networkInfo.NextValue();
-            }
-            networkReceived = (float)Math.Round(((networkReceived / 1024) * 8) / 1000, 1); /// 1024 = KB, * 8 = kb, / 1000 = mb
-            return networkReceived.ToString();
-            //return instanceArray.ToString();
+
+            return instance;
         }
 
-        private void updateInfo_Click(object sender, RoutedEventArgs e)
+        public void ShowInformation()
         {
-            cpuInformation.Text = GetCpuInformation() + " %";
-            ramInformation.Text = GetRamInformation() + " GB";
-            diskInfo.Text = GetDiskActive() + " %";
-            networkInfoSend.Text = GetNetworkInfoSend() + " Kb/sec";
-            networkInfoReceived.Text = GetNetworkInfoReceived() + " Mb/sec";
+                // do whatever you want to do with shared object.
+            cpuInformation.Text = GetCpuInformation().ToString() + " %";
+            ramInformation.Text = GetRamInformation().ToString() + " GB";
+            diskInformation.Text = GetDiskActive().ToString() + " %";
+            networkInfoSend.Text = GetNetworkInfoSend().ToString() + " kb/sec";
+            networkInfoReceived.Text = GetNetworkInfoReceived().ToString() + " kb/sec";
             SaveLog();
         }
     }
