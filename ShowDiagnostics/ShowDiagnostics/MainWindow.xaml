@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ShowDiagnostics"
         mc:Ignorable="d"
-        Title="MainWindow" Height="303.5" Width="531" ResizeMode="NoResize">
+        Title="Diagnostics" Height="303.5" Width="531" ResizeMode="NoResize">
     <Grid Margin="0,36,2,81">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
