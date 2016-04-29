@@ -47,14 +47,18 @@ namespace ShowDiagnostics
         public void SaveLog()
         {
             // var path = "diagnosticLog.txt";
-            var file = new System.IO.StreamWriter("diagnosticLog.txt"); //read the file and put it into file variable
-            file.WriteLine(DateTime.Now);
-            file.WriteLine("CPU :" + cpuInformation.Text);
-            file.WriteLine("RAM :" + ramInformation.Text);
-            file.WriteLine("Disk Usage :" + diskInformation.Text);
-            file.WriteLine("Network Send :" + networkInfoSend.Text);
-            file.WriteLine("Network Received  :" + networkInfoReceived.Text + "\n");
-            file.Close();
+            using (var fs = new System.IO.FileStream("diagnosticLog.txt", System.IO.FileMode.Append, System.IO.FileAccess.Write)) //read the file and put it into file variable
+            using (var file = new System.IO.StreamWriter(fs))
+            {
+                file.WriteLine(DateTime.Now);
+                file.WriteLine("\nCPU :" + cpuInformation.Text);
+                file.WriteLine("\nRAM :" + ramInformation.Text);
+                file.WriteLine("\nDisk Usage :" + diskInformation.Text);
+                file.WriteLine("\nNetwork Send :" + networkInfoSend.Text);
+                file.WriteLine("\nNetwork Received  :" + networkInfoReceived.Text + "\n");
+                file.Close();
+            }
+            
         }
 
         public double GetRamInformation()
@@ -144,7 +148,6 @@ namespace ShowDiagnostics
 
         public void ShowInformation()
         {
-                // do whatever you want to do with shared object.
             cpuInformation.Text = GetCpuInformation().ToString() + " %";
             ramInformation.Text = GetRamInformation().ToString() + " GB";
             diskInformation.Text = GetDiskActive().ToString() + " %";
