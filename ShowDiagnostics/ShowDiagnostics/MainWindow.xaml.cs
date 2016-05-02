@@ -25,20 +25,19 @@ namespace ShowDiagnostics
     public partial class MainWindow : Window
     {
         private ComputerInfo cp = new ComputerInfo();
-        private double ramAvailableInfo;
-        private double ramTotalInfo;
+        private int countSave;
         private PerformanceCounter ramInfo = new PerformanceCounter("Memory", "Available MBytes");
         private PerformanceCounter cpuInfo = new PerformanceCounter("Processor", "% Processor Time", "_Total");
         private PerformanceCounter diskUsageInfo = new PerformanceCounter("PhysicalDisk", "% Disk Time", "_Total");
         private PerformanceCounter networkInfo;
-        private Timer update = new Timer(2000);
+        private Timer update = new Timer(1000); //new timer with 2s of interval
 
         public MainWindow()
         {
             networkInfo = new PerformanceCounter("Network Interface", "Bytes Received/sec", CheckNetworkInterface()); //iniciate the network counter
             InitializeComponent();
-            update.Enabled = true;
-            update.Elapsed += (s, e) => { Application.Current.Dispatcher.Invoke(new System.Action(() => this.ShowInformation() )); }; //binding for showInformation method
+            update.Enabled = true; //enable timer
+            update.Elapsed += (s, e) => { Application.Current.Dispatcher.Invoke(new System.Action(() => this.ShowInformation() )); }; //get the application owner to timer elapsed thread
             //update.Interval = 10000; //10000 ticks= 10s
             update.Start();
             //showInformation();
@@ -63,10 +62,10 @@ namespace ShowDiagnostics
 
         public double GetRamInformation()
         {
-            ramAvailableInfo = Math.Round(((Double)ramInfo.NextValue() / 1024), 2); //amount memory available in GB
-            ramTotalInfo = Math.Round((((((Double)cp.TotalPhysicalMemory) / 1024) / 1024) / 1024), 2); //Amount memory installed in GB
+           var ramAvailableInfo = Math.Round(((Double)ramInfo.NextValue() / 1024), 2); //amount memory available in GB
+           var ramTotalInfo = Math.Round((((((Double)cp.TotalPhysicalMemory) / 1024) / 1024) / 1024), 2); //Amount memory installed in GB
 
-            return (ramTotalInfo - ramAvailableInfo);
+           return (ramTotalInfo - ramAvailableInfo);
         }
 
         public double GetCpuInformation()
@@ -153,7 +152,12 @@ namespace ShowDiagnostics
             diskInformation.Text = GetDiskActive().ToString() + " %";
             networkInfoSend.Text = GetNetworkInfoSend().ToString() + " kb/sec";
             networkInfoReceived.Text = GetNetworkInfoReceived().ToString() + " kb/sec";
-            SaveLog();
+            countSave++;
+            if (countSave % 10 == 0)
+            {
+                SaveLog();
+            }
+            
         }
     }
 }
