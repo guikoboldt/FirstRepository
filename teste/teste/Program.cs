@@ -27,7 +27,8 @@ namespace teste
         static void Main(string[] args) {
 
 
-
+            var tests = Teste.teste;
+            Console.WriteLine(tests);
 
             MainWindow test = new MainWindow();
             test.Show();
@@ -56,4 +57,11 @@ namespace teste
 
         }
     }
+
+    public enum Teste
+    {
+        teste = 15,
+        teste2 = 20,
+        test3 = 40
+    };
 }
