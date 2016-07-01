@@ -1,32 +1,27 @@
-﻿using System;
+﻿using EasyWpfLoginNavigateExample.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace RGP_WINDOWS.ViewModels
 {
     class ViewModelLogin : INotifyPropertyChanged
-    {
-        public ICommand LoginCommand
+    { 
+        public ViewModelLogin()
         {
-            set
-            {
-                if ((_login != "") && (_password != ""))
-                {
-                    //LoginCommand.Execute();   
-                }
-            }
+            LoginCommand = new RelayCommand(CheckLogin);
         }
+
+        public ICommand LoginCommand { get; set; }
 
         public string ButtonContent
         {
-            get
-            {
-                return "Login";
-            }
+            get { return "Login"; }
         }
 
         private string _login;
@@ -48,6 +43,34 @@ namespace RGP_WINDOWS.ViewModels
         {
             if (PropertyChanged != null)
                 PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void CheckLogin (object obj)
+        {
+            var checkImputs = CheckImputsValues();
+            if (checkImputs)
+            {
+                MessageBox.Show("User: " + _login + " -- Password: " + _password + " !!");
+            }
+            else
+            {
+                LoginError("Blank user or password");
+            }
+        }
+
+        private bool CheckImputsValues ()
+        {
+            bool status = false;
+            if (_login != "" && _password != "")
+            {
+                status = true;
+            }
+            return status;
+        }
+
+        private void LoginError (string error)
+        {
+            MessageBox.Show(error);
         }
     }
 }
