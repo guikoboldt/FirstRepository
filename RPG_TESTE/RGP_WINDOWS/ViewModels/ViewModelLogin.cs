@@ -10,7 +10,25 @@ namespace RGP_WINDOWS.ViewModels
 {
     class ViewModelLogin : INotifyPropertyChanged
     {
-        public ICommand LoginCommand { get; set; }
+        public ICommand LoginCommand
+        {
+            set
+            {
+                if ((_login != "") && (_password != ""))
+                {
+                    //LoginCommand.Execute();   
+                }
+            }
+        }
+
+        public string ButtonContent
+        {
+            get
+            {
+                return "Login";
+            }
+        }
+
         private string _login;
         public string Login
         {
