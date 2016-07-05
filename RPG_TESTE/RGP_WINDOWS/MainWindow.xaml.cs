@@ -21,16 +21,10 @@ namespace RGP_WINDOWS
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ViewModelLogin viewlogin = new ViewModelLogin();
         public MainWindow()
         {
             InitializeComponent();
-            DataContext = viewlogin;
         }
 
-        private void loginButton_Click(object sender, RoutedEventArgs e)
-        {
-            viewlogin.Password = passwordBox.Password;
-        }
     }
 }

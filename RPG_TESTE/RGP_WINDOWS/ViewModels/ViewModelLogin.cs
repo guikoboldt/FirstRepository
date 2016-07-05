@@ -6,18 +6,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace RGP_WINDOWS.ViewModels
 {
     class ViewModelLogin : INotifyPropertyChanged
-    { 
-        public ViewModelLogin()
+    {
+        public ICommand LoginCommand
         {
-            LoginCommand = new RelayCommand(CheckLogin);
+            get
+            {
+                return new RelayCommand(CheckLogin);
+            }
         }
-
-        public ICommand LoginCommand { get; set; }
 
         public string ButtonContent
         {
@@ -31,46 +33,38 @@ namespace RGP_WINDOWS.ViewModels
             set { _login = value; OnPropertyChanged("Login"); }
         }
 
-        private string _password;
-        public string Password
-        {
-            get { return _password; }
-            set { _password = value; OnPropertyChanged("Password"); }
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null)
-                PropertyChanged (this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void CheckLogin (object obj)
+        private void CheckLogin(object obj)
         {
-            var checkImputs = CheckImputsValues();
-            if (checkImputs)
+           var  _password = (obj as PasswordBox).Password;
+            using (var db = new Database.RPG_DATABASEEntities())
             {
-                MessageBox.Show("User: " + _login + " -- Password: " + _password + " !!");
-            }
-            else
-            {
-                LoginError("Blank user or password");
+                var query = (from user in db.USER
+                             where user.NickName == _login
+                             where user.Password == _password
+                             select user).FirstOrDefault();
+
+                if (query == null)
+                {
+                    Messages("Invalid user or password");
+                }
+                else
+                {
+                    // go to main windown
+                    Messages("First Name: " + query.FirstName  + " -- Email: " + query.Email);
+                }
             }
         }
 
-        private bool CheckImputsValues ()
+        private void Messages(string message)
         {
-            bool status = false;
-            if (_login != "" && _password != "")
-            {
-                status = true;
-            }
-            return status;
-        }
-
-        private void LoginError (string error)
-        {
-            MessageBox.Show(error);
+            MessageBox.Show(message);
         }
     }
 }
