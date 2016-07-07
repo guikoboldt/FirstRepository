@@ -30,7 +30,8 @@ namespace TEST_OPP_2
             };
 
             var graph = new Graph<string>(links);
-            await graph.WriteRoutesBetweenAsync("a", "e", Print);
+
+            graph.WriteRoutesBetween("a", "e", Print);
         }
 
         static private void Print(IEnumerable<ILink<string>> links)
@@ -62,6 +63,7 @@ namespace TEST_OPP_2
     {
         ICollection<ILink<T>> Links { get; }
         Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add);
+        void WriteRoutesBetween(T from, T to, Action<IEnumerable<ILink<T>>> add);
     }
 
     public class Graph<T> : IGraph<T>
@@ -70,25 +72,33 @@ namespace TEST_OPP_2
         {
             foreach (var link in links)
             {
-                Links.Add(link);
+                try
+                {
+                    this.Links.Add(link);
+                }
+                catch
+                {
+                    Console.WriteLine("Error on add new link");
+                }
             }
         }
 
         virtual public ICollection<ILink<T>> Links { get; protected set; }
 
+        public void WriteRoutesBetween(T from, T to, Action<IEnumerable<ILink<T>>> add)
+        {
+            var link = from a in Links
+                       where a.Source.Equals(@from.ToString())
+                       select a;
+
+            add(link);
+        }
+
         async virtual public Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add)
         {
-            ILink<T>[] rangedLinks = null;
-            int count = 0;
-            foreach (var link in Links)
-            {
-                if (from.Equals(link.Source) || (to.ToString().CompareTo(link.Target.ToString())) <= 0)
-                {
-                    // rangedLinks[count] = link;
-                    //   count++;
-                }
-            }
-            //add(rangedLinks);
+            throw new NotImplementedException();
         }
+
+
     }
 }

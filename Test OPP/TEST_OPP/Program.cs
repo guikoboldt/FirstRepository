@@ -47,7 +47,7 @@ namespace TEST_OPP
                         if (SourceLine.Contains("-->"))
                         {
                             var SplitedSourceLine = SourceLine.Split(' ');
-                            var SourceLineInitialTime = long.Parse(SplitedSourceLine[0].Replace(" ", "").Replace(":", "").Replace(",", "")) + milliseconds;
+                            var SourceLineInitialTime = long.Parse(SplitedSourceLine[0]. Replace(" ", "").Replace(":", "").Replace(",", "")) + milliseconds;
                             var SourceLineFinalTime = long.Parse(SplitedSourceLine[2].Replace(" ", "").Replace(":", "").Replace(",", "")) + milliseconds;
                             SourceLine = string.Format("{0:00:00:00000} {1} {2:00:00:00000}", SourceLineInitialTime, SplitedSourceLine[1], SourceLineFinalTime).Insert(8,",").Insert(25, ",");
                         }
