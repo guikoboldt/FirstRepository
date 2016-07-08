@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\poagui06\Source\Repos\FirstRepository\RPG_TESTE\RGP_WINDOWS\Database\DataModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Guilherme\SkyDrive\C#\GitHub Projects\FirstRepository\RPG_TESTE\RGP_WINDOWS\Database\DataModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

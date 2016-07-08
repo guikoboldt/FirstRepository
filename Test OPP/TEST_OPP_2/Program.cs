@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,26 +71,30 @@ namespace TEST_OPP_2
     {
         public Graph(IEnumerable<ILink<T>> links)
         {
+            IList<ILink<T>> newLinks = new List<ILink<T>>();
             foreach (var link in links)
             {
                 try
                 {
-                    this.Links.Add(link);
+                    newLinks.Add(link);
                 }
                 catch
                 {
                     Console.WriteLine("Error on add new link");
                 }
             }
+            Links = newLinks;
         }
 
         virtual public ICollection<ILink<T>> Links { get; protected set; }
 
         public void WriteRoutesBetween(T from, T to, Action<IEnumerable<ILink<T>>> add)
         {
-            var link = from a in Links
-                       where a.Source.Equals(@from.ToString())
-                       select a;
+
+            var link = (from a in Links
+                        where a.Source.Equals(@from.ToString()) || a.Target.Equals(@to.ToString())
+                        select a);
+
 
             add(link);
         }
