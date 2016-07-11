@@ -1,4 +1,5 @@
 ﻿using Owin;
+using Microsoft.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
             config.MapHttpAttributeRoutes();
 
             appBuilder.UseWebApi(config);
+            appBuilder.MapSignalR();
         }
     }
 }
