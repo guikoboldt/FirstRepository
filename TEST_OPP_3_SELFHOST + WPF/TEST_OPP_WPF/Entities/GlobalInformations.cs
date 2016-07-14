@@ -15,23 +15,15 @@ namespace TEST_OPP_WPF.Entities
 
         public static async Task<bool> Connection()
         {
-            var status = false;
             connection = new HubConnection("http://localhost:9000/");
             Hub = connection.CreateHubProxy("HubClass");
-            await Task.Run(() =>
-            {
                 try
                 {
-                    connection.Start().Wait(TimeSpan.FromMilliseconds(4000));
+                  await connection.Start();
                 }
                 catch (AggregateException e)
                 { }
-            });
-            if (connection.State.Equals(ConnectionState.Connected))
-            {
-                status = true;
-            }
-            return status;
+            return connection.State == ConnectionState.Connected;
         }
     }
 }

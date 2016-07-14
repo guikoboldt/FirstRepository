@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,6 +42,7 @@ namespace TEST_OPP_2
         static private void Print(IEnumerable<ILink<string>> links)
         {
             Console.WriteLine(String.Join(", ", links.Select(link => String.Format("({0} -> {1})", link.Source, link.Target))));
+            Console.WriteLine();
         }
     }
 
@@ -91,41 +91,33 @@ namespace TEST_OPP_2
         }
 
         virtual public ICollection<ILink<T>> Links { get; protected set; }
+        async virtual public Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add, IEnumerable<ILink<T>> links, IEnumerable<ILink<T>> checkedlinks)
+        {
+            var validLinks = (from link in links
+                              where link.Source.Equals(@from)
+                              select link).ToArray();
+
+            var otherLinks = (from link in links
+                              where !link.Source.Equals(@from)
+                              select link).ToArray();
+
+            foreach (var item in validLinks)
+            {
+                checkedlinks = checkedlinks.Concat(new ILink<T>[] { item }).ToArray();
+                if (!item.Target.Equals(to))
+                {
+                    await WriteRoutesBetweenAsync(item.Target, to, add, otherLinks, checkedlinks);
+                }
+                else
+                {
+                    add(checkedlinks);
+                }
+            }
+        }
 
         async virtual public Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add)
         {
-            IList<ILink<T>> list = new List<ILink<T>>();
-            bool status = false;
-            var TargeLinks = from a in Links //get all links where Target attribut is equals the target especified as parameter
-                       where a.Target.Equals(@to.ToString())
-                       select a;
-
-            foreach (var link in TargeLinks)
-            {
-                list.Add(link);
-                var route = link;
-                while (!route.Source.Equals(@from.ToString())) //get all routes available and stop when the source is equals the source especified as parameter
-                {
-                    route = (from a in Links
-                             where route.Source.Equals(a.Target)
-                             select a).FirstOrDefault();
-                    if (route == null || list.Contains(route))
-                        break; //if some is null or the same as the starter link, break the loop
-                    else
-                        list.Add(route);
-                }
-                if (list.Last().Source.Equals(@from.ToString())) //if is a valid route
-                {
-                    var newList = list.Reverse(); //change the order, to print in the correct order
-                    add(newList); //calls the add Action
-                    status = true;
-                }
-                list.Clear();
-            }
-            if (!status) //check if exist some route available
-            {
-                Console.WriteLine(" No Routes Available between {0} -> {1}", from.ToString(), to.ToString());
-            }
+            await WriteRoutesBetweenAsync(from, to, add, Links.ToArray(), new ILink<T>[] { });
         }
 
 
