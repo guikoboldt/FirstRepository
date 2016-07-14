@@ -18,5 +18,6 @@ namespace TEST_OPP_3_SELFHOST___WPF.Database
         public string username { get; set; }
         public string password { get; set; }
         public string email { get; set; }
+        public string name { get; set; }
     }
 }

@@ -13,6 +13,7 @@
           <Property Name="username" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="name" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityContainer Name="TEST_OPPModelStoreContainer">
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
@@ -22,7 +23,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="TEST_OPPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TEST_OPPEntities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="user" EntityType="TEST_OPPModel.user" />
+          <EntitySet Name="userSet" EntityType="TEST_OPPModel.user" />
         </EntityContainer>
         <EntityType Name="user">
           <Key>
@@ -32,16 +33,18 @@
           <Property Name="username" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="TEST_OPPModelStoreContainer" CdmEntityContainer="TEST_OPPEntities" >
-          <EntitySetMapping Name="user">
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TEST_OPPModelStoreContainer" CdmEntityContainer="TEST_OPPEntities">
+          <EntitySetMapping Name="userSet">
             <EntityTypeMapping TypeName="TEST_OPPModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="username" ColumnName="username" />
@@ -50,8 +53,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
         </EntityContainerMapping>
-      </Mapping>
-    </edmx:Mappings>
+</Mapping></edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
   <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
@@ -65,7 +67,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

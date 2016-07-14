@@ -10,20 +10,14 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
 {
     public class HubClass : Hub
     {
-        public bool isLogged { get; set; }
 
         public void Login(string username, string password)
         {
-            var checkedUser = CheckUser(username, password);
-            if (checkedUser != null) //check if this user was create
-            {
-                Clients.Caller("Username: " + checkedUser.username + "   password: " + checkedUser.password + "   email: " + checkedUser.email);
-                isLogged = true;
-            }
-            else
-            {
-                Clients.Caller("Invalid username or passsword");
-            }
+            string userInformations = null;
+            var user = CheckUser(username, password);
+            if (user != null)
+                userInformations = user.name;
+            Clients.Caller.Login(userInformations);
         }
 
         public void CreateUser(string username, string password, string email)
@@ -42,7 +36,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
                     newUser.password = password;
                     newUser.email = email;
 
-                    db.user.Add(newUser);
+                    db.userSet.Add(newUser);
                     db.SaveChanges();
                 }
             }
@@ -56,7 +50,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
             {
                 using (var db = new Database.TEST_OPPEntities())
                 {
-                    checkedUser = (from a in db.user
+                    checkedUser = (from a in db.userSet
                                            where a.username.Equals(username) && (a.password.Equals(passwordOrEmail) || a.email.Equals(passwordOrEmail))
                                            select a).FirstOrDefault();
 

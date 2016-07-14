@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using Microsoft.AspNet.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -21,11 +21,14 @@ namespace TEST_OPP_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            var connection = new HubConnection();
+        
 
+        public MainWindow()
+        { 
             InitializeComponent();
         }
+
+        
+
     }
 }

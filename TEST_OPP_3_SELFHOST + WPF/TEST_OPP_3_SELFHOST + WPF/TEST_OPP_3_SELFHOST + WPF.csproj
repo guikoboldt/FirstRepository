@@ -133,9 +133,19 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="Server Features\HubClass.cs" />
     <Compile Include="Server Features\TestController.cs" />
     <Compile Include="Server Features\Startup.cs" />
+    <Compile Include="TEST_OPPDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TEST_OPPDataSet1.xsd</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -147,6 +157,21 @@
       <DependentUpon>DataModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="TEST_OPPDataSet1.xsc">
+      <DependentUpon>TEST_OPPDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="TEST_OPPDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TEST_OPPDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="TEST_OPPDataSet1.xss">
+      <DependentUpon>TEST_OPPDataSet1.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database\DataModel.Context.tt">
@@ -154,17 +179,11 @@
       <DependentUpon>DataModel.edmx</DependentUpon>
       <LastGenOutput>DataModel.Context.cs</LastGenOutput>
     </Content>
+    <Content Include="Database\DataModel.edmx.sql" />
     <Content Include="Database\DataModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DataModel.edmx</DependentUpon>
       <LastGenOutput>DataModel.cs</LastGenOutput>
-    </Content>
-    <Content Include="TEST_OPP.mdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TEST_OPP_log.ldf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>TEST_OPP.mdf</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
