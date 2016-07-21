@@ -104,6 +104,7 @@ namespace TEST_OPP_2
             foreach (var item in validLinks)
             {
                 checkedlinks = checkedlinks.Concat(new ILink<T>[] { item }).ToArray();
+
                 if (!item.Target.Equals(to))
                 {
                     await WriteRoutesBetweenAsync(item.Target, to, add, otherLinks, checkedlinks);
@@ -111,6 +112,15 @@ namespace TEST_OPP_2
                 else
                 {
                     add(checkedlinks);
+                }
+
+                if (checkedlinks.Last().Equals(item))
+                {
+                    checkedlinks = checkedlinks.TakeWhile(o => !o.Equals(checkedlinks.Last())).ToArray();
+                }
+                else if (!checkedlinks.Last().Target.Equals(item.Source))
+                {
+                    checkedlinks = new ILink<T>[] { };
                 }
             }
         }
