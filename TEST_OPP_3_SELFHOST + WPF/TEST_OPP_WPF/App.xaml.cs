@@ -16,8 +16,11 @@ namespace TEST_OPP_WPF
     {
         async void Application_Startup(object sender, StartupEventArgs a)
         {
-            var status = await Entities.GlobalInformations.Connection();
-            if (status)//conect to the server
+            //var status = await Entities.GlobalInformations.StartHubConnection();
+            await Entities.GlobalInformations.StartServerConnection();
+
+            //if (status)//conect to the server
+            if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
             {
                 MainWindow mainwindow = new MainWindow(); //create the main window
                 Current.MainWindow = mainwindow; //set as the current window

@@ -49,19 +49,27 @@ namespace TEST_OPP_WPF.Views
         private void CheckLogin(object obj)
         {
             var _password = (obj as PasswordBox).Password;
-            string validCredentials = "";
-            Entities.GlobalInformations.Hub.On("Login", result => validCredentials = result);
+            var typedUser = new string[] { _userName, _password };
+            Entities.GlobalInformations.ExecuteUri("api/login/" + typedUser);
+            //Entities.GlobalInformations.Hub.On("Login", result => validCredentials = result);
 
-            Entities.GlobalInformations.Hub.Invoke("Login", _userName, _password).Wait();
+            //Entities.GlobalInformations.Hub.Invoke("Login", _userName, _password).Wait();
 
-            if (validCredentials != null)
+            if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
             {
-                Entities.GlobalInformations.nomeUsuario = validCredentials;
-                OnRequestClose(this, new EventArgs());
+                if (Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result != null)
+                {
+                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result;
+                    OnRequestClose(this, new EventArgs());
+                }
+                else
+                {
+                    MessageBox.Show("Invalid Credentials");
+                }
             }
             else
             {
-                MessageBox.Show("Invalid Credentials!");
+                MessageBox.Show("Bad Connection! Check your network");
             }
 
         }
