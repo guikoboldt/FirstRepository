@@ -36,7 +36,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
                     newUser.password = password;
                     newUser.email = email;
 
-                    db.userSet.Add(newUser);
+                    db.user.Add(newUser);
                     db.SaveChanges();
                 }
             }
@@ -50,7 +50,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
             {
                 using (var db = new Database.TEST_OPPEntities())
                 {
-                    checkedUser = (from a in db.userSet
+                    checkedUser = (from a in db.user
                                            where a.username.Equals(username) && (a.password.Equals(passwordOrEmail) || a.email.Equals(passwordOrEmail))
                                            select a).FirstOrDefault();
 

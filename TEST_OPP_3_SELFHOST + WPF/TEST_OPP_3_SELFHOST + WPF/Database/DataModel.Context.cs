@@ -25,6 +25,6 @@ namespace TEST_OPP_3_SELFHOST___WPF.Database
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<user> userSet { get; set; }
+        public virtual DbSet<user> user { get; set; }
     }
 }

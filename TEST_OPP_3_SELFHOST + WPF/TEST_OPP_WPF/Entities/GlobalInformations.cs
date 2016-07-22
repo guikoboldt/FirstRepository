@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace TEST_OPP_WPF.Entities
             return connection.State == ConnectionState.Connected;
         }
 
-        public static async Task StartServerConnection()
+        public static void StartServerConnection()
         {
             ServerConnection = new HttpClient();
             ServerConnection.BaseAddress = new Uri("http://localhost:9000");
@@ -38,9 +39,9 @@ namespace TEST_OPP_WPF.Entities
             ServerConnection.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static async void ExecuteUri (string parameter)
+        public static async Task ExecuteUri (string parameter, User user)
         {
-            ServerResponse = await ServerConnection.GetAsync(parameter);
+            ServerResponse = await ServerConnection.PostAsJsonAsync<User>(parameter, user);
         }
     }
 }

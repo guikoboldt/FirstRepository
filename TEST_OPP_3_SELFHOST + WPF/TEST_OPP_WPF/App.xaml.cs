@@ -14,10 +14,10 @@ namespace TEST_OPP_WPF
     /// </summary>
     public partial class App : Application
     {
-        async void Application_Startup(object sender, StartupEventArgs a)
+        void Application_Startup(object sender, StartupEventArgs a)
         {
             //var status = await Entities.GlobalInformations.StartHubConnection();
-            await Entities.GlobalInformations.StartServerConnection();
+            Entities.GlobalInformations.StartServerConnection();
 
             //if (status)//conect to the server
             //if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)

@@ -46,20 +46,22 @@ namespace TEST_OPP_WPF.Views
             set { _userName = value; OnPropertyChanged("UserName"); }
         }
 
-        private void CheckLogin(object obj)
+        private async void CheckLogin(object obj)
         {
             var _password = (obj as PasswordBox).Password;
-            var typedUser = new string[] { _userName, _password };
-            Entities.GlobalInformations.ExecuteUri("api/login/" + typedUser);
+            try
+            {
+                await Entities.GlobalInformations.ExecuteUri("api/User/", new Entities.User(username: _userName, password: _password));
+            
             //Entities.GlobalInformations.Hub.On("Login", result => validCredentials = result);
 
             //Entities.GlobalInformations.Hub.Invoke("Login", _userName, _password).Wait();
 
-            if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
-            {
-                if (Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result != null)
+            //if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
+            //{
+                if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
                 {
-                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result;
+                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ToString();
                     OnRequestClose(this, new EventArgs());
                 }
                 else
@@ -67,10 +69,15 @@ namespace TEST_OPP_WPF.Views
                     MessageBox.Show("Invalid Credentials");
                 }
             }
-            else
+            catch
             {
                 MessageBox.Show("Bad Connection! Check your network");
             }
+            // }
+            //else
+            //{
+            //    MessageBox.Show("Bad Connection! Check your network");
+            //}
 
         }
 

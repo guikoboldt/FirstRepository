@@ -33,9 +33,7 @@ namespace TEST_OPP_2
                 new Link<string>("f", "g"),
                 new Link <string>("g", "h"),
             };
-
             var graph = new Graph<string>(links);
-
             await graph.WriteRoutesBetweenAsync("a", "e", Print);
         }
 
@@ -61,7 +59,6 @@ namespace TEST_OPP_2
         }
 
         public T Source { get; private set; }
-
         public T Target { get; private set; }
     }
 
@@ -91,6 +88,7 @@ namespace TEST_OPP_2
         }
 
         virtual public ICollection<ILink<T>> Links { get; protected set; }
+
         async virtual public Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add, IEnumerable<ILink<T>> links, IEnumerable<ILink<T>> checkedlinks)
         {
             var validLinks = (from link in links
@@ -129,7 +127,5 @@ namespace TEST_OPP_2
         {
             await WriteRoutesBetweenAsync(from, to, add, Links.ToArray(), new ILink<T>[] { });
         }
-
-
     }
 }
