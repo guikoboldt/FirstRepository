@@ -20,8 +20,8 @@ namespace TEST_OPP_WPF
             await Entities.GlobalInformations.StartServerConnection();
 
             //if (status)//conect to the server
-            if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
-            {
+            //if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
+            //{
                 MainWindow mainwindow = new MainWindow(); //create the main window
                 Current.MainWindow = mainwindow; //set as the current window
 
@@ -48,12 +48,12 @@ namespace TEST_OPP_WPF
 
                 LoginWindow.ShowDialog(); //show the login window
                 //mainwindow.Show();
-            }
-            else
-            {
-                MessageBox.Show("Can not connect to the server! Please, try again!");
-                App.Current.Shutdown();
-            }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Can not connect to the server! Please, try again!");
+            //    App.Current.Shutdown();
+            //}
         }
     }
 }
