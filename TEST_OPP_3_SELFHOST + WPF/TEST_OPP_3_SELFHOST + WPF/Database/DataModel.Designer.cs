@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\Guilherme\SkyDrive\C#\GitHub Projects\FirstRepository\TEST_OPP_3_SELFHOST + WPF\TEST_OPP_3_SELFHOST + WPF\Database\DataModel.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\poagui06\Source\Repos\FirstRepository\TEST_OPP_3_SELFHOST + WPF\TEST_OPP_3_SELFHOST + WPF\Database\DataModel.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

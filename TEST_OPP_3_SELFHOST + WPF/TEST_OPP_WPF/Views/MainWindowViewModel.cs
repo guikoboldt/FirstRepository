@@ -12,7 +12,7 @@ namespace TEST_OPP_WPF.Views
     {
         public string LoggedLabelContent
         {
-            get { return "Hello " + Entities.GlobalInformations.nomeUsuario; }
+            get { return "Hello " + Entities.GlobalInformations.username; }
         }
 
         public string[] TreeMenuEntries

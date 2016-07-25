@@ -23,7 +23,7 @@
     <edmx:ConceptualModels>
       <Schema Namespace="TEST_OPPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="TEST_OPPEntities" annotation:LazyLoadingEnabled="true" >
-          <EntitySet Name="userSet" EntityType="TEST_OPPModel.user" />
+          <EntitySet Name="user" EntityType="TEST_OPPModel.user" />
         </EntityContainer>
         <EntityType Name="user">
           <Key>
@@ -41,7 +41,7 @@
     <edmx:Mappings>
     <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TEST_OPPModelStoreContainer" CdmEntityContainer="TEST_OPPEntities">
-          <EntitySetMapping Name="userSet">
+          <EntitySetMapping Name="user">
             <EntityTypeMapping TypeName="TEST_OPPModel.user">
               <MappingFragment StoreEntitySet="user">
                 <ScalarProperty Name="name" ColumnName="name" />

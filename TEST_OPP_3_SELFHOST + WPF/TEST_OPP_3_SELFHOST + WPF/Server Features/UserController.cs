@@ -23,7 +23,7 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
             var checkedUser = CheckUser(user);
             if (checkedUser == null)
             {
-                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.NotFound, Content = new StringContent(null) };
+                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.NotFound, Content = new StringContent("Invalid User") };
             }
             else
             {

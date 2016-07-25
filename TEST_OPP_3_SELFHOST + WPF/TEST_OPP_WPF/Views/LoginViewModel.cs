@@ -53,10 +53,13 @@ namespace TEST_OPP_WPF.Views
             {
                 await Entities.GlobalInformations.ExecuteUri("api/User/", new Entities.User(username: _userName, password: _password));
 
-                if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
+                if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode && Entities.GlobalInformations.ServerResponse.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result;
-                    OnRequestClose(this, new EventArgs());
+                    if (Entities.GlobalInformations.ServerResponse.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        Entities.GlobalInformations.username = Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result;
+                        OnRequestClose(this, new EventArgs());
+                    }
                 }
                 else
                 {

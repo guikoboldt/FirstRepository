@@ -35,6 +35,8 @@ namespace TEST_OPP_WPF
                 WindowStyle = WindowStyle.None,
             };
 
+            await StartHub();
+
             Views.LoginViewModel.OnRequestClose += (s, e) =>
             {
                 mainwindow = new MainWindow();
@@ -43,7 +45,7 @@ namespace TEST_OPP_WPF
             }; //register the onClose event to login dialog by the view
 
             LoginWindow.ShowDialog(); //show the login window
-            await StartHub();
+            
         }
 
         private async Task StartHub()

@@ -13,7 +13,7 @@ namespace TEST_OPP_WPF.Entities
 {
     public static class GlobalInformations
     {
-        public static string nomeUsuario { get; set; }
+        public static string username { get; set; }
         public static HubConnection connection { get; set; }
         public static IHubProxy Hub { get; set; }
         public static HttpClient ServerConnection { get; set; }
@@ -34,8 +34,8 @@ namespace TEST_OPP_WPF.Entities
 
         public static async Task NotifyAllMembers(string eventName)
         {
-            Hub.On(eventName, (isAvailable) => MessageBox.Show(isAvailable));
-            await Hub.Invoke(eventName);
+            Hub.On("NotifyOnLogon", (isAvailable) => MessageBox.Show(isAvailable));
+            await Hub.Invoke(eventName, username);
         }
 
         public static void StartServerConnection()
