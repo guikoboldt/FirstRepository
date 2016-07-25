@@ -52,16 +52,10 @@ namespace TEST_OPP_WPF.Views
             try
             {
                 await Entities.GlobalInformations.ExecuteUri("api/User/", new Entities.User(username: _userName, password: _password));
-            
-            //Entities.GlobalInformations.Hub.On("Login", result => validCredentials = result);
 
-            //Entities.GlobalInformations.Hub.Invoke("Login", _userName, _password).Wait();
-
-            //if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
-            //{
                 if (Entities.GlobalInformations.ServerResponse.IsSuccessStatusCode)
                 {
-                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ToString();
+                    Entities.GlobalInformations.nomeUsuario = Entities.GlobalInformations.ServerResponse.Content.ReadAsStringAsync().Result;
                     OnRequestClose(this, new EventArgs());
                 }
                 else
@@ -73,11 +67,6 @@ namespace TEST_OPP_WPF.Views
             {
                 MessageBox.Show("Bad Connection! Check your network");
             }
-            // }
-            //else
-            //{
-            //    MessageBox.Show("Bad Connection! Check your network");
-            //}
 
         }
 

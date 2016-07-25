@@ -18,13 +18,13 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
         }
 
         [HttpPost]
-        public HttpResponseMessage Post(Entities.User user)
+        public HttpResponseMessage Post([FromBody] Entities.User user)
         {
             var checkedUser = CheckUser(user);
             if (checkedUser == null)
                 return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.NotFound, Content = new StringContent(null) };
             else
-                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent(checkedUser.username) }; ;
+                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent(checkedUser.username) };
         }
 
         private user CheckUser(Entities.User user)
