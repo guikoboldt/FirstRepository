@@ -21,14 +21,9 @@ namespace TEST_OPP_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        
-
         public MainWindow()
         { 
             InitializeComponent();
         }
-
-        
-
     }
 }

@@ -5,11 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TEST_OPP_WPF"
         xmlns:views="clr-namespace:TEST_OPP_WPF.Views"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
         Title="Control Entries" Height="350" Width="525">
     <Window.DataContext>
         <views:MainWindowViewModel />
     </Window.DataContext>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding OnLoaded}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -17,10 +23,11 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="auto" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="73*" />
+            <ColumnDefinition Width="249*"/>
             <ColumnDefinition Width="100" />
         </Grid.ColumnDefinitions>
-        <Label Name="Logged" Grid.Row="0" Grid.Column="2" Content="{Binding LoggedLabelContent}" />
+        <Label Name="Logged" Grid.Row="0" Grid.Column="3" Content="{Binding LoggedLabelContent}" />
         <TreeView Name="TreeMenu" Grid.Row="1" Grid.Column="0">
             <TreeViewItem Header="Entries" ItemsSource="{Binding TreeMenuEntries}" />
             <TreeViewItem Header="Management" ItemsSource="{Binding TreeMenuManagement}" />

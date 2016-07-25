@@ -1,5 +1,4 @@
-﻿using EasyWpfLoginNavigateExample.Helpers;
-using Microsoft.AspNet.SignalR.Client;
+﻿using Microsoft.AspNet.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using TEST_OPP_WPF.Helpers;
 
 namespace TEST_OPP_WPF.Views
 {

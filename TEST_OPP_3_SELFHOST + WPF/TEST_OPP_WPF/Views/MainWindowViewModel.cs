@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TEST_OPP_WPF.Views
 {
@@ -31,6 +32,19 @@ namespace TEST_OPP_WPF.Views
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ICommand OnLoaded
+        {
+            get
+            {
+                return new Helpers.RelayCommand(LoadedWindow);
+            }
+        }
+
+        private async void LoadedWindow(object obj)
+        {
+           await Entities.GlobalInformations.NotifyAllMembers("NotifyAllMembers");
         }
     }
 }

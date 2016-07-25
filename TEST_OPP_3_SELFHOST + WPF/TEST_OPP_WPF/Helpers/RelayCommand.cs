@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using System.Diagnostics;
 
-namespace EasyWpfLoginNavigateExample.Helpers
+namespace TEST_OPP_WPF.Helpers
 {
     /// <summary>
     /// This RelayCommand is taken from MSDN magazine

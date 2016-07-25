@@ -7,6 +7,7 @@ using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace TEST_OPP_WPF.Entities
 {
@@ -31,6 +32,12 @@ namespace TEST_OPP_WPF.Entities
             return connection.State == ConnectionState.Connected;
         }
 
+        public static async Task NotifyAllMembers(string eventName)
+        {
+            Hub.On(eventName, (isAvailable) => MessageBox.Show(isAvailable));
+            await Hub.Invoke(eventName);
+        }
+
         public static void StartServerConnection()
         {
             ServerConnection = new HttpClient();
@@ -39,9 +46,9 @@ namespace TEST_OPP_WPF.Entities
             ServerConnection.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public static async Task ExecuteUri (string parameter, User user)
+        public static async Task ExecuteUri (string address, User parameter)
         {
-            ServerResponse = await ServerConnection.PostAsJsonAsync<User>(parameter, user);
+            ServerResponse = await ServerConnection.PostAsJsonAsync<User>(address, parameter);
         }
     }
 }

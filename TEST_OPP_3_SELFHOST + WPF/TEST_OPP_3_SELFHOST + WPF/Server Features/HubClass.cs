@@ -10,7 +10,9 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
 {
     public class HubClass : Hub
     {
-
-        
+        public void NotifyOnLogon (string username)
+        {
+            Clients.Others.NotifyAllMembers("{0} is now online", username);
+        }
     }
 }
