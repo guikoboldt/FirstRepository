@@ -99,28 +99,44 @@ namespace TEST_OPP_2
                               where !link.Source.Equals(@from)
                               select link).ToArray();
 
-            foreach (var item in validLinks)
+            var tasks = validLinks.Select(async (item, index) => //divide para todos os processadores
             {
-                checkedlinks = checkedlinks.Concat(new ILink<T>[] { item }).ToArray();
+                await Task.Delay(checkedlinks.Count() * 100);
 
                 if (!item.Target.Equals(to))
                 {
-                    await WriteRoutesBetweenAsync(item.Target, to, add, otherLinks, checkedlinks);
+                    await WriteRoutesBetweenAsync(item.Target, to, add, otherLinks, checkedlinks.Concat(new ILink<T>[] { item }).ToArray());
                 }
                 else
                 {
-                    add(checkedlinks);
+                    add(checkedlinks.Concat(new ILink<T>[] { item }).ToArray());
                 }
+            }).ToArray();
 
-                if (checkedlinks.Last().Equals(item))
-                {
-                    checkedlinks = checkedlinks.TakeWhile(o => !o.Equals(checkedlinks.Last())).ToArray();
-                }
-                else if (!checkedlinks.Last().Target.Equals(item.Source))
-                {
-                    checkedlinks = new ILink<T>[] { };
-                }
-            }
+            await Task.WhenAll(tasks); //espera todas as tarefas executadas no select acima
+
+            //foreach (var item in validLinks)
+            //{
+            //    //checkedlinks = checkedlinks.Concat(new ILink<T>[] { item }).ToArray();
+
+            //    if (!item.Target.Equals(to))
+            //    {
+            //        await WriteRoutesBetweenAsync(item.Target, to, add, otherLinks, checkedlinks.Concat(new ILink<T>[] { item }).ToArray());
+            //    }
+            //    else
+            //    {
+            //        add(checkedlinks.Concat(new ILink<T>[] { item }).ToArray());
+            //    }
+
+            //    //if (checkedlinks.Last().Equals(item))
+            //    //{
+            //    //    checkedlinks = checkedlinks.TakeWhile(o => !o.Equals(checkedlinks.Last())).ToArray();
+            //    //}
+            //    //else if (!checkedlinks.Last().Target.Equals(item.Source))
+            //    //{
+            //    //    checkedlinks = new ILink<T>[] { };
+            //    //}
+            //}
         }
 
         async virtual public Task WriteRoutesBetweenAsync(T from, T to, Action<IEnumerable<ILink<T>>> add)

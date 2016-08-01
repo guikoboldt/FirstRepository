@@ -21,9 +21,12 @@ namespace TEST_OPP
         {
             try
             {
-                var source = args[0];
-                var target = args[1];
-                var milliseconds = long.Parse(args[2]);
+                //var source = args[0];
+                var source = "Marvel's -Avengers- Age of Ultron.srt";
+                //var target = args[1];
+                var target = "new Marvel's -Avengers- Age of Ultron.srt";
+                //var milliseconds = long.Parse(args[2]);
+                var milliseconds = long.Parse("2350");
                 Parse(source, target, milliseconds);
                 Console.WriteLine("Shifit successful");
             }
@@ -37,21 +40,21 @@ namespace TEST_OPP
 
         private static void Parse <T>(T source, T target, long milliseconds)
         {
-            using (var TargetStream = new StreamWriter(target.ToString()))
+            using (var targetStream = new StreamWriter(target.ToString()))
             {
-                using (var SourceStream = new StreamReader(source.ToString(), Encoding.Default))
+                using (var sourceStream = new StreamReader(source.ToString(), Encoding.Default))
                 {
-                    string SourceLine = "";
-                    while ((SourceLine = SourceStream.ReadLine()) != null)
+                    string sourceLine = "";
+                    while ((sourceLine = sourceStream.ReadLine()) != null)
                     {
-                        if (SourceLine.Contains("-->"))
+                        var splitedSourceLine = sourceLine.Split(new string[] { " --> " }, new StringSplitOptions());
+                        if (splitedSourceLine.Length == 2)
                         {
-                            var SplitedSourceLine = SourceLine.Split(' ');
-                            var SourceLineInitialTime = long.Parse(SplitedSourceLine[0]. Replace(" ", "").Replace(":", "").Replace(",", "")) + milliseconds;
-                            var SourceLineFinalTime = long.Parse(SplitedSourceLine[2].Replace(" ", "").Replace(":", "").Replace(",", "")) + milliseconds;
-                            SourceLine = string.Format("{0:00:00:00000} {1} {2:00:00:00000}", SourceLineInitialTime, SplitedSourceLine[1], SourceLineFinalTime).Insert(8,",").Insert(25, ",");
+                            var sourceLineInitialTime = TimeSpan.Parse(splitedSourceLine[0]).Add(TimeSpan.FromMilliseconds(milliseconds));
+                            var sourceLineFinalTime = TimeSpan.Parse(splitedSourceLine[1]).Add(TimeSpan.FromMilliseconds(milliseconds));
+                            sourceLine = string.Format(@"{0:hh\:mm\:ss\,fff} --> {1:hh\:mm\:ss\,fff}", sourceLineInitialTime, sourceLineFinalTime);
                         }
-                        TargetStream.WriteLine(SourceLine);
+                        targetStream.WriteLine(sourceLine);
                     }
                 }
              }
