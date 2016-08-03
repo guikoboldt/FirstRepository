@@ -60,7 +60,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="AppSettings.config" />
-    <None Include="Nlog.config" />
+    <Content Include="Nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
