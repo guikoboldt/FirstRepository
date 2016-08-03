@@ -12,34 +12,27 @@ namespace CopyBackupFile
 {
     public class CopyFile
     {
-        private static NLog.Logger Log { get; set; }
+        private static NLog.Logger Log = NLog.LogManager.GetCurrentClassLogger();
         private static NameValueCollection appSettings = ConfigurationManager.AppSettings;
 
         static void Main(string[] args)
         {
-            Log = NLog.LogManager.GetCurrentClassLogger();
-            //var credentials = ConfigurationManager.AppSettings;
-            //Task.Factory.StartNew(async () =>
-            //{
-            //loking for file
-            Log.Info("Starting proccess to copy the file from server.... - {0}", DateTime.Now);
-            TryCopyFile(appSettings.Get("sourcePath"), appSettings.Get("targetPath")).Wait();
+            WriteLog("Starting proccess to copy the file from the original server...");
+            TryCopyFile(appSettings.Get("serverSourcePath"), appSettings.Get("serverTargetPath"), appSettings.Get("serverUser"), appSettings.Get("serverDomain"), appSettings.Get("serverPassword")).Wait();
 
-            //copy it to the end destination
-            Log.Info("Starting proccess to copy the file to backup server.... - {0}", DateTime.Now);
-            TryCopyFile(appSettings.Get("targetPath"), appSettings.Get("sourcePath") + @"\return").Wait();
+            WriteLog("Starting proccess to copy the file to backup server...");
+            TryCopyFile(appSettings.Get("backupServerSourcePath"), appSettings.Get("backupServerTargetPath"), appSettings.Get("backupServerUser"), appSettings.Get("backupServerDomain"), appSettings.Get("backupServerPassword")).Wait();
 
-            Log.Info("Deleting the zip file create in the source server.... - {0}", DateTime.Now);
-            DeleteZipFile(appSettings.Get("sourcePath")).Wait();
-            //}).Wait();
+            WriteLog("Deleting the zip file created in the source server...");
+            DeleteZipFile(appSettings.Get("serverSourcePath"), appSettings.Get("serverUser"), appSettings.Get("serverDomain"), appSettings.Get("serverPassword")).Wait();
         }
 
-        private static async Task TryCopyFile(string source, string target)
+        private static async Task TryCopyFile(string source, string target, string user, string domain, string password)
         {
             try
             {
-                Log.Info("Trying to access the directory {0} with credentials.... - {1}", source, DateTime.Now);
-                using (new Helpers.Impersonator(appSettings.Get("serverUser"), appSettings.Get("serverDomain"), appSettings.Get("serverPassword")))
+                WriteLog("Trying to access the directory " + source + " with credentials...");
+                using (new Helpers.Impersonator(user, domain, password))
                 {
                     var dbFolder = new DirectoryInfo(source);
 
@@ -47,7 +40,7 @@ namespace CopyBackupFile
                         dbFolder.Create();
 
                     var lastBackUp = dbFolder.GetFiles("*.bak*").OrderByDescending(_ => _.LastWriteTime).FirstOrDefault();
-                    Log.Info("Founded the latest file {0} - {1}", lastBackUp.FullName, DateTime.Now);
+                    WriteLog("Founded the new file " + lastBackUp.FullName);
 
                     if (lastBackUp == null)
                         return;
@@ -56,43 +49,45 @@ namespace CopyBackupFile
 
                     if (lastBackUp.Extension.ToLowerInvariant() != ".zip")
                     {
-                        Log.Info("Iniciating compress process on file... - {0}", DateTime.Now);
+                        WriteLog("Iniciating compress process on file...");
                         fileName = lastBackUp.FullName + ".zip";
                         using (ZipArchive archive = ZipFile.Open(fileName, ZipArchiveMode.Create))
                         {
-                            archive.CreateEntryFromFile(lastBackUp.FullName, lastBackUp.Name);
+                            WriteLog("Compressing file...");
+                            archive.CreateEntryFromFile(lastBackUp.FullName, lastBackUp.Name, CompressionLevel.Optimal);
                         }
-                        Log.Info("Compressed sucess - {0}", DateTime.Now);
+                        WriteLog("Compressed with sucess");
                     }
                     else
                     {
                         fileName = lastBackUp.FullName;
                     }
-                    Log.Info("Trying to open file...- {0}", DateTime.Now);
+                    WriteLog("Trying to open file...");
                     using (FileStream SourceStream = File.Open(fileName, FileMode.Open))
                     {
                         var name = fileName.Substring(fileName.LastIndexOf(@"\"));
-                        Log.Info("Creating destination file... - {0}", DateTime.Now);
+                        WriteLog("Creating destination file..");
                         using (FileStream DestinationStream = File.Create(target + name))
                         {
+                            WriteLog("Copyng file...");
                             await SourceStream.CopyToAsync(DestinationStream);
                         }
                     }
-                    Log.Info("File was copy with sucess - {0}", DateTime.Now);
+                    
                 }
+                WriteLog("Copyied with sucess!");
             }
             catch (Exception e)
             {
-                Log.Fatal("The file wasn't copy \n error: {0} \n {1}", e, DateTime.Now);
+                WriteLog(e,"The file wasn't copy");
             }
         }
-
-        private static async Task DeleteZipFile(string path)
+        private static async Task DeleteZipFile(string path, string user, string domain, string password)
         {
             try
             {
-                Log.Info("Trying to access the directory {0} with credentials.... - {1}", path, DateTime.Now);
-                using (new Helpers.Impersonator(appSettings.Get("serverUser"), appSettings.Get("serverDomain"), appSettings.Get("serverPassword")))
+                WriteLog("Trying to access the directory " + path + " with credentials...");
+                using (new Helpers.Impersonator(user, domain, password))
                 {
                     var dbFolder = new DirectoryInfo(path);
 
@@ -100,19 +95,29 @@ namespace CopyBackupFile
                         dbFolder.Create();
 
                     var lastBackUp = dbFolder.GetFiles("*.zip").OrderByDescending(_ => _.LastWriteTime).FirstOrDefault();
-                    Log.Info("Founded the temp zip file {0} - {1}", lastBackUp.FullName, DateTime.Now);
+                    WriteLog("Founded the temp zip file " + lastBackUp.FullName);
                     if (lastBackUp == null)
                         return;
 
-                    Log.Info("Trying to delete... - {0}", DateTime.Now);
+                    WriteLog("Deleting file...");
                     await Task.Run(() => File.Delete(lastBackUp.FullName));
-                    Log.Info("Deleted with sucess... - {0}", DateTime.Now);
                 }
+                WriteLog("Deleted with sucess...");
             }
             catch (Exception e)
             {
-                Log.Fatal("Error on delete \n error: {0} \n {1}", e, DateTime.Now);
+                WriteLog(e, "Error on delete");
             }
+        }
+
+        private static void WriteLog (string message)
+        {
+            Log.Info(message);
+        }
+
+        private static void WriteLog(Exception e, string message)
+        {
+            Log.Fatal(e, message);
         }
     }
 }
