@@ -109,12 +109,10 @@ namespace CopyBackupFile
                 WriteLog(e, "Error on delete");
             }
         }
-
         private static void WriteLog (string message)
         {
             Log.Info(message);
         }
-
         private static void WriteLog(Exception e, string message)
         {
             Log.Fatal(e, message);

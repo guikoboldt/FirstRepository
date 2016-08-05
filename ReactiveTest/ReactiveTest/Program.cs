@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 
@@ -10,36 +11,37 @@ namespace ReactiveTest
 {
     class Program
     {
+        //private static Object locker = new object();
         static void Main(string[] args)
         {
 
-            IList<int> temp = new List<int>();
+            IList<int> temp = new List<int>(10);
             //var startHour = DateTime.Now;
             //var timer = new Timer(10000);
             //timer.Start();
             var time = DateTime.Now.TimeOfDay.Hours;
             var timenew = time + 1;
-            var time2 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, timenew , 00, 00).TimeOfDay;
+            var time2 = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, timenew, 00, 00).TimeOfDay;
             var scheduledTime = DateTime.Now.AddTicks((time2 - DateTime.Now.TimeOfDay).Ticks).TimeOfDay;
 
 
             var rand = new Random();
 
-            Observable
-                .Interval(TimeSpan.FromSeconds(1)) //throws an event per second
-                .Synchronize() //synchronize it
-                .Select(_ => rand.Next()) //select the values - performance counter values
-                .Buffer(TimeSpan.FromSeconds(10)) //create a buffer of these values by 10 seconds
-                .Subscribe(data => //subscribe this buffer after 10s
-                {
-                    Console.WriteLine();
+            //Observable
+            //    .Interval(TimeSpan.FromSeconds(1)) //throws an event per second
+            //    .Synchronize() //synchronize it
+            //    .Select(_ => rand.Next()) //select the values - performance counter values
+            //    .Buffer(TimeSpan.FromSeconds(10)) //create a buffer of these values by 10 seconds
+            //    .Subscribe(data => //subscribe this buffer after 10s
+            //    {
+            //        Console.WriteLine();
 
-                    foreach (var item in data)
-                    {
-                        Console.Write($"{item},");
-                    }
-                }); //create an event per minute
-            
+            //        foreach (var item in data)
+            //        {
+            //            Console.Write($"{item},");
+            //        }
+            //    }); //create an event per minute
+
             //Observable
             //    .Interval(TimeSpan.FromMinutes(1))
             //    .Select(_ => rand.Next()); //create an event per minute
@@ -48,7 +50,7 @@ namespace ReactiveTest
 
             //eventPerMinute.Subscribe(time =>
             //{
-                
+
             //});
 
 
@@ -58,6 +60,19 @@ namespace ReactiveTest
             //   {
             //       temp.Add(count++);
             //   });
+
+            Observable
+                .Interval(TimeSpan.FromMilliseconds(1000))
+                    .Synchronize()
+                    .Select(_ => rand.Next())
+                    .Buffer(TimeSpan.FromMilliseconds(10000))
+                    .Subscribe(data =>
+                    {
+                        foreach (var item in data)
+                        {
+                            temp.Add(item);
+                        }
+                    });
 
             //eventStream = (from e in eventStream
             //               let time = DateTime.Now

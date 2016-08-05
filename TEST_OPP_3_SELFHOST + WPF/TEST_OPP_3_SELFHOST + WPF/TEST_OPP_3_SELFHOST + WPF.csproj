@@ -128,6 +128,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Database\Updater_Database.cs" />
     <Compile Include="Database\user.cs">
       <DependentUpon>DataModel.tt</DependentUpon>
     </Compile>
