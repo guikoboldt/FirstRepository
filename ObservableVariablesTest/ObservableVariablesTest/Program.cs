@@ -24,7 +24,7 @@ namespace ObservableVariablesTest
                     _ => click += _,
                     _ => click -= _
                     )
-                .Buffer(TimeSpan.FromMilliseconds(200),5000)
+                .Buffer(TimeSpan.FromMilliseconds(1000),3000)
                 .Subscribe(data =>
                 {
                     SqlCommand command = new SqlCommand();
