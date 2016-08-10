@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Edmx Version="3.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <Runtime>
+    <ConceptualModels>
+      <Schema Namespace="RestaurantApp.Voting.Repository" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Poll">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Nullable="false" />
+          <Property Name="WinnerCandidateName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Candidates" Relationship="Self.Poll_Candidates" FromRole="Poll_Candidates_Source" ToRole="Poll_Candidates_Target" />
+          <NavigationProperty Name="Winner" Relationship="Self.Restaurant_PollsWon" FromRole="Restaurant_PollsWon_Target" ToRole="Restaurant_PollsWon_Source" />
+        </EntityType>
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="PollDate" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PollDate" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Poll" Relationship="Self.Poll_Candidates" FromRole="Poll_Candidates_Target" ToRole="Poll_Candidates_Source" />
+          <NavigationProperty Name="Restaurant" Relationship="Self.Candidate_Restaurant" FromRole="Candidate_Restaurant_Source" ToRole="Candidate_Restaurant_Target" />
+          <NavigationProperty Name="Votes" Relationship="Self.Vote_Candidate" FromRole="Vote_Candidate_Target" ToRole="Vote_Candidate_Source" />
+        </EntityType>
+        <EntityType Name="Restaurant">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PollsWon" Relationship="Self.Restaurant_PollsWon" FromRole="Restaurant_PollsWon_Source" ToRole="Restaurant_PollsWon_Target" />
+        </EntityType>
+        <EntityType Name="Vote">
+          <Key>
+            <PropertyRef Name="VoterName" />
+            <PropertyRef Name="CandidateName" />
+          </Key>
+          <Property Name="VoterName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CandidateName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="When" Type="DateTime" Nullable="false" />
+          <NavigationProperty Name="Candidate" Relationship="Self.Vote_Candidate" FromRole="Vote_Candidate_Source" ToRole="Vote_Candidate_Target" />
+          <NavigationProperty Name="Voter" Relationship="Self.Vote_Voter" FromRole="Vote_Voter_Source" ToRole="Vote_Voter_Target" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="Restaurant_PollsWon">
+          <End Role="Restaurant_PollsWon_Source" Type="Self.Restaurant" Multiplicity="0..1" />
+          <End Role="Restaurant_PollsWon_Target" Type="Self.Poll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant_PollsWon_Source">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Restaurant_PollsWon_Target">
+              <PropertyRef Name="WinnerCandidateName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Candidate_Restaurant">
+          <End Role="Candidate_Restaurant_Source" Type="Self.Candidate" Multiplicity="*" />
+          <End Role="Candidate_Restaurant_Target" Type="Self.Restaurant" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Candidate_Restaurant_Target">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Candidate_Restaurant_Source">
+              <PropertyRef Name="Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Vote_Candidate">
+          <End Role="Vote_Candidate_Source" Type="Self.Vote" Multiplicity="*" />
+          <End Role="Vote_Candidate_Target" Type="Self.Candidate" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Vote_Candidate_Target">
+              <PropertyRef Name="Name" />
+              <PropertyRef Name="PollDate" />
+            </Principal>
+            <Dependent Role="Vote_Candidate_Source">
+              <PropertyRef Name="CandidateName" />
+              <PropertyRef Name="When" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Vote_Voter">
+          <End Role="Vote_Voter_Source" Type="Self.Vote" Multiplicity="*" />
+          <End Role="Vote_Voter_Target" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Vote_Voter_Target">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Vote_Voter_Source">
+              <PropertyRef Name="VoterName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Poll_Candidates">
+          <End Role="Poll_Candidates_Source" Type="Self.Poll" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Poll_Candidates_Target" Type="Self.Candidate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poll_Candidates_Source">
+              <PropertyRef Name="Date" />
+            </Principal>
+            <Dependent Role="Poll_Candidates_Target">
+              <PropertyRef Name="PollDate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RestaurantVoterDbContext">
+          <EntitySet Name="Polls" EntityType="Self.Poll" />
+          <EntitySet Name="Candidates" EntityType="Self.Candidate" />
+          <EntitySet Name="Restaurants" EntityType="Self.Restaurant" />
+          <EntitySet Name="Votes" EntityType="Self.Vote" />
+          <EntitySet Name="Voters" EntityType="Self.User" />
+          <AssociationSet Name="Restaurant_PollsWon" Association="Self.Restaurant_PollsWon">
+            <End Role="Restaurant_PollsWon_Source" EntitySet="Restaurants" />
+            <End Role="Restaurant_PollsWon_Target" EntitySet="Polls" />
+          </AssociationSet>
+          <AssociationSet Name="Candidate_Restaurant" Association="Self.Candidate_Restaurant">
+            <End Role="Candidate_Restaurant_Source" EntitySet="Candidates" />
+            <End Role="Candidate_Restaurant_Target" EntitySet="Restaurants" />
+          </AssociationSet>
+          <AssociationSet Name="Vote_Candidate" Association="Self.Vote_Candidate">
+            <End Role="Vote_Candidate_Source" EntitySet="Votes" />
+            <End Role="Vote_Candidate_Target" EntitySet="Candidates" />
+          </AssociationSet>
+          <AssociationSet Name="Vote_Voter" Association="Self.Vote_Voter">
+            <End Role="Vote_Voter_Source" EntitySet="Votes" />
+            <End Role="Vote_Voter_Target" EntitySet="Voters" />
+          </AssociationSet>
+          <AssociationSet Name="Poll_Candidates" Association="Self.Poll_Candidates">
+            <End Role="Poll_Candidates_Source" EntitySet="Polls" />
+            <End Role="Poll_Candidates_Target" EntitySet="Candidates" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </ConceptualModels>
+    <Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CodeFirstDatabase" CdmEntityContainer="RestaurantVoterDbContext">
+          <EntitySetMapping Name="Polls">
+            <EntityTypeMapping TypeName="RestaurantApp.Voting.Repository.Poll">
+              <MappingFragment StoreEntitySet="Poll">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="WinnerCandidateName" ColumnName="WinnerCandidateName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Candidates">
+            <EntityTypeMapping TypeName="RestaurantApp.Voting.Repository.Candidate">
+              <MappingFragment StoreEntitySet="Candidate">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="PollDate" ColumnName="PollDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Restaurants">
+            <EntityTypeMapping TypeName="RestaurantApp.Voting.Repository.Restaurant">
+              <MappingFragment StoreEntitySet="Restaurant">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Votes">
+            <EntityTypeMapping TypeName="RestaurantApp.Voting.Repository.Vote">
+              <MappingFragment StoreEntitySet="Vote">
+                <ScalarProperty Name="VoterName" ColumnName="VoterName" />
+                <ScalarProperty Name="CandidateName" ColumnName="CandidateName" />
+                <ScalarProperty Name="When" ColumnName="When" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voters">
+            <EntityTypeMapping TypeName="RestaurantApp.Voting.Repository.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </Mappings>
+    <StorageModels>
+      <Schema Namespace="CodeFirstDatabaseSchema" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Poll">
+          <Key>
+            <PropertyRef Name="Date" />
+          </Key>
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="WinnerCandidateName" Type="nvarchar" MaxLength="128" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Candidate">
+          <Key>
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="PollDate" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="PollDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Restaurant">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Vote">
+          <Key>
+            <PropertyRef Name="VoterName" />
+            <PropertyRef Name="CandidateName" />
+          </Key>
+          <Property Name="VoterName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CandidateName" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="When" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Name" />
+          </Key>
+          <Property Name="Name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="true" />
+        </EntityType>
+        <Association Name="Restaurant_PollsWon">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="0..1" />
+          <End Role="Poll" Type="Self.Poll" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Poll">
+              <PropertyRef Name="WinnerCandidateName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Candidate_Restaurant">
+          <End Role="Restaurant" Type="Self.Restaurant" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Restaurant">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Candidate">
+              <PropertyRef Name="Name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Vote_Candidate">
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Vote" Type="Self.Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Candidate">
+              <PropertyRef Name="Name" />
+              <PropertyRef Name="PollDate" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="CandidateName" />
+              <PropertyRef Name="When" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Vote_Voter">
+          <End Role="User" Type="Self.User" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Vote" Type="Self.Vote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Name" />
+            </Principal>
+            <Dependent Role="Vote">
+              <PropertyRef Name="VoterName" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Poll_Candidates">
+          <End Role="Poll" Type="Self.Poll" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Candidate" Type="Self.Candidate" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poll">
+              <PropertyRef Name="Date" />
+            </Principal>
+            <Dependent Role="Candidate">
+              <PropertyRef Name="PollDate" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CodeFirstDatabase">
+          <EntitySet Name="Poll" EntityType="Self.Poll" Schema="dbo" Table="Polls" />
+          <EntitySet Name="Candidate" EntityType="Self.Candidate" Schema="dbo" Table="Candidates" />
+          <EntitySet Name="Restaurant" EntityType="Self.Restaurant" Schema="dbo" Table="Restaurants" />
+          <EntitySet Name="Vote" EntityType="Self.Vote" Schema="dbo" Table="Votes" />
+          <EntitySet Name="User" EntityType="Self.User" Schema="dbo" Table="Users" />
+          <AssociationSet Name="Restaurant_PollsWon" Association="Self.Restaurant_PollsWon">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="Poll" EntitySet="Poll" />
+          </AssociationSet>
+          <AssociationSet Name="Candidate_Restaurant" Association="Self.Candidate_Restaurant">
+            <End Role="Restaurant" EntitySet="Restaurant" />
+            <End Role="Candidate" EntitySet="Candidate" />
+          </AssociationSet>
+          <AssociationSet Name="Vote_Candidate" Association="Self.Vote_Candidate">
+            <End Role="Candidate" EntitySet="Candidate" />
+            <End Role="Vote" EntitySet="Vote" />
+          </AssociationSet>
+          <AssociationSet Name="Vote_Voter" Association="Self.Vote_Voter">
+            <End Role="User" EntitySet="User" />
+            <End Role="Vote" EntitySet="Vote" />
+          </AssociationSet>
+          <AssociationSet Name="Poll_Candidates" Association="Self.Poll_Candidates">
+            <End Role="Poll" EntitySet="Poll" />
+            <End Role="Candidate" EntitySet="Candidate" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </StorageModels>
+  </Runtime>
+  <Designer>
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="ProcessDependentTemplatesOnSave" Value="False" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <Diagrams >
+      <Diagram DiagramId="ccf0dca6c1244f79a234d06b7d780c5e" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="RestaurantApp.Voting.Repository.Poll" Width="2" PointX="6.625" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantApp.Voting.Repository.Candidate" Width="1.5" PointX="4.25" PointY="1.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantApp.Voting.Repository.Restaurant" Width="1.5" PointX="1.875" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantApp.Voting.Repository.Vote" Width="1.5" PointX="4.25" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="RestaurantApp.Voting.Repository.User" Width="1.5" PointX="4.25" PointY="6.5" IsExpanded="true" />
+        <AssociationConnector Association="RestaurantApp.Voting.Repository.Restaurant_PollsWon" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantApp.Voting.Repository.Candidate_Restaurant" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantApp.Voting.Repository.Vote_Candidate" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantApp.Voting.Repository.Vote_Voter" ManuallyRouted="false" />
+        <AssociationConnector Association="RestaurantApp.Voting.Repository.Poll_Candidates" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</Edmx>

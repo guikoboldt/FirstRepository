@@ -1,0 +1,633 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="RestaurantsListGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="RestaurantsListGroupBox.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="VoteOptionsListControl.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="VoteOptionsListControl.ItemHeight" type="System.Int32, mscorlib">
+    <value>19</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="VoteOptionsListControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>13, 14</value>
+  </data>
+  <data name="VoteOptionsListControl.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>13, 3, 13, 3</value>
+  </data>
+  <data name="VoteOptionsListControl.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>140, 140</value>
+  </data>
+  <data name="VoteOptionsListControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>178, 232</value>
+  </data>
+  <data name="VoteOptionsListControl.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;VoteOptionsListControl.Name" xml:space="preserve">
+    <value>VoteOptionsListControl</value>
+  </data>
+  <data name="&gt;&gt;VoteOptionsListControl.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VoteOptionsListControl.Parent" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;VoteOptionsListControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="panel1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="panel1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>204, 263</value>
+  </data>
+  <data name="panel1.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;panel1.Name" xml:space="preserve">
+    <value>panel1</value>
+  </data>
+  <data name="&gt;&gt;panel1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;panel1.Parent" xml:space="preserve">
+    <value>RestaurantsListGroupBox</value>
+  </data>
+  <data name="&gt;&gt;panel1.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="VoteButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="VoteButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>30, 294</value>
+  </data>
+  <data name="VoteButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>13, 3, 13, 3</value>
+  </data>
+  <data name="VoteButton.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="VoteButton.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="VoteButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="VoteButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="VoteButton.Text" xml:space="preserve">
+    <value>Votar</value>
+  </data>
+  <data name="&gt;&gt;VoteButton.Name" xml:space="preserve">
+    <value>VoteButton</value>
+  </data>
+  <data name="&gt;&gt;VoteButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VoteButton.Parent" xml:space="preserve">
+    <value>RestaurantsListGroupBox</value>
+  </data>
+  <data name="&gt;&gt;VoteButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="RestaurantsListGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold</value>
+  </data>
+  <data name="RestaurantsListGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>26, 79</value>
+  </data>
+  <data name="RestaurantsListGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>27, 3, 27, 3</value>
+  </data>
+  <data name="RestaurantsListGroupBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>216, 333</value>
+  </data>
+  <data name="RestaurantsListGroupBox.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+    <value>No</value>
+  </data>
+  <data name="RestaurantsListGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>216, 333</value>
+  </data>
+  <data name="RestaurantsListGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="RestaurantsListGroupBox.Text" xml:space="preserve">
+    <value>Votos/Restaurantes:</value>
+  </data>
+  <data name="&gt;&gt;RestaurantsListGroupBox.Name" xml:space="preserve">
+    <value>RestaurantsListGroupBox</value>
+  </data>
+  <data name="&gt;&gt;RestaurantsListGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RestaurantsListGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RestaurantsListGroupBox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="VoteResultGroupBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="VoteResultGroupBox.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="PollClosingAlertLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="PollClosingAlertLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold, Italic</value>
+  </data>
+  <data name="PollClosingAlertLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="PollClosingAlertLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>100, 235</value>
+  </data>
+  <data name="PollClosingAlertLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>79, 19</value>
+  </data>
+  <data name="PollClosingAlertLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="PollClosingAlertLabel.Text" xml:space="preserve">
+    <value>Encerrada</value>
+  </data>
+  <data name="&gt;&gt;PollClosingAlertLabel.Name" xml:space="preserve">
+    <value>PollClosingAlertLabel</value>
+  </data>
+  <data name="&gt;&gt;PollClosingAlertLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;PollClosingAlertLabel.Parent" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;PollClosingAlertLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="MostVotedLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="MostVotedLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>89, 185</value>
+  </data>
+  <data name="MostVotedLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 19</value>
+  </data>
+  <data name="MostVotedLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="MostVotedLabel.Text" xml:space="preserve">
+    <value>Mais Votado:</value>
+  </data>
+  <data name="&gt;&gt;MostVotedLabel.Name" xml:space="preserve">
+    <value>MostVotedLabel</value>
+  </data>
+  <data name="&gt;&gt;MostVotedLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MostVotedLabel.Parent" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;MostVotedLabel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="MonthCalendar.FirstDayOfWeek" type="System.Windows.Forms.Day, System.Windows.Forms">
+    <value>Monday</value>
+  </data>
+  <data name="MonthCalendar.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 14</value>
+  </data>
+  <data name="MonthCalendar.ShowWeekNumbers" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="MonthCalendar.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;MonthCalendar.Name" xml:space="preserve">
+    <value>MonthCalendar</value>
+  </data>
+  <data name="&gt;&gt;MonthCalendar.Type" xml:space="preserve">
+    <value>System.Windows.Forms.MonthCalendar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MonthCalendar.Parent" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;MonthCalendar.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="MostVotedCadidateLabel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="MostVotedCadidateLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold, Italic</value>
+  </data>
+  <data name="MostVotedCadidateLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="MostVotedCadidateLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 206</value>
+  </data>
+  <data name="MostVotedCadidateLabel.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>249, 19</value>
+  </data>
+  <data name="MostVotedCadidateLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>242, 19</value>
+  </data>
+  <data name="MostVotedCadidateLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="MostVotedCadidateLabel.Text" xml:space="preserve">
+    <value>Restaurante Mais Votado</value>
+  </data>
+  <data name="MostVotedCadidateLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;MostVotedCadidateLabel.Name" xml:space="preserve">
+    <value>MostVotedCadidateLabel</value>
+  </data>
+  <data name="&gt;&gt;MostVotedCadidateLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;MostVotedCadidateLabel.Parent" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;MostVotedCadidateLabel.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>100, 235</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>67, 19</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="LaunchTimeCountDownLabel.Text" xml:space="preserve">
+    <value>00:00:00</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownLabel.Name" xml:space="preserve">
+    <value>LaunchTimeCountDownLabel</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownLabel.Parent" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="VoteResultPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 25</value>
+  </data>
+  <data name="VoteResultPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>276, 254</value>
+  </data>
+  <data name="VoteResultPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;VoteResultPanel.Name" xml:space="preserve">
+    <value>VoteResultPanel</value>
+  </data>
+  <data name="&gt;&gt;VoteResultPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VoteResultPanel.Parent" xml:space="preserve">
+    <value>VoteResultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;VoteResultPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="VoteResultGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold</value>
+  </data>
+  <data name="VoteResultGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>266, 79</value>
+  </data>
+  <data name="VoteResultGroupBox.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>27, 3, 27, 3</value>
+  </data>
+  <data name="VoteResultGroupBox.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>290, 290</value>
+  </data>
+  <data name="VoteResultGroupBox.RightToLeft" type="System.Windows.Forms.RightToLeft, System.Windows.Forms">
+    <value>No</value>
+  </data>
+  <data name="VoteResultGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>290, 290</value>
+  </data>
+  <data name="VoteResultGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="VoteResultGroupBox.Text" xml:space="preserve">
+    <value>Resultados</value>
+  </data>
+  <data name="&gt;&gt;VoteResultGroupBox.Name" xml:space="preserve">
+    <value>VoteResultGroupBox</value>
+  </data>
+  <data name="&gt;&gt;VoteResultGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;VoteResultGroupBox.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;VoteResultGroupBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="RefreshVoteResultButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="RefreshVoteResultButton.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold</value>
+  </data>
+  <data name="RefreshVoteResultButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="RefreshVoteResultButton.Location" type="System.Drawing.Point, System.Drawing">
+    <value>336, 374</value>
+  </data>
+  <data name="RefreshVoteResultButton.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>13, 3, 13, 3</value>
+  </data>
+  <data name="RefreshVoteResultButton.MaximumSize" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="RefreshVoteResultButton.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="RefreshVoteResultButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>140, 31</value>
+  </data>
+  <data name="RefreshVoteResultButton.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="RefreshVoteResultButton.Text" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
+  <data name="&gt;&gt;RefreshVoteResultButton.Name" xml:space="preserve">
+    <value>RefreshVoteResultButton</value>
+  </data>
+  <data name="&gt;&gt;RefreshVoteResultButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;RefreshVoteResultButton.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;RefreshVoteResultButton.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="LoggedUserLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LoggedUserLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Times New Roman, 12pt, style=Bold</value>
+  </data>
+  <data name="LoggedUserLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>32, 38</value>
+  </data>
+  <data name="LoggedUserLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>66, 19</value>
+  </data>
+  <data name="LoggedUserLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="LoggedUserLabel.Text" xml:space="preserve">
+    <value>Usuário:</value>
+  </data>
+  <data name="LoggedUserLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleCenter</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserLabel.Name" xml:space="preserve">
+    <value>LoggedUserLabel</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserLabel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="LoggedUserNameLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="LoggedUserNameLabel.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 12pt, style=Bold</value>
+  </data>
+  <data name="LoggedUserNameLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="LoggedUserNameLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>96, 38</value>
+  </data>
+  <data name="LoggedUserNameLabel.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>400, 13</value>
+  </data>
+  <data name="LoggedUserNameLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>400, 20</value>
+  </data>
+  <data name="LoggedUserNameLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="LoggedUserNameLabel.Text" xml:space="preserve">
+    <value>&lt;User&gt;</value>
+  </data>
+  <data name="LoggedUserNameLabel.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserNameLabel.Name" xml:space="preserve">
+    <value>LoggedUserNameLabel</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserNameLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserNameLabel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;LoggedUserNameLabel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="LaunchTimeCountDownTicker.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>132, 17</value>
+  </metadata>
+  <metadata name="AutoResultRefreshTimer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>346, 17</value>
+  </metadata>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="$this.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="$this.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>581, 430</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterParent</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownTicker.Name" xml:space="preserve">
+    <value>LaunchTimeCountDownTicker</value>
+  </data>
+  <data name="&gt;&gt;LaunchTimeCountDownTicker.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;AutoResultRefreshTimer.Name" xml:space="preserve">
+    <value>AutoResultRefreshTimer</value>
+  </data>
+  <data name="&gt;&gt;AutoResultRefreshTimer.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Timer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>MainVotingForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>RestaurantApp.Voting.DesktopApp.BaseForm, RestaurantVotingApp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+</root>
