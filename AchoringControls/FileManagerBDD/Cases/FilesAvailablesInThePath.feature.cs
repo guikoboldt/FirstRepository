@@ -63,22 +63,27 @@ namespace FileManagerBDD.Cases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("List all availables files", new string[] {
-                "mytag"}, SourceLine=5)]
+        [TechTalk.SpecRun.ScenarioAttribute("List all availables files", SourceLine=4)]
         public virtual void ListAllAvailablesFiles()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("List all availables files", new string[] {
-                        "mytag"});
-#line 6
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("List all availables files", ((string[])(null)));
+#line 5
 this.ScenarioSetup(scenarioInfo);
+#line 6
+ testRunner.Given("This is the download path: \'C:\\Download\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
- testRunner.Given("This is the download path: \'Path\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 8
- testRunner.And("there is \'1\' or more files availables in \'Path\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 9
  testRunner.When("I click on the FileManager button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 10
- testRunner.Then("all files availables in the \'Path\' should appear in the screen", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Name"});
+            table1.AddRow(new string[] {
+                        "text1.txt"});
+            table1.AddRow(new string[] {
+                        "text2.txt"});
+            table1.AddRow(new string[] {
+                        "text3.txt"});
+#line 8
+ testRunner.Then("The following files should appear", ((string)(null)), table1, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
