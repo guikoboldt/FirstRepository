@@ -5,6 +5,6 @@
 @mytag
 Scenario: List all availables files
 	Given This is the download path: 'Path'
-	And there is '1' or more files availables in 'Path'
+	And there is '1' or more files availables
 	When I click on the FileManager button
-	Then all files availables in the 'Path' should appear in the screen
+	Then 'x' files availables in the 'Path' should appear in the screen

@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerBDD", "FileManagerBDD\FileManagerBDD.csproj", "{30120335-BEEC-44D3-B798-6C09A0CB5DF0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileManagerApp", "FileManagerApp\FileManagerApp.csproj", "{EC4F2E92-CF5B-42EC-BCCE-48599EEC0528}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{30120335-BEEC-44D3-B798-6C09A0CB5DF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30120335-BEEC-44D3-B798-6C09A0CB5DF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30120335-BEEC-44D3-B798-6C09A0CB5DF0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC4F2E92-CF5B-42EC-BCCE-48599EEC0528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC4F2E92-CF5B-42EC-BCCE-48599EEC0528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC4F2E92-CF5B-42EC-BCCE-48599EEC0528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC4F2E92-CF5B-42EC-BCCE-48599EEC0528}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
