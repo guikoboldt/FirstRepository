@@ -88,7 +88,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\FileManagerApp\FileManagerApp.csproj">
+      <Project>{ec4f2e92-cf5b-42ec-bcce-48599eec0528}</Project>
+      <Name>FileManagerApp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

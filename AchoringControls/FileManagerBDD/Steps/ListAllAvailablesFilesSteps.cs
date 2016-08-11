@@ -33,8 +33,7 @@ namespace FileManagerBDD.Steps
         public void ThenAllFilesAvailablesShouldAppearInTheScreen(int availablesFilesFound, string downloadPath)
         {
             //get files of the original download path of application
-            
-            var defaultDownloadPath = Path.Combine(FileManagerApp.AppDomain.CurrentDomain.BaseDirectory , FileManagerApp.System.configuration.ConfiguratinManager.AppSettings["defaultDownloadPath"]);
+            var defaultDownloadPath = Path.Combine(FileManagerApp.Globals.GlobalInformations.baseDirectory , FileManagerApp.Globals.GlobalInformations.defultDownloadPath);
             var filesDefaultPath = Directory.GetFiles(defaultDownloadPath);
 
             //get the files of the download path parameter
