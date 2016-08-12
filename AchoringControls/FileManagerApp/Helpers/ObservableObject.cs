@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.ComponentModel;
 
-namespace SimpleMVVMExample
+namespace FileManagerApp.Helpers
 {
     public abstract class ObservableObject : INotifyPropertyChanged
     {

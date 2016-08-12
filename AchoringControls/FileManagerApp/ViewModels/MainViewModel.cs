@@ -7,11 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FileManagerApp.Models
+namespace FileManagerApp.ViewModels
 {
     public class MainViewModel : IBaseViewModel
     {
-        public string DowloadManager
+        public string DownloadManager
         { get { return "Dowload Manager"; } }
 
         public string Name

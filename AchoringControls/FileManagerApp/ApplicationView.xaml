@@ -1,4 +1,4 @@
-﻿<Window x:Class="FileManagerApp.MainWindow"
+﻿<Window x:Class="FileManagerApp.ApplicationView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,10 +8,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
-        <!-- <DataTemplate DataType="{x:Type viewModels:MainViewModel}">
+       <DataTemplate DataType="{x:Type viewModels:MainViewModel}">
             <userControls:MainWindowView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type local:ProductsViewModel}">
+       <!-- <DataTemplate DataType="{x:Type local:ProductsViewModel}">
             <local:ProductsView />
         </DataTemplate> -->
     </Window.Resources>

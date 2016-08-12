@@ -1,6 +1,4 @@
 ﻿using FileManagerApp.Helpers;
-using FileManagerApp.Models;
-using SimpleMVVMExample;
 using System;
 using System.Collections.Generic;
 using System.Linq;

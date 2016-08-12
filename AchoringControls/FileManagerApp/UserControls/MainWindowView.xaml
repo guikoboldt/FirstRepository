@@ -7,9 +7,9 @@
              xmlns:viewModels="clr-namespace:FileManagerApp.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-   <!--<UserControl.DataContext>
+    <UserControl.DataContext>
         <viewModels:MainViewModel />
-    </UserControl.DataContext>-->
+    </UserControl.DataContext>
 
     <Grid Background="White">
         <Grid.RowDefinitions>
