@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileManagerApp.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
@@ -11,7 +12,6 @@ namespace FileManagerApp.Entities
     public class DownloadManager
     {
         public string downloadPath { get; set; }
-        public int numberOfFiles { get; set; }
 
         public DownloadManager (string downloadPath)
         {
@@ -23,9 +23,18 @@ namespace FileManagerApp.Entities
             this.downloadPath = directory.FullName;
         }
 
-        public async Task<string[]> GetAllFilesAsync ()
+        public FileInfo[] GetAllFiles()
         {
-            return await Task.Run( () => Directory.GetFiles(downloadPath));
+            var files = GetAllFilesAsync().Result;
+            if (files.Length.Equals(0))
+                throw new NoFilesFoundException();
+            return files;
+
+        }
+
+        private async Task<FileInfo[]> GetAllFilesAsync ()
+        {
+            return await Task.Run( () => new DirectoryInfo(downloadPath).GetFiles());
         }
     }
 }

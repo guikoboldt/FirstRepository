@@ -72,18 +72,25 @@ this.ScenarioSetup(scenarioInfo);
 #line 6
  testRunner.Given("This is the download path: \'C:\\Download\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
- testRunner.When("I click on the FileManager button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
-                        "Name"});
-            table1.AddRow(new string[] {
-                        "text1.txt"});
-            table1.AddRow(new string[] {
-                        "text2.txt"});
-            table1.AddRow(new string[] {
-                        "text3.txt"});
+ testRunner.When("I click on the DownloadManager button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 8
- testRunner.Then("The following files should appear", ((string)(null)), table1, "Then ");
+ testRunner.Then("files should be found", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [TechTalk.SpecRun.ScenarioAttribute("No Files availables", SourceLine=9)]
+        public virtual void NoFilesAvailables()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No Files availables", ((string[])(null)));
+#line 10
+this.ScenarioSetup(scenarioInfo);
+#line 11
+ testRunner.Given("This is the download path: \'C:\\Download\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 12
+ testRunner.When("I click on the DownloadManager button", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 13
+ testRunner.Then("I should see a message : No files found", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

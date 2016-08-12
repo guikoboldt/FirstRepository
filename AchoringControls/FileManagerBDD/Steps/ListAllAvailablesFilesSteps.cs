@@ -1,5 +1,7 @@
 ﻿using FileManagerApp.Entities;
+using FileManagerApp.Exceptions;
 using FileManagerBDD.Extensions;
+using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -14,33 +16,42 @@ namespace FileManagerBDD.Steps
     public class ListAllAvailablesFilesSteps
     {
         protected DownloadManager downloadManager { get; set; }
-        protected StringCollection files { get; set; }
+        protected FileInfo[] files { get; set; }
 
         [Given(@"This is the download path: '(.*)'")]
         public void GivenThisIsTheDownloadPath(string downloadPath)
         {
             downloadManager = new DownloadManager(downloadPath);
-        }
-        
-        [Given(@"there is '(\d)' or more files availables")]
-        public void GivenThereIsFilesAvailablesIn(int numberAvailablesFiles)
-        {
-            downloadManager.numberOfFiles = numberAvailablesFiles;
+
+            for (int i = 0; i < 3; i++) //path files initializer
+            {
+                File.Create(Path.Combine(downloadPath, @"text" + i + ".txt"));
+            }
         }
 
-        [When(@"I click on the FileManager button")]
+        [When(@"I click on the DownloadManager button")]
         public void WhenIClickOnTheFileManagerButton()
         {
-            files = new StringCollection();
-            files.AddRange(downloadManager.GetAllFilesAsync().Result);
+            files = downloadManager.GetAllFiles();
         }
 
-        [Then(@"The following files should appear")]
-        public void ThenTheFollowingFilesShouldAppear(Table table)
+        [Then(@"files should be found")]
+        public void ThenFileShouldBeFound()
         {
-            var values = table.ToStringCollection();
-            Assert.AreEqual(values.Count, files.Count);
+            files.Should()
+                 .NotBeEmpty("Files found");
         }
+
+        [Then(@"I should see a message : No files found")]
+        public void ThenIShouldSeeAMessageNoFilesFound()
+        {
+            foreach (var file in files)
+            {
+                file.Delete();
+            }
+            this.Invoking(_ => _.WhenIClickOnTheFileManagerButton()).ShouldThrow<NoFilesFoundException>();
+        }
+
 
     }
 }

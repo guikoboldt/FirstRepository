@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="FileManagerApp.UserControls.MainWindowView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FileManagerApp.UserControls"
+             xmlns:viewModels="clr-namespace:FileManagerApp.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+   <!--<UserControl.DataContext>
+        <viewModels:MainViewModel />
+    </UserControl.DataContext>-->
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+                <RowDefinition Height="80" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="30" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Name="DownloadManager" Content="{Binding DownloadManager}" 
+                Grid.Row="0" Grid.Column="2" Height="50" Width="50" HorizontalAlignment="Left" Command="{Binding OpenDownloadManager}"/>
+        </Grid>
+</UserControl>
