@@ -16,17 +16,12 @@ namespace FileManagerBDD.Steps
     public class ListAllAvailablesFilesSteps
     {
         protected DownloadManager downloadManager { get; set; }
-        protected FileInfo[] files { get; set; }
+        protected FileInfo[] files { get; set; } = null;
 
         [Given(@"This is the download path: '(.*)'")]
         public void GivenThisIsTheDownloadPath(string downloadPath)
         {
             downloadManager = new DownloadManager(downloadPath);
-
-            for (int i = 0; i < 3; i++) //path files initializer
-            {
-                File.Create(Path.Combine(downloadPath, @"text" + i + ".txt"));
-            }
         }
 
         [When(@"I click on the DownloadManager button")]
@@ -45,10 +40,14 @@ namespace FileManagerBDD.Steps
         [Then(@"I should see a message : No files found")]
         public void ThenIShouldSeeAMessageNoFilesFound()
         {
-            foreach (var file in files)
+            Task.Run(() =>
             {
-                file.Delete();
-            }
+                foreach (var file in files)
+                {
+                    file.Delete();
+                };
+            }).Wait();
+
             this.Invoking(_ => _.WhenIClickOnTheFileManagerButton()).ShouldThrow<NoFilesFoundException>();
         }
 

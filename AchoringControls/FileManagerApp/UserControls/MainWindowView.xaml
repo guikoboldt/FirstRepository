@@ -13,15 +13,15 @@
 
     <Grid Background="White">
         <Grid.RowDefinitions>
-                <RowDefinition Height="80" />
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="30" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Name="DownloadManager" Content="{Binding DownloadManager}" 
-                Grid.Row="0" Grid.Column="2" Height="50" Width="50" HorizontalAlignment="Left" Command="{Binding OpenDownloadManager}"/>
-        </Grid>
+            <RowDefinition Height="80" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Button Name="DownloadManager" Content="{Binding DownloadManager}" 
+                Grid.Row="0" Grid.Column="1" Height="50" Width="111" HorizontalAlignment="Left" Command="{Binding OpenDownloadManager}" Margin="0,15"/>
+    </Grid>
 </UserControl>
