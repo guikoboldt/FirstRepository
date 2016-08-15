@@ -6,11 +6,10 @@
              xmlns:local="clr-namespace:FileManagerApp.UserControls"
              xmlns:viewModels="clr-namespace:FileManagerApp.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="330" d:DesignWidth="330">
     <UserControl.DataContext>
         <viewModels:MainViewModel />
     </UserControl.DataContext>
-
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="80" />
@@ -21,7 +20,14 @@
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Button Name="DownloadManager" Content="{Binding DownloadManager}" 
-                Grid.Row="0" Grid.Column="1" Height="50" Width="111" HorizontalAlignment="Left" Command="{Binding OpenDownloadManager}" Margin="0,15"/>
+        <Button Name="updateFiles" Content="{Binding updateFiles }"
+                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Left" Command="{Binding updateFilesCommand}" Margin="0,15"/>
+        <Button Name="deleteFiles" Content="{Binding deleteFiles }"
+                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Right" Command="{Binding deleteFilesComman}" Margin="0,15"/>
+        <DataGrid Grid.Column="1" Grid.Row="1" 
+                  ItemsSource="{Binding fileList}"
+                  CanUserAddRows="False" CanUserDeleteRows="False"
+                  AutoGenerateColumns="True"
+                  Visibility="Visible"/>
     </Grid>
 </UserControl>

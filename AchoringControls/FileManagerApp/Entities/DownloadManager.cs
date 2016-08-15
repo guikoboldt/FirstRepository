@@ -12,6 +12,7 @@ namespace FileManagerApp.Entities
     public class DownloadManager
     {
         public string downloadPath { get; set; }
+        //public FileInfo[] fileList { get; set; }
 
         public DownloadManager (string downloadPath)
         {
@@ -25,10 +26,10 @@ namespace FileManagerApp.Entities
 
         public FileInfo[] GetAllFiles()
         {
-            var files = GetAllFilesAsync().Result;
-            if (files.Length.Equals(0))
+            var fileList = GetAllFilesAsync().Result;
+            if (fileList.Length.Equals(0))
                 throw new NoFilesFoundException();
-            return files;
+            return fileList;
 
         }
 
