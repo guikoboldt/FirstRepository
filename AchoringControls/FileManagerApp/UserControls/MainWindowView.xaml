@@ -23,9 +23,9 @@
         <Button Name="updateFiles" Content="{Binding updateFiles }"
                 Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Left" Command="{Binding updateFilesCommand}" Margin="0,15"/>
         <Button Name="deleteFiles" Content="{Binding deleteFiles }"
-                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Right" Command="{Binding deleteFilesComman}" Margin="0,15"/>
+                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Right" Command="{Binding deleteFilesCommand}" Margin="0,15"/>
         <DataGrid Grid.Column="1" Grid.Row="1" 
-                  ItemsSource="{Binding fileList}"
+                  ItemsSource="{Binding Files}"
                   CanUserAddRows="False" CanUserDeleteRows="False"
                   AutoGenerateColumns="True"
                   Visibility="Visible"/>

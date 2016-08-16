@@ -19,7 +19,12 @@ namespace FileManagerApp.ViewModels
             dM = new DownloadManager(Globals.GlobalInformations.defultDownloadPath);
         }
 
-        //public IList<FileInfo> files = new List<FileInfo>();
+        private IList<FileInfo> _files;
+        public IList<FileInfo> Files
+        {
+            get { return _files; }
+            set { _files = value; OnPropertyChanged(nameof(Files)); }
+        }
         private DownloadManager dM;
         public string updateFiles
         { get { return "Update Files"; } }
@@ -29,12 +34,10 @@ namespace FileManagerApp.ViewModels
         public string name
         { get { return "Main Window"; } }
 
-        public IList fileList{ get; private set; }
+        //public IList fileList{ get; private set; }
         public void LoadFiles(object obj)
         {
-            var files = dM.GetAllFiles().ToList();
-            fileList = (from file in files
-                            select new { fileName = file.Name, lastModified = file.LastWriteTime, size = file.Length }).ToList();
+            _files = dM.GetAllFiles().ToList();
         }
 
         public ICommand updateFilesCommand
