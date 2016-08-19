@@ -11,6 +11,13 @@ namespace LedPanel
     {
         static void Main(string[] args)
         {
+            Entities.LedPanel panel = new Entities.LedPanel("localhost");
+            while(true)
+            {
+                Console.WriteLine("Digite a frase:");
+                var message1 = Console.ReadLine();
+                panel.DisplayMessage(message1);
+            }
         }
 
         public Program()

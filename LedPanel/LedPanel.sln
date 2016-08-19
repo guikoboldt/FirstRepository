@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedPanel", "LedPanel\LedPanel.csproj", "{ECAC69EC-6187-4F2E-A334-FC3C8BABCFA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "virtualPanel", "virtualPanel\virtualPanel.csproj", "{FD2AFFE4-5002-483C-9A0C-D895BF84C8E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{ECAC69EC-6187-4F2E-A334-FC3C8BABCFA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECAC69EC-6187-4F2E-A334-FC3C8BABCFA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECAC69EC-6187-4F2E-A334-FC3C8BABCFA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD2AFFE4-5002-483C-9A0C-D895BF84C8E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD2AFFE4-5002-483C-9A0C-D895BF84C8E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD2AFFE4-5002-483C-9A0C-D895BF84C8E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD2AFFE4-5002-483C-9A0C-D895BF84C8E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
