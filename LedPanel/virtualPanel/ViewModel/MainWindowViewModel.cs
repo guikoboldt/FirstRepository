@@ -13,7 +13,7 @@ namespace virtualPanel.ViewModel
         public string DisplayMessage
         {
             get { return this._displayMessage; }
-            set { this._displayMessage = value; OnPropertyChanged(nameof(DisplayMessage)); }
+            set { this._displayMessage = value; OnPropertyChanged("DisplayMessage"); }
         }
 
 
