@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LedPanel.Entities
 {
-    public class LedPanel : IDisposable
+    public class LedPanel
     {
         public Socket socket { get; set; }
         private string ipAddress { get; set; }
@@ -19,6 +19,11 @@ namespace LedPanel.Entities
         private const byte bigFontSize = 0x16;
         private const byte firstLine = 0x01;
         private const byte secondLine = 0x02;
+        private const byte alignCenter = 0x04;
+        private const byte speedSetter = 0x40;
+        private const byte slow = 0x0A;
+        private const byte scrollDown = 0x24;
+        private const byte scrollUp = 0x23;
         private const byte initiateFrame = 0x01;
         private const byte initiateMessage = 0x02;
         private const byte endFrame = 0x03;
@@ -32,40 +37,67 @@ namespace LedPanel.Entities
         private const byte currentFrame = 0x01;
         private const byte numberOfFrames = 0x01;
         private const int bitCounter = 8;
+        public enum MessageType
+        {
+            Normal_1L = 0,
+            Normal_2L = 1,
+            Startup = 3,
+        }
 
         public LedPanel(string ipAddress, int connectionPort = 2101)
         {
             this.ipAddress = ipAddress;
             this.connectionPort = connectionPort;
-            this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            this.socket.Connect(ipAddress, connectionPort);
+            this.socket  = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
-        public IDisposable DisplayMessage(string line1, string line2 = "")
+        public void DisplayMessage(string line1, string line2, MessageType messageType)
         {
             var message = new List<byte>();
 
-            message.AddRange(new byte[] { command, defaultFontSize, command, firstLine });
-            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1));
-
-            if (!string.IsNullOrWhiteSpace(line2))
+            switch (messageType)
             {
-                message.AddRange(new byte[] { command, secondLine });
-                message.AddRange(ASCIIEncoding.ASCII.GetBytes(line2));
+                case MessageType.Normal_1L:
+                    {
+                        message.AddRange(new byte[] { command, 0x13, command, alignCenter });
+                        break;
+                    }
+                case MessageType.Normal_2L:
+                    {
+                        message.AddRange(new byte[] { command, defaultFontSize, command, firstLine });
+                        break;
+                    }
+                case MessageType.Startup:
+                    {
+                        message.AddRange(new byte[] { command, bigFontSize, command, speedSetter, slow });
+                        break;
+                    }
+                default:
+                    break;
             }
 
-            return SendToPanel(configureMessage(message).ToArray());
+            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1.ToUpper()));
+            message.Add(espace);
+
+            if (!string.IsNullOrWhiteSpace(line2) && messageType == MessageType.Normal_2L)
+            {
+                message.AddRange(new byte[] { command, speedSetter, slow, command, scrollDown, espace});
+                message.AddRange(ASCIIEncoding.ASCII.GetBytes(line2.ToUpper()));
+                message.AddRange(new byte[] { espace });
+            }
+
+            SendToPanel(configureMessage(message).ToArray());
         }
 
-        public IDisposable DisplayASingleBigMessage(string line1)
+        public void DisplayASingleBigMessage(string line1)
         {
             var message = new List<byte>();
 
-            message.AddRange(new byte[] { command, bigFontSize, command, firstLine });
-            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1));
-            message.AddRange(new byte[] { espace, espace, espace });
+            message.AddRange(new byte[] { command, bigFontSize, command, speedSetter, slow});
+            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1.ToUpper()));
+            message.AddRange(new byte[] { espace, espace });
 
-            return SendToPanel(configureMessage(message).ToArray());
+            SendToPanel(configureMessage(message).ToArray());
         }
 
         private ushort calculeteCheckSum(byte[] frame)
@@ -131,26 +163,18 @@ namespace LedPanel.Entities
             return frame;
         }
 
-        private IDisposable SendToPanel(byte[] frame)
+        private void SendToPanel(byte[] frame)
         {
             try
             {
+                socket.Connect(ipAddress, connectionPort);
                 socket.Send(frame);
+                socket.Disconnect(true);
             }
             catch
-            { }
-            return socket;
-        }
-
-        public void Dispose()
-        {
-            ((IDisposable)socket)?.Dispose();
-        }
-
-        public static void SendMessage(string ipAddress, int connectionPort = 2101, string line1 = "", string line2 = "")
-        {
-            using (var panel = new Entities.LedPanel(ipAddress, connectionPort))
-                panel.DisplayMessage(line1, line2);
+            {
+                Console.WriteLine("Check your connection!");
+            }
         }
     }
 }

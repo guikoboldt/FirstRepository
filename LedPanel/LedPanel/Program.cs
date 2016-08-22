@@ -12,37 +12,35 @@ namespace LedPanel
     {
         static void Main(string[] args)
         {
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            var panel = new Entities.LedPanel("192.168.1.2");
             var random = new Random();
             var timer = new Timer(5000);
-            //using (var panel = new Entities.LedPanel("localhost", 2034))
-            //{
-                //timer.Elapsed += (e, s) => { panel.DisplayMessage(line1: "CAMINHAO: " + random.Next(1, 20), line2: "LINHA: " + random.Next(1, 20)); };
+            
+                timer.Elapsed += (e, s) => {
+                    var rd = random.Next(1, 20);
+                    var rd2 = random.Next(1, 20);
+                    panel.DisplayMessage(line1: "CAMINHAO: " + rd, line2: "LINHA: " + rd2, messageType: Entities.LedPanel.MessageType.Normal_1L);
+                    logger.Info("CAMINHAO: {0}      LINHA: {1}", rd, rd2);
+                };
 
-                //timer.Start();
+                timer.Start();
 
-                //timer.Enabled = true;
-                while (true)
-                {
-                    Console.WriteLine("Digite a frase 1:");
-                    var message1 = Console.ReadLine();
-                    Console.WriteLine("Digite a frase 2:");
-                    var message2 = Console.ReadLine();
-                    Entities.LedPanel.SendMessage("localhost" , 2034, message1, message2);
-                }
-                //Console.Read();
-            //}
-            //using (var panel = new Entities.LedPanel("192.168.1.2"))
+                timer.Enabled = true;
+                Console.Read();
+            
+            //while (true)
             //{
-            //    //new Program();
-            //    while (true)
-            //    {
-            //        Console.WriteLine("Digite a frase 1:");
-            //        var message1 = Console.ReadLine();
-            //        Console.WriteLine("Digite a frase 2:");
-            //        var message2 = Console.ReadLine();
-            //        panel.DisplayMessage(message1, message2);
-            //    }
+            //    Console.WriteLine("Digite a frase 1:");
+            //    var message1 = Console.ReadLine();
+            //    Console.WriteLine("Digite a frase 2:");
+            //    var message2 = Console.ReadLine();
+            //    Entities.LedPanel.SendMessage("192.168.1.2",message1, message2);
+            //    //System.Threading.Thread.Sleep(3000);
+            //    //panel.DisplayASingleBigMessage(message1);
             //}
+            //Console.Read();
+            // }
         }
 
         //public Program()

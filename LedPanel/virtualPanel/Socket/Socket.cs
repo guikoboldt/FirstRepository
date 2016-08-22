@@ -12,18 +12,29 @@ namespace virtualPanel.Socket
         public TcpListener server { get; private set; } = new TcpListener(2034);
         public Socket()
         {
+            server.Server.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
             server.Start();
+            server.Server.Listen(5);
         }
         public async Task<string> GetMessageFromServer()
         {
             //server.Start();
+            System.Net.Sockets.Socket socket;
+            System.Net.EndPoint endPointClient;
             byte[] buffer = new byte[1024];
+            int length;
             //byte[] dataSize = new byte[2];
             //while (true)
             //{
-
-            var newSocket = await server.AcceptSocketAsync();
-            var length = newSocket.Receive(buffer);
+            if (!server.Server.Connected)
+            {
+                socket = await server.AcceptSocketAsync();
+                length = server.Server.Receive(buffer);
+            }
+            else
+            {
+                length = server.Server.Receive(buffer);
+            }
             //Array.Copy(buffer, 11, dataSize, 0, 2);
 
             var dataLength = ((ushort)buffer[11]) << 8;
