@@ -14,9 +14,12 @@ namespace virtualPanel
             ViewModel.MainWindowViewModel vm = new ViewModel.MainWindowViewModel();
             Socket.Socket server = new Socket.Socket();
 
+            //vm._displayMessage = "teste";
             MainWindow = new MainWindow();
+            MainWindow.DataContext = vm;
             MainWindow.Show();
-            vm.DisplayMessage = "teste";
+            while(true)
+                vm.DisplayMessage = await server.GetMessageFromServer();
 
 
             //vm.DisplayMessage = await server.GetMessageFromServer();

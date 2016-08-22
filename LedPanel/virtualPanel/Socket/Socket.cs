@@ -10,24 +10,29 @@ namespace virtualPanel.Socket
     public class Socket
     {
         public TcpListener server { get; private set; } = new TcpListener(2034);
-        public async Task<string> GetMessageFromServer()
+        public Socket()
         {
             server.Start();
+        }
+        public async Task<string> GetMessageFromServer()
+        {
+            //server.Start();
             byte[] buffer = new byte[1024];
             //byte[] dataSize = new byte[2];
-            while (true)
-            {
-                var length = server.AcceptSocket().Receive(buffer);
+            //while (true)
+            //{
 
-                //Array.Copy(buffer, 11, dataSize, 0, 2);
+            var newSocket = await server.AcceptSocketAsync();
+            var length = newSocket.Receive(buffer);
+            //Array.Copy(buffer, 11, dataSize, 0, 2);
 
-                var dataLength = ((ushort)buffer[11]) << 8;
-                dataLength = dataLength | (ushort)buffer[12];
+            var dataLength = ((ushort)buffer[11]) << 8;
+            dataLength = dataLength | (ushort)buffer[12];
 
-                var data = ASCIIEncoding.ASCII.GetString(buffer.Skip(13).Take(dataLength).ToArray());
+            var data = ASCIIEncoding.ASCII.GetString(buffer.Skip(13).Take(dataLength).ToArray());
 
-                var pakect = string.Format(
-                        @"
+            var pakect = string.Format(
+                    @"
                         SOH:      {0} 
                         STX:      {1}
                         CLAS. ORIG.:    {2}
@@ -43,8 +48,8 @@ namespace virtualPanel.Socket
                         DATA:     {12}
                         ", buffer.Cast<object>().Take(11).Concat(new object[] { dataLength }).Concat(new[] { data }).ToArray());
 
-                return await Task.Factory.StartNew(() => pakect.Substring(pakect.IndexOf("DATA:")));
-            }
+            return await Task.Factory.StartNew(() => pakect.Substring(pakect.LastIndexOf("DATA")));
+            // }
         }
     }
 }

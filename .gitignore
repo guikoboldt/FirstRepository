@@ -243,3 +243,5 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/LedPanel/virtualPanel/App.xaml.cs
+/LedPanel/virtualPanel/Socket/Socket.cs

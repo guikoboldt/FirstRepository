@@ -9,11 +9,11 @@ namespace virtualPanel.ViewModel
 {
     class MainWindowViewModel : INotifyPropertyChanged
     {
-        private string _displayMessage;
+        public string _displayMessage;
         public string DisplayMessage
         {
-            get { return this._displayMessage; }
-            set { this._displayMessage = value; OnPropertyChanged("DisplayMessage"); }
+            get { return _displayMessage; }
+            set { _displayMessage = value; OnPropertyChanged("DisplayMessage"); }
         }
 
 

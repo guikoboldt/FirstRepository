@@ -14,16 +14,23 @@ namespace LedPanel
         {
             var random = new Random();
             var timer = new Timer(5000);
-            using (var panel = new Entities.LedPanel("localhost"))
-            {
-                timer.Elapsed += (e, s) => { panel.DisplayMessage(line1: "CAMINHAO: " + random.Next(1, 20), line2: "LINHA: " + random.Next(1, 20)); };
+            //using (var panel = new Entities.LedPanel("localhost", 2034))
+            //{
+                //timer.Elapsed += (e, s) => { panel.DisplayMessage(line1: "CAMINHAO: " + random.Next(1, 20), line2: "LINHA: " + random.Next(1, 20)); };
 
-                timer.Start();
+                //timer.Start();
 
-                timer.Enabled = true;
-
-                Console.Read();
-            }
+                //timer.Enabled = true;
+                while (true)
+                {
+                    Console.WriteLine("Digite a frase 1:");
+                    var message1 = Console.ReadLine();
+                    Console.WriteLine("Digite a frase 2:");
+                    var message2 = Console.ReadLine();
+                    Entities.LedPanel.SendMessage("localhost" , 2034, message1, message2);
+                }
+                //Console.Read();
+            //}
             //using (var panel = new Entities.LedPanel("192.168.1.2"))
             //{
             //    //new Program();

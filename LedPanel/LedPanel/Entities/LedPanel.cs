@@ -11,7 +11,7 @@ namespace LedPanel.Entities
     {
         public Socket socket { get; set; }
         private string ipAddress { get; set; }
-        private int connectionPort { get; set; } = 2101; //default panel's connecttion port 2101;
+        private int connectionPort { get; set; } //default panel's connecttion port 2101;
 
         private const byte espace = 0x20;
         private const byte command = 0xAA;
@@ -33,9 +33,10 @@ namespace LedPanel.Entities
         private const byte numberOfFrames = 0x01;
         private const int bitCounter = 8;
 
-        public LedPanel(string ipAddress)
+        public LedPanel(string ipAddress, int connectionPort = 2101)
         {
             this.ipAddress = ipAddress;
+            this.connectionPort = connectionPort;
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             this.socket.Connect(ipAddress, connectionPort);
         }
@@ -53,25 +54,20 @@ namespace LedPanel.Entities
                 message.AddRange(ASCIIEncoding.ASCII.GetBytes(line2));
             }
 
-            var messageSize = (ushort)message.ToArray().Length;
-
-            var frame = new List<byte>();
-            frame.AddRange(new byte[] { initiateFrame, initiateMessage, computerCode,
-                                        computerGroup, computerId, panelCode, panelGroup,
-                                        panelId, quickMessage, currentFrame, numberOfFrames });
-
-            frame.Add((byte)(messageSize >> bitCounter));
-            frame.Add((byte)messageSize);
-
-            frame.AddRange(message.ToArray());
-            frame.Add(endFrame);
-
-            var checkSum = calculeteCheckSum(frame.ToArray());
-            frame.Add((byte)(checkSum >> bitCounter));
-            frame.Add((byte)checkSum);
-
-            return SendToPanel(frame.ToArray());
+            return SendToPanel(configureMessage(message).ToArray());
         }
+
+        public IDisposable DisplayASingleBigMessage(string line1)
+        {
+            var message = new List<byte>();
+
+            message.AddRange(new byte[] { command, bigFontSize, command, firstLine });
+            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1));
+            message.AddRange(new byte[] { espace, espace, espace });
+
+            return SendToPanel(configureMessage(message).ToArray());
+        }
+
         private ushort calculeteCheckSum(byte[] frame)
         {
             // Buffer para valor CRC16 calculado
@@ -114,6 +110,27 @@ namespace LedPanel.Entities
             return checkSum;
         }
 
+        private List<byte> configureMessage (List<byte> message)
+        {
+            var messageSize = message.ToArray().Length;
+            var frame = new List<byte>();
+            frame.AddRange(new byte[] { initiateFrame, initiateMessage, computerCode,
+                                        computerGroup, computerId, panelCode, panelGroup,
+                                        panelId, quickMessage, currentFrame, numberOfFrames });
+
+            frame.Add((byte)(messageSize >> bitCounter));
+            frame.Add((byte)messageSize);
+
+            frame.AddRange(message.ToArray());
+            frame.Add(endFrame);
+
+            var checkSum = calculeteCheckSum(frame.ToArray());
+            frame.Add((byte)(checkSum >> bitCounter));
+            frame.Add((byte)checkSum);
+
+            return frame;
+        }
+
         private IDisposable SendToPanel(byte[] frame)
         {
             try
@@ -130,9 +147,9 @@ namespace LedPanel.Entities
             ((IDisposable)socket)?.Dispose();
         }
 
-        public static void SendMessage(string ipAddress, string line1, string line2 = "")
+        public static void SendMessage(string ipAddress, int connectionPort = 2101, string line1 = "", string line2 = "")
         {
-            using (var panel = new Entities.LedPanel(ipAddress))
+            using (var panel = new Entities.LedPanel(ipAddress, connectionPort))
                 panel.DisplayMessage(line1, line2);
         }
     }
