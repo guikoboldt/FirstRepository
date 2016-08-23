@@ -15,18 +15,19 @@ namespace LedPanel
             var logger = NLog.LogManager.GetCurrentClassLogger();
             //var panel = new Entities.LedPanel("192.168.1.2");
             var random = new Random();
-            var timer = new Timer(5000);
+            var timer = new Timer(7000);
 
-            using (var panel = new Entities.LedPanel("192.168.1.2"))
-            {
+            //using (var panel = new Entities.LedPanel("localhost", 2034))
+            //{
+                Entities.LedPanel.SendMessage("localhost", 2034, line1: "Initializing...", line2: " ", messageType: Entities.LedPanel.MessageType.Startup).Wait();
                 timer.Elapsed += (e, s) =>
                 {
                     var rd = random.Next(1, 20);
                     var rd2 = random.Next(1, 20);
 
-                    panel.DisplayMessage(line1: "CAMINHAO: " + rd, line2: "LINHA: " + rd2, messageType: Entities.LedPanel.MessageType.Normal_1L).Wait();
+                    Entities.LedPanel.SendMessage("localhost", 2034, line1: "Sindus Andritz " + rd, line2: "OPP " + rd2, messageType: Entities.LedPanel.MessageType.Normal_2L).Wait();
 
-                    logger.Info("CAMINHAO: {0}      LINHA: {1}", rd, rd2);
+                    logger.Info("Sindus Andritz: {0}      OPP: {1}", rd, rd2);
                 };
 
                 timer.Start();
@@ -34,7 +35,7 @@ namespace LedPanel
                 timer.Enabled = true;
 
                 Console.Read();
-            }
+            //}
             //while (true)
             //{
             //    Console.WriteLine("Digite a frase 1:");

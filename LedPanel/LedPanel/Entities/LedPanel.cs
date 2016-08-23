@@ -172,7 +172,6 @@ namespace LedPanel.Entities
                socket.Send(frame);
            });
         }
-
         public void Dispose()
         {
             ((IDisposable)this.socket)?.Dispose();

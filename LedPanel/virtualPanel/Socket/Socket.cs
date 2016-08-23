@@ -18,29 +18,16 @@ namespace virtualPanel.Socket
         }
         public async Task<string> GetMessageFromServer()
         {
-            //server.Start();
-            //System.Net.Sockets.Socket socket;
-            //System.Net.EndPoint endPointClient;
             byte[] buffer = new byte[1024];
-            //int length;
-            //byte[] dataSize = new byte[2];
-            //while (true)
-            //{
-            //if (!server.Server.Connected)
-            //{
-                var socket = await server.AcceptSocketAsync();
-                var length = socket.Receive(buffer);
-            //}
-            //else
-            //{
-            //    length = server.Server.Receive(buffer);
-            //}
-            //Array.Copy(buffer, 11, dataSize, 0, 2);
+
+            var socket = await server.AcceptSocketAsync();
+            var length = socket.Receive(buffer);
 
             var dataLength = ((ushort)buffer[11]) << 8;
             dataLength = dataLength | (ushort)buffer[12];
 
             var data = ASCIIEncoding.ASCII.GetString(buffer.Skip(13).Take(dataLength).ToArray());
+            var dataByte = buffer.Skip(13).Take(dataLength);
 
             var pakect = string.Format(
                     @"
@@ -59,8 +46,42 @@ namespace virtualPanel.Socket
                         DATA:     {12}
                         ", buffer.Cast<object>().Take(11).Concat(new object[] { dataLength }).Concat(new[] { data }).ToArray());
 
-            return await Task.Factory.StartNew(() => pakect.Substring(pakect.LastIndexOf("DATA") + 5));
-            // }
+            var message = "";
+
+            foreach (var item in dataByte)
+            {
+                switch (item)
+                {
+                    case 0xAA:
+                    case 0x40:
+                    case 0x0A:
+                    case 0x04:
+                    case 0x01:
+                    case 0x11:
+                    case 0x16:
+                    case 0x13://command
+                        {
+                            break;
+                        }
+                    case 0x20: //space
+                        {
+                            message += " ";
+                            break;
+                        }
+                    case 0x24: //scroll down
+                        {
+                            message += "\r\n";
+                            break;
+                        }
+                    default: //default message
+                        {
+                            message += ASCIIEncoding.ASCII.GetString(new byte[] { item });
+                            break;
+                        }
+                }
+            }
+
+            return await Task.Factory.StartNew(() => message);
         }
     }
 }
