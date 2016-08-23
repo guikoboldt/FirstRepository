@@ -19,22 +19,22 @@ namespace virtualPanel.Socket
         public async Task<string> GetMessageFromServer()
         {
             //server.Start();
-            System.Net.Sockets.Socket socket;
-            System.Net.EndPoint endPointClient;
+            //System.Net.Sockets.Socket socket;
+            //System.Net.EndPoint endPointClient;
             byte[] buffer = new byte[1024];
-            int length;
+            //int length;
             //byte[] dataSize = new byte[2];
             //while (true)
             //{
-            if (!server.Server.Connected)
-            {
-                socket = await server.AcceptSocketAsync();
-                length = server.Server.Receive(buffer);
-            }
-            else
-            {
-                length = server.Server.Receive(buffer);
-            }
+            //if (!server.Server.Connected)
+            //{
+                var socket = await server.AcceptSocketAsync();
+                var length = socket.Receive(buffer);
+            //}
+            //else
+            //{
+            //    length = server.Server.Receive(buffer);
+            //}
             //Array.Copy(buffer, 11, dataSize, 0, 2);
 
             var dataLength = ((ushort)buffer[11]) << 8;
@@ -59,7 +59,7 @@ namespace virtualPanel.Socket
                         DATA:     {12}
                         ", buffer.Cast<object>().Take(11).Concat(new object[] { dataLength }).Concat(new[] { data }).ToArray());
 
-            return await Task.Factory.StartNew(() => pakect.Substring(pakect.LastIndexOf("DATA")));
+            return await Task.Factory.StartNew(() => pakect.Substring(pakect.LastIndexOf("DATA") + 5));
             // }
         }
     }

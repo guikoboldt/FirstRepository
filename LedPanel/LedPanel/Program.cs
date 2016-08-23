@@ -13,7 +13,7 @@ namespace LedPanel
         static void Main(string[] args)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            var panel = new Entities.LedPanel("192.168.1.2");
+            var panel = new Entities.LedPanel("localhost", 2034);
             var random = new Random();
             var timer = new Timer(5000);
             

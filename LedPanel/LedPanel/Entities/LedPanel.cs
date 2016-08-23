@@ -11,12 +11,13 @@ namespace LedPanel.Entities
     {
         public Socket socket { get; set; }
         private string ipAddress { get; set; }
-        private int connectionPort { get; set; } //default panel's connecttion port 2101;
+        private int connectionPort { get; set; } //default panel's connection port: 2101;
 
         private const byte espace = 0x20;
         private const byte command = 0xAA;
         private const byte defaultFontSize = 0x11;
         private const byte bigFontSize = 0x16;
+        private const byte mediumFontSize = 0x13;
         private const byte firstLine = 0x01;
         private const byte secondLine = 0x02;
         private const byte alignCenter = 0x04;
@@ -59,7 +60,7 @@ namespace LedPanel.Entities
             {
                 case MessageType.Normal_1L:
                     {
-                        message.AddRange(new byte[] { command, 0x13, command, alignCenter });
+                        message.AddRange(new byte[] { command, mediumFontSize, command, alignCenter });
                         break;
                     }
                 case MessageType.Normal_2L:
@@ -102,39 +103,35 @@ namespace LedPanel.Entities
 
         private ushort calculeteCheckSum(byte[] frame)
         {
-            // Buffer para valor CRC16 calculado
+            // Buffer for CheckSum
             ushort checkSum = 0xFFFF;
-            // Polinômio para cálculo do valor CRC16
+            // Formula of polynom
             const ushort Polynom = 0x1021;
-            // pega o tamanho do frame
+            // get the frame's size
             ushort frameLength = (ushort)frame.Length;
-            // Enquanto não processados todos os caracteres previstos
+            // check all bytes
             for (int i = 0; i < frameLength; i++)
             {
                 var flag = 0;
-                // Prepara caracter do Buffer para cálculo
                 var Char_to_CRC = (ushort)(frame[i] * 256);
-                // CRC16 = (Valor atual CRC16 EXOR'ed com caracterdo Buffer
                 checkSum = (ushort)(checkSum ^ Char_to_CRC);
-                // Enquanto não processados todos os bits do caracter atual
+                // check all bits of the current byte
                 for (int bitCounter = 8; bitCounter != 0; bitCounter--)
                 {
-                    // Se bit 15 do CRC atual = 1
+                    // if the 15 bit of current byte = 1
                     if (checkSum > 32767)
                     {
-                        // Sinaliza necessária operação com o POLINÔMIO PADRÃO
+                        // flag to operate with polynom
                         flag = 1;
                     }
                     else
                     {
                         flag = 0;
                     }
-                    // Shift Left valor CRC16 atual
                     checkSum = (ushort)(checkSum * 2);
-                    // Se bit 15 do CRC atual = 1
+
                     if (flag != 0)
                     {
-                        // ExOR valor CRC16 atual e polinônio padrão
                         checkSum = (ushort)(checkSum ^ Polynom);
                     }
                 }
@@ -169,11 +166,15 @@ namespace LedPanel.Entities
             {
                 socket.Connect(ipAddress, connectionPort);
                 socket.Send(frame);
-                socket.Disconnect(true);
+                socket.Close();
             }
             catch
             {
                 Console.WriteLine("Check your connection!");
+            }
+            finally
+            {
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             }
         }
     }
