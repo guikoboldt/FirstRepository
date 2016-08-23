@@ -7,52 +7,67 @@ using System.Threading.Tasks;
 
 namespace LedPanel.Entities
 {
-    public class LedPanel
+    public class LedPanel : IDisposable
     {
         public Socket socket { get; set; }
         private string ipAddress { get; set; }
         private int connectionPort { get; set; } //default panel's connection port: 2101;
 
-        private const byte espace = 0x20;
-        private const byte command = 0xAA;
-        private const byte defaultFontSize = 0x11;
-        private const byte bigFontSize = 0x16;
-        private const byte mediumFontSize = 0x13;
-        private const byte firstLine = 0x01;
-        private const byte secondLine = 0x02;
-        private const byte alignCenter = 0x04;
-        private const byte speedSetter = 0x40;
-        private const byte slow = 0x0A;
-        private const byte scrollDown = 0x24;
-        private const byte scrollUp = 0x23;
-        private const byte initiateFrame = 0x01;
-        private const byte initiateMessage = 0x02;
-        private const byte endFrame = 0x03;
-        private const byte computerCode = 0x50;
-        private const byte computerGroup = 0x01;
-        private const byte computerId = 0x01;
-        private const byte panelCode = 0xAA;
-        private const byte panelGroup = 0x01;
-        private const byte panelId = 0x01;
-        private const byte quickMessage = 0x82;
-        private const byte currentFrame = 0x01;
-        private const byte numberOfFrames = 0x01;
-        private const int bitCounter = 8;
+        public enum FrameTokens
+        {
+            Space = 0x20,
+            Command = 0xAA,
+            DefaultFontSize = 0x11,
+            BigFontSize = 0x16,
+            MediumFontSize = 0x13,
+            FirstLine = 0x01,
+            SecondLine = 0x02,
+            AlignCenter = 0x04,
+            SpeedSetter = 0x40,
+            Slow = 0x0A,
+            ScrollDown = 0x24,
+            ScrollUp = 0x23,
+            InitiateFrame = 0x01,
+            InitiateMessage = 0x02,
+            EndFrame = 0x03,
+            ComputerCode = 0x50,
+            ComputerGroup = 0x01,
+            ComputerId = 0x01,
+            PanelCode = 0xAA,
+            PanelGroup = 0x01,
+            PanelId = 0x01,
+            QuickMessage = 0x82,
+            CurrentFrame = 0x01,
+            NumberOfFrames = 0x01,
+            BitCounter = 8,
+        } //tokens to configure message (fontSize, scroll speed, ...)
         public enum MessageType
         {
             Normal_1L = 0,
             Normal_2L = 1,
             Startup = 3,
-        }
+        } 
 
         public LedPanel(string ipAddress, int connectionPort = 2101)
         {
             this.ipAddress = ipAddress;
             this.connectionPort = connectionPort;
-            this.socket  = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
-        public void DisplayMessage(string line1, string line2, MessageType messageType)
+        async private Task<Socket> GetSocket()
+        {
+            if (this.socket != null)
+                return this.socket;
+
+            return await Task.Run(() =>
+            {
+                this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                this.socket.Connect(ipAddress, connectionPort);
+                return this.socket;
+            });
+        }
+
+        async public Task DisplayMessage(string line1, string line2, MessageType messageType)
         {
             var message = new List<byte>();
 
@@ -60,17 +75,17 @@ namespace LedPanel.Entities
             {
                 case MessageType.Normal_1L:
                     {
-                        message.AddRange(new byte[] { command, mediumFontSize, command, alignCenter });
+                        message.AddRange(new byte[] { (byte)FrameTokens.Command, (byte)FrameTokens.MediumFontSize, (byte)FrameTokens.Command, (byte)FrameTokens.AlignCenter });
                         break;
                     }
                 case MessageType.Normal_2L:
                     {
-                        message.AddRange(new byte[] { command, defaultFontSize, command, firstLine });
+                        message.AddRange(new byte[] { (byte)FrameTokens.Command, (byte)FrameTokens.DefaultFontSize, (byte)FrameTokens.Command, (byte)FrameTokens.FirstLine });
                         break;
                     }
                 case MessageType.Startup:
                     {
-                        message.AddRange(new byte[] { command, bigFontSize, command, speedSetter, slow });
+                        message.AddRange(new byte[] { (byte)FrameTokens.Command, (byte)FrameTokens.BigFontSize, (byte)FrameTokens.Command, (byte)FrameTokens.SpeedSetter, (byte)FrameTokens.Slow });
                         break;
                     }
                 default:
@@ -78,27 +93,16 @@ namespace LedPanel.Entities
             }
 
             message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1.ToUpper()));
-            message.Add(espace);
+            message.Add((byte)FrameTokens.Space);
 
             if (!string.IsNullOrWhiteSpace(line2) && messageType == MessageType.Normal_2L)
             {
-                message.AddRange(new byte[] { command, speedSetter, slow, command, scrollDown, espace});
+                message.AddRange(new byte[] { (byte)FrameTokens.Command, (byte)FrameTokens.SpeedSetter, (byte)FrameTokens.Slow, (byte)FrameTokens.Command, (byte)FrameTokens.ScrollDown, (byte)FrameTokens.Space });
                 message.AddRange(ASCIIEncoding.ASCII.GetBytes(line2.ToUpper()));
-                message.AddRange(new byte[] { espace });
+                message.AddRange(new byte[] { (byte)FrameTokens.Space });
             }
 
-            SendToPanel(configureMessage(message).ToArray());
-        }
-
-        public void DisplayASingleBigMessage(string line1)
-        {
-            var message = new List<byte>();
-
-            message.AddRange(new byte[] { command, bigFontSize, command, speedSetter, slow});
-            message.AddRange(ASCIIEncoding.ASCII.GetBytes(line1.ToUpper()));
-            message.AddRange(new byte[] { espace, espace });
-
-            SendToPanel(configureMessage(message).ToArray());
+            await SendToPanel(configureMessage(message).ToArray());
         }
 
         private ushort calculeteCheckSum(byte[] frame)
@@ -116,7 +120,7 @@ namespace LedPanel.Entities
                 var Char_to_CRC = (ushort)(frame[i] * 256);
                 checkSum = (ushort)(checkSum ^ Char_to_CRC);
                 // check all bits of the current byte
-                for (int bitCounter = 8; bitCounter != 0; bitCounter--)
+                for (int bitCounter = (byte)FrameTokens.BitCounter; bitCounter != 0; bitCounter--)
                 {
                     // if the 15 bit of current byte = 1
                     if (checkSum > 32767)
@@ -139,43 +143,51 @@ namespace LedPanel.Entities
             return checkSum;
         }
 
-        private List<byte> configureMessage (List<byte> message)
+        private List<byte> configureMessage(List<byte> message)
         {
             var messageSize = message.ToArray().Length;
             var frame = new List<byte>();
-            frame.AddRange(new byte[] { initiateFrame, initiateMessage, computerCode,
-                                        computerGroup, computerId, panelCode, panelGroup,
-                                        panelId, quickMessage, currentFrame, numberOfFrames });
+            frame.AddRange(new byte[] { (byte)FrameTokens.InitiateFrame, (byte)FrameTokens.InitiateMessage, (byte)FrameTokens.ComputerCode,
+                                        (byte)FrameTokens.ComputerGroup, (byte)FrameTokens.ComputerId, (byte)FrameTokens.PanelCode, (byte)FrameTokens.PanelGroup,
+                                        (byte)FrameTokens.PanelId, (byte)FrameTokens.QuickMessage, (byte)FrameTokens.CurrentFrame, (byte)FrameTokens.NumberOfFrames });
 
-            frame.Add((byte)(messageSize >> bitCounter));
+            frame.Add((byte)(messageSize >> (byte)FrameTokens.BitCounter));
             frame.Add((byte)messageSize);
 
             frame.AddRange(message.ToArray());
-            frame.Add(endFrame);
+            frame.Add((byte)FrameTokens.EndFrame);
 
             var checkSum = calculeteCheckSum(frame.ToArray());
-            frame.Add((byte)(checkSum >> bitCounter));
+            frame.Add((byte)(checkSum >> (byte)FrameTokens.BitCounter));
             frame.Add((byte)checkSum);
 
             return frame;
         }
 
-        private void SendToPanel(byte[] frame)
+        async private Task SendToPanel(byte[] frame)
         {
-            try
-            {
-                socket.Connect(ipAddress, connectionPort);
-                socket.Send(frame);
-                socket.Close();
-            }
-            catch
-            {
-                Console.WriteLine("Check your connection!");
-            }
-            finally
-            {
-                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            }
+            await Task.Run(async () =>
+           {
+               var socket = await this.GetSocket();
+               socket.Send(frame);
+           });
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)this.socket)?.Dispose();
+        }
+
+        async public static Task SendMessage(string ipAdderss, int connectionPort, string line1, string line2, MessageType messageType)
+        {
+            using (var panel = new LedPanel(ipAdderss, connectionPort))
+                await panel.DisplayMessage(line1, line2, messageType);
+        }
+
+        async public static Task SendMessage(string ipAdderss, string line1, string line2, MessageType messageType)
+        {
+            using (var panel = new LedPanel(ipAdderss))
+                await panel.DisplayMessage(line1, line2, messageType);
         }
     }
 }

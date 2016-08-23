@@ -13,22 +13,28 @@ namespace LedPanel
         static void Main(string[] args)
         {
             var logger = NLog.LogManager.GetCurrentClassLogger();
-            var panel = new Entities.LedPanel("localhost", 2034);
+            //var panel = new Entities.LedPanel("192.168.1.2");
             var random = new Random();
             var timer = new Timer(5000);
-            
-                timer.Elapsed += (e, s) => {
+
+            using (var panel = new Entities.LedPanel("192.168.1.2"))
+            {
+                timer.Elapsed += (e, s) =>
+                {
                     var rd = random.Next(1, 20);
                     var rd2 = random.Next(1, 20);
-                    panel.DisplayMessage(line1: "CAMINHAO: " + rd, line2: "LINHA: " + rd2, messageType: Entities.LedPanel.MessageType.Normal_1L);
+
+                    panel.DisplayMessage(line1: "CAMINHAO: " + rd, line2: "LINHA: " + rd2, messageType: Entities.LedPanel.MessageType.Normal_1L).Wait();
+
                     logger.Info("CAMINHAO: {0}      LINHA: {1}", rd, rd2);
                 };
 
                 timer.Start();
 
                 timer.Enabled = true;
+
                 Console.Read();
-            
+            }
             //while (true)
             //{
             //    Console.WriteLine("Digite a frase 1:");
