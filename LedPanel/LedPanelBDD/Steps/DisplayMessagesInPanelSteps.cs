@@ -7,7 +7,8 @@ namespace LedPanelBDD.Steps
     public class DisplayMessagesInPanelSteps
     {
         protected PanelContext context;
-        protected string message;
+        protected string message1;
+        protected string message2;
 
         public DisplayMessagesInPanelSteps(PanelContext context)
         {
@@ -17,20 +18,42 @@ namespace LedPanelBDD.Steps
         [Given(@"'(.*)' as message")]
         public void GivenAsMessage(string message)
         {
-            this.message = message;
+            this.message1 = message;
         }
 
         [When(@"I send the message")]
         public void WhenISendTheMessageToPanel()
         {
-            context.GetPanel.DisplayMessage(message, null, LedPanel.Entities.LedPanel.MessageType.Normal_1L).Wait();
+            context.Panel.DisplayMessage(message1, null, LedPanel.Entities.LedPanel.MessageType.Normal_1L).Wait();
         }
         
         [Then(@"the message should display")]
         public void ThenTheMessageShouldDisplay()
         {
-            var socketMessage = context.GetSocket.GetMessageFromServer().Result;
-            socketMessage.Should().Be(message.ToUpper(), because: "This assertion is needed to check if the phrase parameter is the same on the panel side");
+            var socketMessage = context.Socket.GetMessageFromServer();
+            socketMessage.Should().Be(message1.ToUpper(), because: "This assertion is needed to check if the phrase parameter is the same on the panel side");
         }
+
+        [Given(@"'(.*)' and '(.*)' as messages")]
+        public void GivenAndAsMessages(string message1, string message2)
+        {
+            this.message1 = message1;
+            this.message2 = message2;
+        }
+
+        [When(@"I send these messages")]
+        public void WhenISendTheseMessages()
+        {
+            context.Panel.DisplayMessage(message1, message2, LedPanel.Entities.LedPanel.MessageType.Normal_2L).Wait();
+        }
+
+        [Then(@"these message should display")]
+        public void ThenTheseMessageShouldDisplay()
+        {
+            var socketMessage = context.Socket.GetMessageFromServer();
+            var messages = message1.ToUpper() + " \r\n " + message2.ToUpper();
+            socketMessage.Should().Be(messages, "This assertion is needed to check if all messages were receive by the panel");
+        }
+
     }
 }

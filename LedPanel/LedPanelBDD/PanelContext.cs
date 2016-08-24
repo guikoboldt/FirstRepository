@@ -17,12 +17,12 @@ namespace LedPanelBDD
             this._panel = new LedPanel.Entities.LedPanel("localhost", 2034);
         }
 
-        public Socket GetSocket
+        public Socket Socket
         {
             get { return _socket = _socket ?? new Socket(); }
         }
 
-        public LedPanel.Entities.LedPanel GetPanel
+        public LedPanel.Entities.LedPanel Panel
         {
             get { return _panel = _panel ?? new LedPanel.Entities.LedPanel("localhost"); }
         }

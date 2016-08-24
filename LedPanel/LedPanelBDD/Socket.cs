@@ -16,11 +16,11 @@ namespace LedPanelBDD
             //server.Start();
             //server.Server.Listen(5);
         }
-        public async Task<string> GetMessageFromServer()
+        public string GetMessageFromServer()
         {
             byte[] buffer = new byte[1024];
 
-            var socket = await server.AcceptSocketAsync();
+            var socket = server.AcceptSocketAsync().Result;
             var length = socket.Receive(buffer);
 
             var dataLength = ((ushort)buffer[11]) << 8;
@@ -81,7 +81,7 @@ namespace LedPanelBDD
                 }
             }
 
-            return await Task.Factory.StartNew(() => message.Trim());
+            return message.Trim();
         }
     }
 }

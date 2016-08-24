@@ -20,13 +20,13 @@ namespace LedPanelBDD.Initializer
         [BeforeScenario("requires_socket")]
         public void BeforeScenario()
         {
-            this.context.GetSocket.server.Start();
+            this.context.Socket.server.Start();
         }
 
         [AfterScenario("requires_socket")]
         public void AfterScenario()
         {
-            this.context.GetSocket.server.Stop();
+            this.context.Socket.server.Stop();
         }
     }
 }
