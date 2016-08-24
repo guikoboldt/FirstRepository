@@ -18,10 +18,16 @@ namespace FileManagerApp
         {
             base.OnStartup(e);
 
-            ApplicationView app = new ApplicationView();
-            ApplicationViewModel context = new ApplicationViewModel();
-            app.DataContext = context;
-            app.Show();
+            //ApplicationView app = new ApplicationView();
+            //ApplicationViewModel context = new ApplicationViewModel();
+            //app.DataContext = context;
+            //app.Show();
+            
+
+            var main =  new Window
+            { Content = new UserControls.MainWindowView() };
+            main.Show();
+            
         }
     }
 }

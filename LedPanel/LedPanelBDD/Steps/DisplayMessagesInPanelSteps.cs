@@ -31,7 +31,7 @@ namespace LedPanelBDD.Steps
         public void ThenTheMessageShouldDisplay()
         {
             var socketMessage = context.Socket.GetMessageFromServer();
-            socketMessage.Should().Be(message1.ToUpper(), because: "This assertion is needed to check if the phrase parameter is the same on the panel side");
+            socketMessage.Should().Be(message1.ToUpper(), because: "This assertion is needed to check if the phrase parameter is the same on the panel's side");
         }
 
         [Given(@"'(.*)' and '(.*)' as messages")]
@@ -52,7 +52,7 @@ namespace LedPanelBDD.Steps
         {
             var socketMessage = context.Socket.GetMessageFromServer();
             var messages = message1.ToUpper() + " \r\n " + message2.ToUpper();
-            socketMessage.Should().Be(messages, "This assertion is needed to check if all messages were receive by the panel");
+            socketMessage.Should().Be(messages, "This assertion is needed to check if all messages were display by the panel");
         }
 
     }

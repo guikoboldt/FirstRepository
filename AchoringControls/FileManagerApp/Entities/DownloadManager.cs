@@ -26,16 +26,16 @@ namespace FileManagerApp.Entities
 
         public FileInfo[] GetAllFiles()
         {
-            var fileList = GetAllFilesAsync().Result;
+            var fileList = GetAllFilesAsync();
             if (fileList.Length.Equals(0))
                 throw new NoFilesFoundException();
             return fileList;
 
         }
 
-        private async Task<FileInfo[]> GetAllFilesAsync ()
+         public FileInfo[] GetAllFilesAsync ()
         {
-            return await Task.Run( () => new DirectoryInfo(downloadPath).GetFiles());
+            return  new DirectoryInfo(downloadPath).GetFiles();
         }
     }
 }
