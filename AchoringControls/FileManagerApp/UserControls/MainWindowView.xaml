@@ -19,15 +19,36 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
         <Button Name="updateFiles" Content="{Binding updateFiles }"
-                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Left" Command="{Binding updateFilesCommand}" Margin="0,15"/>
-        <Button Name="deleteFiles" Content="{Binding deleteFiles }"
-                Grid.Row="0" Grid.Column="1" Height="50" Width="110" HorizontalAlignment="Right" Command="{Binding deleteFilesCommand}" Margin="0,15"/>
+                Grid.Row="0" Grid.Column="1" Height="50" Width="70" HorizontalAlignment="Left" Command="{Binding updateFilesCommand}"/>
+        <ItemsControl ItemsSource="{Binding Events}" Grid.Column="2">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Background="Gray"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+       
+        <!--<Button Name="deleteFiles" Content="{Binding deleteFiles }"
+                Grid.Row="0" Grid.Column="1" Height="50" Width="70" HorizontalAlignment="Right" Command="{Binding deleteFilesCommand}"/> -->
         <DataGrid Grid.Column="1" Grid.Row="1" AutoGenerateColumns="false"
-                  ItemsSource="{Binding Path=Files}">
+                  ItemsSource="{Binding Path=Files}" CanUserAddRows="False" CanUserResizeColumns="False">
+       
             <DataGrid.Columns>
+                <DataGridTemplateColumn Header="{Binding delete}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid} ,Path=DataContext.deleteFileCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn IsReadOnly="True" Header="File Name" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastAccessTime}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
