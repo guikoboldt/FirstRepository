@@ -61,7 +61,8 @@ namespace FileManagerApp.Entities
                 App.Current.Dispatcher.Invoke(() =>
                 {
                     events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
-
+                    var newFile = new FileInfo(e.FullPath);
+                    files.Add(newFile);
                 });
             };
             fileWatcher.Renamed += (s, e) =>
