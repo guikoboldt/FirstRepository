@@ -4,11 +4,11 @@
 
 	@Path_initializer
 Scenario: List all availables files
-	Given This is the download path: 'C:\Download'
-	When I click on the DownloadManager button
-	Then files should be found
-
+	Given The following path 'C:\Download'
+	When I open the DownloadManager
+	Then all giles should be shown
+	@Path_IsEmpty
 Scenario: No Files availables
-	Given This is the download path: 'C:\Download'
-	When I click on the DownloadManager button
+	Given The following path 'C:\Download'
+	When I open the DownloadManager
 	Then I should see a message : No files found

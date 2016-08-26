@@ -12,19 +12,18 @@ namespace FileManagerApp.Entities
 {
     public class DownloadManager
     {
-        public string downloadPath { get; set; }
+        public DirectoryInfo directory { get; set; }
         public FileSystemWatcher fileWatcher = new FileSystemWatcher();
         public ObservableCollection<FileInfo> files { get; private set; }
         public ObservableCollection<string> events { get; private set; }
 
         public DownloadManager(string downloadPath)
         {
-            var directory = new DirectoryInfo(downloadPath);
+            directory = new DirectoryInfo(downloadPath);
             if (!directory.Exists)
             {
                 directory.Create();
             }
-            this.downloadPath = directory.FullName;
             events = new ObservableCollection<string>();
             LoadAllFiles();
             watcherConfigure();
@@ -32,7 +31,7 @@ namespace FileManagerApp.Entities
 
         public void watcherConfigure()
         {
-            fileWatcher.Path = this.downloadPath;
+            fileWatcher.Path = this.directory.FullName;
             fileWatcher.Filter = "*";
 
             fileWatcher.NotifyFilter = NotifyFilters.LastAccess | NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
@@ -92,7 +91,7 @@ namespace FileManagerApp.Entities
 
         private void LoadAllFiles()
         {
-            files = new ObservableCollection<FileInfo>(new DirectoryInfo(downloadPath).GetFiles());
+            files = new ObservableCollection<FileInfo>(this.directory.GetFiles());
         }
     }
 }

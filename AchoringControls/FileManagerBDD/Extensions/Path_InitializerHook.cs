@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 
 namespace FileManagerBDD.Extensions
@@ -15,16 +18,28 @@ namespace FileManagerBDD.Extensions
         [BeforeScenario("Path_initializer")]
         public void PathInitializer()
         {
-            for (int i = 0; i < 3; i++)
+            if (!Directory.Exists(@"C:\Download"))
+                Directory.CreateDirectory(@"C:\Download");
+
+            var files = new DirectoryInfo(@"C:\Download").GetFiles();
+            if (files.Length == 0)
             {
-                File.Create(Path.Combine(@"C:\Download", @"text" + i + ".txt"));
+                File.Create(@"C:\Download\text 0.txt");
+                File.Create(@"C:\Download\text 1.txt");
+                File.Create(@"C:\Download\text 2.txt");
             }
         }
 
-        [AfterScenario]
-        public void AfterScenario()
+        [BeforeScenario("Path_IsEmpty")]
+        public void PathIsEmpty()
         {
-            //TODO: implement logic that has to run after executing each scenario
+            var files = new DirectoryInfo(@"C:\Download").GetFiles();
+            foreach (var file in files)
+            {
+                System.GC.Collect(); //force a garbage collection
+                System.GC.WaitForPendingFinalizers(); //suspend this thread until complete the pending another thread
+                file.Delete();
+            }
         }
     }
 }

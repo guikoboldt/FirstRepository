@@ -15,41 +15,38 @@ namespace FileManagerBDD.Steps
     [Binding]
     public class ListAllAvailablesFilesSteps
     {
-        protected DownloadManager downloadManager { get; set; }
-        protected FileInfo[] files { get; set; } = null;
+        protected DownloadManagerTestContext context { get; set; }
 
-        [Given(@"This is the download path: '(.*)'")]
+        public ListAllAvailablesFilesSteps(DownloadManagerTestContext context)
+        {
+            this.context = context;
+        }
+
+        [Given(@"The following path '(.*)'")]
         public void GivenThisIsTheDownloadPath(string downloadPath)
         {
-            downloadManager = new DownloadManager(downloadPath);
+           context.DownloadManager = new DownloadManager(downloadPath);
         }
 
-        [When(@"I click on the DownloadManager button")]
+        [When(@"I open the DownloadManager")]
         public void WhenIClickOnTheFileManagerButton()
         {
-            files = downloadManager.GetAllFiles();
+           context.Files = context.DownloadManager.files;
         }
 
-        [Then(@"files should be found")]
+        [Then(@"all giles should be shown")]
         public void ThenFileShouldBeFound()
         {
-            files.Should()
-                 .NotBeEmpty("Files found");
+            context.Files.Should()
+                         .NotBeEmpty("The initializer put files into this directory, so if the problem is working we should found some files");
         }
 
         [Then(@"I should see a message : No files found")]
         public void ThenIShouldSeeAMessageNoFilesFound()
         {
-            Task.Run(() =>
-            {
-                foreach (var file in files)
-                {
-                    file.Delete();
-                };
-            }).Wait();
-
-            this.Invoking(_ => _.WhenIClickOnTheFileManagerButton()).ShouldThrow<NoFilesFoundException>();
-        }
+            context.Files.Should()
+                         .BeEmpty("I removed all files before this scenario runs, so no files should be found");
+        }                
 
 
     }

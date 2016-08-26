@@ -11,6 +11,6 @@ namespace FileManagerApp.Globals
     public class GlobalInformations
     {
         public static string baseDirectory { get; } = AppDomain.CurrentDomain.BaseDirectory;
-        public static string defultDownloadPath { get; } = Path.Combine(baseDirectory , System.Configuration.ConfigurationManager.AppSettings["defaultDownloadPath"]);
+        public static string defultDownloadPath { get; } = Path.Combine(baseDirectory , @"C:\Download");
     }
 }

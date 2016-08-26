@@ -77,6 +77,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FilesAvailablesInThePath.feature</DependentUpon>
     </Compile>
+    <Compile Include="DownloadManagerTestContext.cs" />
     <Compile Include="Extensions\Path_InitializerHook.cs" />
     <Compile Include="Extensions\TableExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
