@@ -13,9 +13,12 @@ namespace FileManagerApp.Entities
     public class DownloadManager
     {
         public DirectoryInfo directory { get; set; }
-        public FileSystemWatcher fileWatcher = new FileSystemWatcher();
-        public ObservableCollection<FileInfo> files { get; private set; }
-        public ObservableCollection<string> events { get; private set; }
+
+        private FileSystemWatcher fileWatcher = new FileSystemWatcher();
+
+        private FileSystemWatcher directoryWatcher = new FileSystemWatcher();
+        public ObservableCollection<FileInfo> Files { get; private set; } = new ObservableCollection<FileInfo>();
+        public ObservableCollection<string> Events { get; private set; } = new ObservableCollection<string>();
 
         public DownloadManager(string downloadPath)
         {
@@ -24,12 +27,36 @@ namespace FileManagerApp.Entities
             {
                 directory.Create();
             }
-            events = new ObservableCollection<string>();
             LoadAllFiles();
-            watcherConfigure();
+            ConfigureFileWatcher();
+            ConfigureDirectoryWatcher();
         }
 
-        public void watcherConfigure()
+        private void ConfigureDirectoryWatcher()
+        {
+            directoryWatcher.Path = directory.Root.ToString();
+            directoryWatcher.NotifyFilter = NotifyFilters.DirectoryName;
+            directoryWatcher.IncludeSubdirectories = true;
+
+            directoryWatcher.Renamed += (s, e) =>
+            {
+                if (e.OldFullPath.Equals(directory.FullName))
+                {
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        Events.Insert(0, e.OldFullPath);
+                        Events.Insert(0, e.FullPath);
+                        directory = new DirectoryInfo(e.FullPath);
+                        fileWatcher.Path = this.directory.FullName;
+                        LoadAllFiles();
+                    });
+                }
+            };
+
+            directoryWatcher.EnableRaisingEvents = true;
+        }
+
+        public void ConfigureFileWatcher()
         {
             fileWatcher.Path = this.directory.FullName;
             fileWatcher.Filter = "*";
@@ -40,16 +67,16 @@ namespace FileManagerApp.Entities
             fileWatcher.Changed += (s, e) =>
             {
                 var newFile = new FileInfo(e.FullPath);
-                var chengedFile = (from file in files
+                var chengedFile = (from file in Files
                                    where file.Name.Equals(newFile.Name)
                                    select file).FirstOrDefault();
                 if(!newFile.Equals(chengedFile))
                 {
                     App.Current.Dispatcher.Invoke(() =>
                     {
-                        events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
-                        files.Remove(chengedFile);
-                        files.Add(newFile);
+                        Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
+                        Files.Remove(chengedFile);
+                        Files.Add(newFile);
                     });
                 }
             };
@@ -57,32 +84,33 @@ namespace FileManagerApp.Entities
             {
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
-                    var deletedFile = (from file in files
+                    Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
+                    Events.Insert(0, directory.Root.ToString());
+                    var deletedFile = (from file in Files
                                       where file.Name.Equals(e.Name)
                                       select file).FirstOrDefault();
-                    files.Remove(deletedFile);
+                    Files.Remove(deletedFile);
                 });
             };
             fileWatcher.Created += (s, e) =>
             {
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
+                    this.Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
                     var newFile = new FileInfo(e.FullPath);
-                    files.Add(newFile);
+                    this.Files.Add(newFile);
                 });
             };
             fileWatcher.Renamed += (s, e) =>
             {
                 App.Current.Dispatcher.Invoke(() =>
                 {
-                    events.Insert(0, e.OldFullPath); events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
-                    var updatedFile = (from file in files
+                    this.Events.Insert(0, e.OldFullPath); Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
+                    var updatedFile = (from file in Files
                                        where file.Name.Equals(e.OldName)
                                        select file).FirstOrDefault();
-                    files.Remove(updatedFile);
-                    files.Add(new FileInfo(e.FullPath));
+                    this.Files.Remove(updatedFile);
+                    this.Files.Add(new FileInfo(e.FullPath));
                 });
             };
 
@@ -91,7 +119,11 @@ namespace FileManagerApp.Entities
 
         private void LoadAllFiles()
         {
-            this.files = new ObservableCollection<FileInfo>(this.directory.GetFiles());
+            this.Files.Clear();
+            foreach (var file in this.directory.EnumerateFiles())
+            {
+                this.Files.Add(file);
+            }
         }
     }
 }

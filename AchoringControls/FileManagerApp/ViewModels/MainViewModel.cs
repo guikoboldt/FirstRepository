@@ -61,8 +61,8 @@ namespace FileManagerApp.ViewModels
 
         private void LoadFiles()
         {
-            this.Files = dM.files;
-            this.Events = dM.events;
+            this.Files = dM.Files;
+            this.Events = dM.Events;
         }
 
         private void DeleteCommand(object obj)
@@ -72,8 +72,8 @@ namespace FileManagerApp.ViewModels
                 if (obj is FileInfo)
                 {
                     File.Delete((obj as FileInfo).FullName);
-                    this.Files = dM.files;
-                    this.Events = dM.events;
+                    this.Files = dM.Files;
+                    this.Events = dM.Events;
                 }
             }
             catch

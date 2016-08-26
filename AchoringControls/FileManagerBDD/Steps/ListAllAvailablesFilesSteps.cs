@@ -31,7 +31,7 @@ namespace FileManagerBDD.Steps
         [When(@"I open the DownloadManager")]
         public void WhenIClickOnTheFileManagerButton()
         {
-           context.Files = context.DownloadManager.files;
+           context.Files = context.DownloadManager.Files;
         }
 
         [Then(@"all giles should be shown")]
