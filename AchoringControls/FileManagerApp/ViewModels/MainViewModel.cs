@@ -20,6 +20,7 @@ namespace FileManagerApp.ViewModels
         public MainViewModel()
         {
             dM = new DownloadManager(Globals.GlobalInformations.defultDownloadPath);
+            LoadFiles();
         }
 
         private ObservableCollection<FileInfo> _files;
@@ -44,22 +45,27 @@ namespace FileManagerApp.ViewModels
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public string updateFiles
+        public string UpdateFiles
         { get { return "Update Files"; } }
-        public string deleteFile
+        public string DeleteFile
         { get { return "Delete"; } }
 
-        public string name
+        public string Name
         { get { return "Main Window"; } }
 
         //public IList fileList{ get; private set; }
-        public void loadFiles(object obj)
+        private void LookForFiles(object obj)
+        {
+            LoadFiles();
+        }
+
+        private void LoadFiles()
         {
             this.Files = dM.files;
             this.Events = dM.events;
         }
 
-        public void deleteCommand(object obj)
+        private void DeleteCommand(object obj)
         {
             try
             {
@@ -75,10 +81,10 @@ namespace FileManagerApp.ViewModels
                 MessageBox.Show("An error occured when trying to delete this file");
             }
         }
-        public ICommand updateFilesCommand
-        { get { return new RelayCommand(loadFiles); } }
+        public ICommand UpdateFilesCommand
+        { get { return new RelayCommand(LookForFiles); } }
 
-        public ICommand deleteFileCommand
-        { get { return new RelayCommand(deleteCommand); } }
+        public ICommand DeleteFileCommand
+        { get { return new RelayCommand(DeleteCommand); } }
     }
 }

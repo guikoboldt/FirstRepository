@@ -78,8 +78,7 @@
       <DependentUpon>FilesAvailablesInThePath.feature</DependentUpon>
     </Compile>
     <Compile Include="DownloadManagerTestContext.cs" />
-    <Compile Include="Extensions\Path_InitializerHook.cs" />
-    <Compile Include="Extensions\TableExtensions.cs" />
+    <Compile Include="Initializer\Path_InitializerHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Steps\ListAllAvailablesFilesSteps.cs" />
   </ItemGroup>

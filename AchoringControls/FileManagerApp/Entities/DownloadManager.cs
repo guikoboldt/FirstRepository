@@ -91,7 +91,7 @@ namespace FileManagerApp.Entities
 
         private void LoadAllFiles()
         {
-            files = new ObservableCollection<FileInfo>(this.directory.GetFiles());
+            this.files = new ObservableCollection<FileInfo>(this.directory.GetFiles());
         }
     }
 }

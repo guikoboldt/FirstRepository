@@ -8,6 +8,6 @@ namespace FileManagerApp.ViewModels
 {
     public interface IBaseViewModel
     {
-        string name { get; }
+        string Name { get; }
     }
 }
