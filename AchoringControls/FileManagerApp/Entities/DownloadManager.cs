@@ -40,10 +40,19 @@ namespace FileManagerApp.Entities
 
             fileWatcher.Changed += (s, e) =>
             {
-                App.Current.Dispatcher.Invoke(() =>
+                var newFile = new FileInfo(e.FullPath);
+                var chengedFile = (from file in files
+                                   where file.Name.Equals(newFile.Name)
+                                   select file).FirstOrDefault();
+                if(!newFile.Equals(chengedFile))
                 {
-                    events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
-                });
+                    App.Current.Dispatcher.Invoke(() =>
+                    {
+                        events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
+                        files.Remove(chengedFile);
+                        files.Add(newFile);
+                    });
+                }
             };
             fileWatcher.Deleted += (s, e) =>
             {
@@ -68,7 +77,14 @@ namespace FileManagerApp.Entities
             fileWatcher.Renamed += (s, e) =>
             {
                 App.Current.Dispatcher.Invoke(() =>
-                { events.Insert(0, e.OldFullPath); events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString()); });
+                {
+                    events.Insert(0, e.OldFullPath); events.Insert(0, e.FullPath); events.Insert(0, e.ChangeType.ToString());
+                    var updatedFile = (from file in files
+                                       where file.Name.Equals(e.OldName)
+                                       select file).FirstOrDefault();
+                    files.Remove(updatedFile);
+                    files.Add(new FileInfo(e.FullPath));
+                });
             };
 
             fileWatcher.EnableRaisingEvents = true;

@@ -23,7 +23,7 @@
         </Grid.ColumnDefinitions>
         <Button Name="updateFiles" Content="{Binding updateFiles }"
                 Grid.Row="0" Grid.Column="1" Height="50" Width="70" HorizontalAlignment="Left" Command="{Binding updateFilesCommand}"/>
-        <ItemsControl ItemsSource="{Binding Events}" Grid.Column="2">
+        <ItemsControl ItemsSource="{Binding Events}" Grid.Column="2" Width="auto">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" Background="Gray"/>

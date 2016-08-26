@@ -28,7 +28,7 @@ namespace FileManagerApp
             {
                 Content = new UserControls.MainWindowView(),
                 Height = 600,
-                Width = 1000,
+                Width = 800,
             };
             main.Show();
             
