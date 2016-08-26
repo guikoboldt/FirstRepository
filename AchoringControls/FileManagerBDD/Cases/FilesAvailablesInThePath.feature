@@ -1,14 +1,15 @@
-﻿Feature: FilesAvailablesInThePath
-	The download path receives all files downloaded by the application
-	I want to open this path and see what I have downloaded until now by the application
+﻿Feature: Files in the path
+	The DownloadManager receives all files downloaded by the application
+	I want to open this feature and see what I have downloaded until now
 
-	@Path_initializer
-Scenario: List all availables files
+@Path_initializer
+Scenario: List availables files
 	Given The following path 'C:\Download'
 	When I open the DownloadManager
-	Then all giles should be shown
-	@Path_IsEmpty
+	Then files should be displayed
+
+@Path_IsEmpty
 Scenario: No Files availables
 	Given The following path 'C:\Download'
 	When I open the DownloadManager
-	Then I should see a message : No files found
+	Then No files should be displayed

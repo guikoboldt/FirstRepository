@@ -23,26 +23,26 @@ namespace FileManagerBDD.Steps
         }
 
         [Given(@"The following path '(.*)'")]
-        public void GivenThisIsTheDownloadPath(string downloadPath)
+        public void GivenTheFollowingPath(string downloadPath)
         {
            context.DownloadManager = new DownloadManager(downloadPath);
         }
 
         [When(@"I open the DownloadManager")]
-        public void WhenIClickOnTheFileManagerButton()
+        public void WhenIOpenDownloadManager()
         {
            context.Files = context.DownloadManager.Files;
         }
 
-        [Then(@"all giles should be shown")]
-        public void ThenFileShouldBeFound()
+        [Then(@"files should be displayed")]
+        public void ThenFilesShouldBeDisplayed()
         {
             context.Files.Should()
                          .NotBeEmpty("The initializer put files into this directory, so if the problem is working we should found some files");
         }
 
-        [Then(@"I should see a message : No files found")]
-        public void ThenIShouldSeeAMessageNoFilesFound()
+        [Then(@"No files should be displayed")]
+        public void ThenNoFilesShoudBeDisplayed()
         {
             context.Files.Should()
                          .BeEmpty("I removed all files before this scenario runs, so no files should be found");

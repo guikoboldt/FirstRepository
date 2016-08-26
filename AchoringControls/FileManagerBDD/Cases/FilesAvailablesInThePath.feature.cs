@@ -17,9 +17,9 @@ namespace FileManagerBDD.Cases
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.1.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [TechTalk.SpecRun.FeatureAttribute("FilesAvailablesInThePath", Description="\tThe download path receives all files downloaded by the application\r\n\tI want to o" +
-        "pen this path and see what I have downloaded until now by the application", SourceFile="Cases\\FilesAvailablesInThePath.feature", SourceLine=0)]
-    public partial class FilesAvailablesInThePathFeature
+    [TechTalk.SpecRun.FeatureAttribute("Files in the path", Description="\tThe DownloadManager receives all files downloaded by the application\r\n\tI want to" +
+        " open this feature and see what I have downloaded until now", SourceFile="Cases\\FilesAvailablesInThePath.feature", SourceLine=0)]
+    public partial class FilesInThePathFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -31,8 +31,8 @@ namespace FileManagerBDD.Cases
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "FilesAvailablesInThePath", "\tThe download path receives all files downloaded by the application\r\n\tI want to o" +
-                    "pen this path and see what I have downloaded until now by the application", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Files in the path", "\tThe DownloadManager receives all files downloaded by the application\r\n\tI want to" +
+                    " open this feature and see what I have downloaded until now", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -63,11 +63,11 @@ namespace FileManagerBDD.Cases
             testRunner.CollectScenarioErrors();
         }
         
-        [TechTalk.SpecRun.ScenarioAttribute("List all availables files", new string[] {
+        [TechTalk.SpecRun.ScenarioAttribute("List availables files", new string[] {
                 "Path_initializer"}, SourceLine=5)]
-        public virtual void ListAllAvailablesFiles()
+        public virtual void ListAvailablesFiles()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("List all availables files", new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("List availables files", new string[] {
                         "Path_initializer"});
 #line 6
 this.ScenarioSetup(scenarioInfo);
@@ -76,25 +76,25 @@ this.ScenarioSetup(scenarioInfo);
 #line 8
  testRunner.When("I open the DownloadManager", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
- testRunner.Then("all giles should be shown", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("files should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
         [TechTalk.SpecRun.ScenarioAttribute("No Files availables", new string[] {
-                "Path_IsEmpty"}, SourceLine=10)]
+                "Path_IsEmpty"}, SourceLine=11)]
         public virtual void NoFilesAvailables()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No Files availables", new string[] {
                         "Path_IsEmpty"});
-#line 11
-this.ScenarioSetup(scenarioInfo);
 #line 12
- testRunner.Given("The following path \'C:\\Download\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+this.ScenarioSetup(scenarioInfo);
 #line 13
- testRunner.When("I open the DownloadManager", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.Given("The following path \'C:\\Download\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 14
- testRunner.Then("I should see a message : No files found", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.When("I open the DownloadManager", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 15
+ testRunner.Then("No files should be displayed", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
