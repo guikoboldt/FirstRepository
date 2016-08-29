@@ -117,6 +117,11 @@ namespace FileManagerApp.Entities
             fileWatcher.EnableRaisingEvents = true;
         }
 
+        public void OpenFile(string filePath)
+        {
+            System.Diagnostics.Process.Start(filePath);
+        }
+
         private void LoadAllFiles()
         {
             this.Files.Clear();

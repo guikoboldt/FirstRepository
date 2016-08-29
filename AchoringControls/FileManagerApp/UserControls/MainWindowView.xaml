@@ -35,8 +35,20 @@
                 Grid.Row="0" Grid.Column="1" Height="50" Width="70" HorizontalAlignment="Right" Command="{Binding deleteFilesCommand}"/> -->
         <DataGrid Grid.Column="1" Grid.Row="1" AutoGenerateColumns="false"
                   ItemsSource="{Binding Path=Files}" CanUserAddRows="False" CanUserResizeColumns="False">
-       
+
             <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Header="File Name" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastAccessTime}" />
+                <DataGridTemplateColumn Header="{Binding OpanFile}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Open" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid} ,Path=DataContext.OpenFileCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="{Binding DeleteFile}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -46,9 +58,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="File Name" Binding="{Binding Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastAccessTime}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

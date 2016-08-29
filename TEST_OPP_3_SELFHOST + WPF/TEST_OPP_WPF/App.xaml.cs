@@ -16,35 +16,42 @@ namespace TEST_OPP_WPF
     {
         async void Application_Startup(object sender, StartupEventArgs a)
         {
-            Entities.GlobalInformations.StartServerConnection();
-
-            MainWindow mainwindow = new MainWindow(); //create the main window
-            Current.MainWindow = mainwindow; //set as the current window
-
-            App.Current.ShutdownMode = ShutdownMode.OnMainWindowClose; //change the shutdown mode of the app
-
-            Window LoginWindow = new Window //create the login dialog
+            var window = new Window
             {
-                Title = "Login",
-                Height = 80,
-                Width = 190,
-                Content = new User_Controls.Login(),
-                ResizeMode = 0, //no resize
-                Background = Brushes.Gray,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                WindowStyle = WindowStyle.None,
+                Content = new User_Controls.EntryUser(),
+                Height = 600,
+                Width = 600
             };
+            window.Show();
+            //Entities.GlobalInformations.StartServerConnection();
 
-            await StartHub();
+            //MainWindow mainwindow = new MainWindow(); //create the main window
+            //Current.MainWindow = mainwindow; //set as the current window
 
-            Views.LoginViewModel.OnRequestClose += (s, e) =>
-            {
-                mainwindow = new MainWindow();
-                LoginWindow.Close();
-                mainwindow.Show();
-            }; //register the onClose event to login dialog by the view
+            //App.Current.ShutdownMode = ShutdownMode.OnMainWindowClose; //change the shutdown mode of the app
 
-            LoginWindow.ShowDialog(); //show the login window
+            //Window LoginWindow = new Window //create the login dialog
+            //{
+            //    Title = "Login",
+            //    Height = 80,
+            //    Width = 190,
+            //    Content = new User_Controls.Login(),
+            //    ResizeMode = 0, //no resize
+            //    Background = Brushes.Gray,
+            //    WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            //    WindowStyle = WindowStyle.None,
+            //};
+
+            //await StartHub();
+
+            //Views.LoginViewModel.OnRequestClose += (s, e) =>
+            //{
+            //    mainwindow = new MainWindow();
+            //    LoginWindow.Close();
+            //    mainwindow.Show();
+            //}; //register the onClose event to login dialog by the view
+
+            //LoginWindow.ShowDialog(); //show the login window
             
         }
 

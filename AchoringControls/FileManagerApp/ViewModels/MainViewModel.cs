@@ -65,6 +65,21 @@ namespace FileManagerApp.ViewModels
             this.Events = dM.Events;
         }
 
+        private void OpenCommand(object obj)
+        {
+            try
+            {
+                if (obj is FileInfo)
+                {
+                    dM.OpenFile((obj as FileInfo).FullName);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("An error occured when trying to delete this file");
+            }
+        }
+
         private void DeleteCommand(object obj)
         {
             try
@@ -81,8 +96,12 @@ namespace FileManagerApp.ViewModels
                 MessageBox.Show("An error occured when trying to delete this file");
             }
         }
+
         public ICommand UpdateFilesCommand
         { get { return new RelayCommand(LookForFiles); } }
+
+        public ICommand OpenFileCommand
+        { get { return new RelayCommand(OpenCommand); } }
 
         public ICommand DeleteFileCommand
         { get { return new RelayCommand(DeleteCommand); } }
