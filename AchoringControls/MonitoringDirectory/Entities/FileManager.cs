@@ -5,22 +5,21 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Security.Permissions;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MonitoringDirectory.Entities
 {
-    public class FileManager
+    public class FileManager : Interfaces.IFileProvider
     {
         public DirectoryInfo sourceDirectory { get; set; }
 
         public DirectoryInfo targetDirectory { get; set; }
 
         private FileSystemWatcher fileWatcher = new FileSystemWatcher();
-
-        //private FileSystemWatcher directoryWatcher = new FileSystemWatcher();
-        public ObservableCollection<FileInfo> Files { get; private set; } = new ObservableCollection<FileInfo>();
-        public ObservableCollection<string> Events { get; private set; } = new ObservableCollection<string>();
+        public ObservableCollection<FileInfo> TargetFiles { get; private set; } = new ObservableCollection<FileInfo>();
 
         public FileManager(string sourcePath, string targetPath)
         {
@@ -37,31 +36,9 @@ namespace MonitoringDirectory.Entities
 
             LoadAllFiles();
             ConfigureFileWatcher();
-            //ConfigureDirectoryWatcher();
         }
 
-        //private void ConfigureDirectoryWatcher()
-        //{
-        //    directoryWatcher.Path = sourceDirectory.Root.ToString();
-        //    directoryWatcher.NotifyFilter = NotifyFilters.DirectoryName;
-        //    directoryWatcher.IncludeSubdirectories = true;
-
-        //    directoryWatcher.Renamed += (s, e) =>
-        //    {
-        //        if (e.OldFullPath.Equals(sourceDirectory.FullName))
-        //        {
-        //                Events.Insert(0, e.OldFullPath);
-        //                Events.Insert(0, e.FullPath);
-        //                sourceDirectory = new DirectoryInfo(e.FullPath);
-        //                fileWatcher.Path = this.sourceDirectory.FullName;
-        //                LoadAllFiles();
-        //        }
-        //    };
-
-        //    directoryWatcher.EnableRaisingEvents = true;
-        //}
-
-        public void ConfigureFileWatcher()
+        private void ConfigureFileWatcher()
         {
             fileWatcher.Path = this.sourceDirectory.FullName;
             fileWatcher.Filter = "*";
@@ -77,19 +54,19 @@ namespace MonitoringDirectory.Entities
                 {
                     foreach (var file in files)
                     {
-                        var newFile = new FileInfo(file.FullPath);
-                        if (!newFile.Name.StartsWith("~"))
+                        if (!file.Name.StartsWith("~"))
                         {
-                            var changedFile = (from foundFile in Files
-                                               where foundFile.Name.Equals(newFile.Name)
+                            var changedFile = (from foundFile in TargetFiles
+                                               where foundFile.Name.Equals(file.Name)
                                                select foundFile).FirstOrDefault();
-                            if (!newFile.Equals(changedFile))
+
+                            if (changedFile != null)
                             {
-                                this.Files.Remove(changedFile);
-                                this.Files.Add(newFile);
-                                File.Delete(Path.Combine(targetDirectory.FullName, changedFile.Name));
-                                await TryCopyFile(newFile);
+                                DeleteFile(changedFile, targetDirectory.FullName);
+                                TargetFiles.Remove(changedFile);
                             }
+                            var newFile = new FileInfo(file.FullPath);
+                            await CopyFileAsync(newFile, targetDirectory.FullName);
                         }
                     }
                 });
@@ -98,157 +75,108 @@ namespace MonitoringDirectory.Entities
                .FromEventPattern<FileSystemEventArgs>(fileWatcher, "Deleted")
                .Synchronize()
                .Select(e => e.EventArgs)
-               .Subscribe(filePath =>
+               .Buffer(TimeSpan.FromMilliseconds(2000))
+               .Subscribe(files =>
                {
-                   var deletedFile = (from file in Files
-                                      where file.Name.Equals(filePath.Name)
-                                      select file).FirstOrDefault();
-                   this.Files.Remove(deletedFile);
-                   while (targetDirectory.GetFiles(deletedFile.Name).IsReadOnly) { }
-                   File.Delete(Path.Combine(targetDirectory.FullName, deletedFile.Name));
+                   foreach (var file in files)
+                   {
+                       var deletedFile = (from foundFile in TargetFiles
+                                          where foundFile.Name.Equals(file.Name)
+                                          select foundFile).FirstOrDefault();
+                       if (deletedFile != null)
+                       {
+                           DeleteFile(deletedFile, targetDirectory.FullName);
+                           this.TargetFiles.Remove(deletedFile);
+                       }
+                   }
                });
 
-            Observable
-              .FromEventPattern<FileSystemEventArgs>(fileWatcher, "Created")
-              .Synchronize()
-              .Select(e => e.EventArgs)
-              .Buffer(TimeSpan.FromMilliseconds(2000))
-              .Subscribe(async file =>
-              {
-                  foreach (var filePath in file)
-                  {
-
-                      var newFile = new FileInfo(filePath.FullPath);
-                      this.Files.Add(newFile);
-                      var complete = false;
-                      while (!complete)
-                      {
-                          try
-                          {
-                              await TryCopyFile(newFile);
-                              complete = true;
-                          }
-                          catch { }
-                      }
-                  }
-              });
+            //Observable
+            //  .FromEventPattern<FileSystemEventArgs>(fileWatcher, "Created")
+            //  .Synchronize()
+            //  .Select(e => e.EventArgs)
+            //  .Buffer(TimeSpan.FromMilliseconds(2000))
+            //  .Subscribe(async files =>
+            //  {
+            //      foreach (var file in files)
+            //      {
+            //          var newFile = new FileInfo(file.FullPath);
+            //          this.Files.Add(newFile);
+            //          if (!newFile.Name.StartsWith("~"))
+            //          {
+            //              //await isFileAvailableAsync(newFile);
+            //              await CopyFileAsync(newFile);
+            //          }
+            //      }
+            //  });
 
             Observable
               .FromEventPattern<RenamedEventArgs>(fileWatcher, "Renamed")
               .Synchronize()
               .Select(e => e.EventArgs)
-              .Subscribe(async filePath =>
+              .Buffer(TimeSpan.FromMilliseconds(2000))
+              .Subscribe(async files =>
               {
-                  var newFile = new FileInfo(filePath.FullPath);
-                  var updatedFile = (from file in Files
-                                     where file.Name.Equals(filePath.OldName)
-                                     select file).FirstOrDefault();
-                  this.Files.Remove(updatedFile);
-                  this.Files.Add(newFile);
-                  System.GC.Collect();
-                  System.GC.WaitForPendingFinalizers();
-                  File.Delete(Path.Combine(targetDirectory.FullName, updatedFile.Name));
-                  await TryCopyFile(newFile);
+                  foreach (var file in files)
+                  {
+                      if (!file.Name.StartsWith("~"))
+                      {
+                          var updatedFile = (from foundFile in TargetFiles
+                                             where foundFile.Name.Equals(file.OldName)
+                                             select foundFile).FirstOrDefault();
+                          var newFile = new FileInfo(file.FullPath);
+                          if (updatedFile != null)
+                          {
+                              DeleteFile(updatedFile, targetDirectory.FullName);
+                              this.TargetFiles.Remove(updatedFile);
+                          }
+                          await CopyFileAsync(newFile, targetDirectory.FullName);
+                          this.TargetFiles.Add(newFile);
+                      }
+                  }
               });
-
-
-            //fileWatcher.Changed += (s, e) =>
-            //{
-            //    var newFile = new FileInfo(e.FullPath);
-            //    if (!newFile.Name.StartsWith("~"))
-            //    {
-            //        var changedFile = (from file in Files
-            //                           where file.Name.Equals(newFile.Name)
-            //                           select file).FirstOrDefault();
-            //        if (!newFile.Equals(changedFile))
-            //        {
-            //            Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
-            //            this.Files.Remove(changedFile);
-            //            this.Files.Add(newFile);
-            //            File.Delete(Path.Combine(targetDirectory.FullName, changedFile.Name));
-            //            TryCopyFile(newFile).Wait();
-            //        }
-            //    }
-            //};
-            //fileWatcher.Deleted += (s, e) =>
-            //{
-            //    Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
-            //    Events.Insert(0, sourceDirectory.Root.ToString());
-            //    var deletedFile = (from file in Files
-            //                       where file.Name.Equals(e.Name)
-            //                       select file).FirstOrDefault();
-            //    this.Files.Remove(deletedFile);
-            //    while (targetDirectory.GetFiles(deletedFile.Name).IsReadOnly) { }
-            //    File.Delete(Path.Combine(targetDirectory.FullName, deletedFile.Name));
-            //};
-            //fileWatcher.Created += (s, e) =>
-            //{
-            //    this.Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
-            //    var newFile = new FileInfo(e.FullPath);
-            //    this.Files.Add(newFile);
-            //    var complete = false;
-            //    while (!complete)
-            //    {
-            //        try
-            //        {
-            //            TryCopyFile(newFile).Wait();
-            //            complete = true;
-            //        }
-            //        catch { }
-            //    }
-            //};
-            //fileWatcher.Renamed += async (s, e) =>
-            //{
-            //    var newFile = new FileInfo(e.FullPath);
-            //    this.Events.Insert(0, e.OldFullPath); Events.Insert(0, e.FullPath); Events.Insert(0, e.ChangeType.ToString());
-            //    var updatedFile = (from file in Files
-            //                       where file.Name.Equals(e.OldName)
-            //                       select file).FirstOrDefault();
-            //    this.Files.Remove(updatedFile);
-            //    this.Files.Add(newFile);
-            //    System.GC.Collect();
-            //    System.GC.WaitForPendingFinalizers();
-            //    File.Delete(Path.Combine(targetDirectory.FullName, updatedFile.Name));
-            //    await TryCopyFile(newFile);
-            //};
 
             fileWatcher.EnableRaisingEvents = true;
         }
 
-        public void OpenFile(string filePath)
+        public void OpenFile(FileInfo file)
         {
-            System.Diagnostics.Process.Start(filePath);
+            System.Diagnostics.Process.Start(file.FullName);
         }
 
         private void LoadAllFiles()
         {
-            this.Files.Clear();
-            var targetFiles = targetDirectory.GetFiles();
-            foreach (var file in this.sourceDirectory.EnumerateFiles())
+            this.TargetFiles.Clear();
+            foreach (var file in this.targetDirectory.EnumerateFiles())
             {
-                this.Files.Add(file);
-                if(!targetFiles.Contains(file))
-                {
-                    var complete = false;
-                    while (!complete)
-                    {
-                        try
-                        {
-                            TryCopyFile(file).Wait();
-                            complete = true;
-                        }
-                        catch (Exception e)
-                        { }
-                    }
-                }
+                this.TargetFiles.Add(file);
             }
         }
 
-        async private Task<FileInfo> TryCopyFile(FileInfo newFile)
+        public void DeleteFile(FileInfo deletedFile, string path)
         {
-            return await Task.Factory.StartNew(() =>
-                newFile.CopyTo(Path.Combine(targetDirectory.FullName, newFile.Name), true)
-            );
+            var file = new FileInfo(Path.Combine(path, deletedFile.Name));
+            if (File.Exists(file.FullName))
+            {
+                file.Delete();
+            }
+        }
+
+        async public Task CopyFileAsync(FileInfo file, string targetPath)
+        {
+            try
+            {
+                file.CopyTo(Path.Combine(targetPath, file.Name), true);
+            }
+            catch (IOException)
+            {
+                await CopyFileAsync(file, targetPath);
+            }
+        }
+
+        public FileInfo[] Files(string path)
+        {
+            return new DirectoryInfo(path).GetFiles();
         }
     }
 }
