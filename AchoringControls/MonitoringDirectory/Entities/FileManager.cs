@@ -9,6 +9,7 @@ using System.Security.Permissions;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using MonitoringDirectory.Interfaces;
 
 namespace MonitoringDirectory.Entities
 {
@@ -174,9 +175,29 @@ namespace MonitoringDirectory.Entities
             }
         }
 
-        public FileInfo[] Files(string path)
+        File[] IFileProvider.Files(string path)
         {
-            return new DirectoryInfo(path).GetFiles();
+            throw new NotImplementedException();
+        }
+
+        public void DeleteFile(File file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenFile(File file)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CopyFileTo(File file, string destination)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public File CreateFile(string name, int size, string location)
+        {
+            throw new NotImplementedException();
         }
     }
 }

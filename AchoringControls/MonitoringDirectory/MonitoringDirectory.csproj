@@ -55,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\FileManager.cs" />
     <Compile Include="Interfaces\IFileProvider.cs" />
     <Compile Include="Program.cs" />
