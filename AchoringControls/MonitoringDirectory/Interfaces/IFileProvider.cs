@@ -9,14 +9,13 @@ namespace MonitoringDirectory.Interfaces
 {
     interface IFileProvider
     {
-        Entities.File[] Files(string path);
+        ICollection<Entities.File> Files { get; }
 
         void DeleteFile(Entities.File file);
 
         void OpenFile(Entities.File file);
 
-        void CopyFileTo(Entities.File file, string destination);
+        Task CopyFileTo(Entities.File file, string destination);
 
-        Entities.File CreateFile(string name, int size, string location);
     }
 }

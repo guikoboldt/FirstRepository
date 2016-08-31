@@ -8,16 +8,21 @@ namespace MonitoringDirectory.Entities
 {
     public class File
     {
-        public string name { get; set; }
-        public int size { get; set; }
-        public DateTime lastChange { get; set; }
-        public string location { get; set; }
+        public string Name { get; set; }
+        public long Size { get; set; }
+        public DateTime LastChange { get; set; }
+        public string Location { get; set; }
 
-        public File(string name, int size, string location)
+        public File(string name, string location, long size = 0)
         {
-            this.name = name;
-            this.size = size;
-            this.location = location;
+            this.Name = name;
+            this.Location = location;
+            this.Size = size;
+        }
+
+        public string FullPath()
+        {
+            return string.Concat(this.Location, this.Name);
         }
     }
 }
