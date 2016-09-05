@@ -10,7 +10,7 @@ namespace MonitoringDirectory
     {
         static void Main(string[] args)
         {
-            var dm = new Entities.FileManager(@"C:\Download", @"C:\Download_copy\Test");
+            var dm = new Entities.SimpleFileManager(@"C:\Download", @"C:\Download_copy\Test");
             //var dm_final = new Entities.FileManager(@"C:\Download_copy", @"C:\Download_copy2");
 
             Console.Read();

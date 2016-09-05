@@ -11,31 +11,24 @@ using System.Text;
 using System.Threading.Tasks;
 using MonitoringDirectory.Interfaces;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
 
 namespace MonitoringDirectory.Entities
 {
-    public class FileManager : Interfaces.IFileProvider
+    public abstract class FileManager : Interfaces.IFileProvider
     {
         public DirectoryInfo SourceDirectory { get; set; }
 
-        public DirectoryInfo TargetDirectory { get; set; }
-
         private FileSystemWatcher fileWatcher = new FileSystemWatcher();
 
-        public FileManager(string sourcePath, string targetPath)
+        public FileManager(string sourcePath)
         {
             this.SourceDirectory = new DirectoryInfo(sourcePath);
             if (!SourceDirectory.Exists)
             {
                 SourceDirectory.Create();
             }
-            this.TargetDirectory = new DirectoryInfo(targetPath);
-            if (!TargetDirectory.Exists)
-            {
-                TargetDirectory.Create();
-            }
 
-            this.Files = GetFiles(TargetDirectory.FullName);
             ConfigureFileWatcher();
         }
 
@@ -51,23 +44,13 @@ namespace MonitoringDirectory.Entities
                 .Synchronize()
                 .Select(e => e.EventArgs)
                 .Buffer(TimeSpan.FromMilliseconds(2000))
-                .Subscribe(async files =>
+                .Subscribe(files =>
                 {
                     foreach (var file in files)
                     {
                         if (!file.Name.StartsWith("~"))
                         {
-                            var changedTargetFile = this.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
-                            if (changedTargetFile != null)
-                            {
-                                DeleteFile(changedTargetFile);
-                                Files.Remove(changedTargetFile);
-                            }
-
-                            var newFile = new File(file.Name, Regex.Replace(file.FullPath, file.Name, ""));
-                            await CopyFileTo(newFile, TargetDirectory.FullName);
-                            newFile.Location = TargetDirectory.FullName;
-                            Files.Add(newFile);
+                            OnChanged(new File(file.Name, file.FullPath));
                         }
                     }
                 });
@@ -81,12 +64,7 @@ namespace MonitoringDirectory.Entities
                {
                    foreach (var file in files)
                    {
-                       var deletedFile = Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
-                       if (deletedFile != null)
-                       {
-                           DeleteFile(deletedFile);
-                           this.Files.Remove(deletedFile);
-                       }
+                       OnDeleted(new File(file.Name, file.FullPath));
                    }
                });
 
@@ -95,22 +73,13 @@ namespace MonitoringDirectory.Entities
               .Synchronize()
               .Select(e => e.EventArgs)
               .Buffer(TimeSpan.FromMilliseconds(2000))
-              .Subscribe(async files =>
+              .Subscribe(files =>
               {
                   foreach (var file in files)
                   {
                       if (!file.Name.StartsWith("~"))
                       {
-                          var updatedFile = this.Files.FirstOrDefault(_ => _.Name.Equals(file.OldName));
-                          if (updatedFile != null)
-                          {
-                              DeleteFile(updatedFile);
-                              this.Files.Remove(updatedFile);
-                          }
-                          var newFile = new File(file.Name, Regex.Replace(file.FullPath, file.Name, ""));
-                          await CopyFileTo(newFile, TargetDirectory.FullName);
-                          newFile.Location = TargetDirectory.FullName;
-                          this.Files.Add(newFile);
+                          OnRenamed(new File(file.OldName, file.OldFullPath), new File(file.Name, file.FullPath));
                       }
                   }
               });
@@ -118,7 +87,7 @@ namespace MonitoringDirectory.Entities
             fileWatcher.EnableRaisingEvents = true;
         }
 
-        public virtual ICollection<Entities.File> Files { get; private set; }
+        public virtual ICollection<Entities.File> Files { get; set; }
 
         public virtual IList<File> GetFiles(string path)
         {
@@ -139,7 +108,7 @@ namespace MonitoringDirectory.Entities
 
         public virtual void OpenFile(File file)
         {
-            throw new NotImplementedException();
+            Process.Start(file.FullPath());
         }
 
         async virtual public Task CopyFileTo(File file, string destination)
@@ -147,5 +116,8 @@ namespace MonitoringDirectory.Entities
             await Task.Run(() => System.IO.File.Copy(file.FullPath(), Path.Combine(destination, file.Name), true));
         }
 
+        public abstract void OnDeleted(File file);
+        public abstract void OnChanged(File file);
+        public abstract void OnRenamed(File oldFile, File file);
     }
 }
