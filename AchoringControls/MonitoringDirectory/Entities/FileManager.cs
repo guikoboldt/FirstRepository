@@ -23,6 +23,8 @@ namespace MonitoringDirectory.Entities
 
         public FileManager(string sourcePath)
         {
+            if (!sourcePath.EndsWith(@"\"))
+                sourcePath = sourcePath + @"\";
             this.SourceDirectory = new DirectoryInfo(sourcePath);
             if (!SourceDirectory.Exists)
             {

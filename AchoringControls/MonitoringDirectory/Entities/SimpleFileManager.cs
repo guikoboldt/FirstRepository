@@ -15,6 +15,8 @@ namespace MonitoringDirectory.Entities
         public SimpleFileManager (string sourcePath, string targetPath)
             : base(sourcePath)
         {
+            if (!targetPath.EndsWith(@"\"))
+                targetPath = targetPath + @"\";
             this.TargetDirectory = new DirectoryInfo(targetPath);
             if (!TargetDirectory.Exists)
             {
