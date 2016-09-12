@@ -15,7 +15,7 @@ namespace MonitoringDirectory.Interfaces
 
         void OpenFile(Entities.File file);
 
-        Task CopyFileTo(Entities.File file, string destination);
+        void CopyFileTo(Entities.File file, string destination);
 
     }
 }

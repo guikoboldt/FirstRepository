@@ -37,22 +37,21 @@ namespace MonitoringDirectory.Entities
             }
         }
 
-        async public override void OnChanged(File file)
+        public override void OnChanged(File file)
         {
-            var changedTargetFile = this.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
-            if (changedTargetFile != null)
-            {
-                base.DeleteFile(changedTargetFile);
-                this.Files.Remove(changedTargetFile);
-            }
 
-            var newFile = new File(file.Name, Regex.Replace(file.Location, file.Name, ""));
-            await base.CopyFileTo(newFile, TargetDirectory.FullName);
-            newFile.Location = TargetDirectory.FullName;
-            Files.Add(newFile);
+                var changedTargetFile = this.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+                if (changedTargetFile != null)
+                {
+                    base.DeleteFile(changedTargetFile);
+                    this.Files.Remove(changedTargetFile);
+                }
+
+                base.CopyFileTo(file, TargetDirectory.FullName);
+                Files.Add(new File(file.Name, TargetDirectory.FullName));
         }
 
-        async public override void OnRenamed(File oldFile, File file)
+        public override void OnRenamed(File oldFile, File file)
         {
             var updatedFile = this.Files.FirstOrDefault(_ => _.Name.Equals(oldFile.Name));
             if (updatedFile != null)
@@ -60,10 +59,8 @@ namespace MonitoringDirectory.Entities
                 base.DeleteFile(updatedFile);
                 this.Files.Remove(updatedFile);
             }
-            var newFile = new File(file.Name, Regex.Replace(file.Location, file.Name, ""));
-            await base.CopyFileTo(newFile, TargetDirectory.FullName);
-            newFile.Location = TargetDirectory.FullName;
-            this.Files.Add(newFile);
+            base.CopyFileTo(file, TargetDirectory.FullName);
+            this.Files.Add(new File(file.Name, TargetDirectory.FullName));
         }
     }
 }

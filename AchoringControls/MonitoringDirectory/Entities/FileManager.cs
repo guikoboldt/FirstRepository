@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using MonitoringDirectory.Interfaces;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using Polly;
 
 namespace MonitoringDirectory.Entities
 {
@@ -20,6 +21,8 @@ namespace MonitoringDirectory.Entities
         public DirectoryInfo SourceDirectory { get; set; }
 
         private FileSystemWatcher fileWatcher = new FileSystemWatcher();
+
+        private Policy filePolicys { get; set; }
 
         public FileManager(string sourcePath)
         {
@@ -31,6 +34,9 @@ namespace MonitoringDirectory.Entities
                 SourceDirectory.Create();
             }
 
+            filePolicys = Policy
+              .Handle<Exception>()
+              .WaitAndRetry(5, retryAttempt => (TimeSpan.FromSeconds(15 * retryAttempt)));
             ConfigureFileWatcher();
         }
 
@@ -52,7 +58,14 @@ namespace MonitoringDirectory.Entities
                     {
                         if (!file.Name.StartsWith("~"))
                         {
-                            OnChanged(new File(file.Name, file.FullPath));
+                            var name = file.Name;
+                            var location = file.FullPath;
+                            foreach (var invalidString in new string[] { @"[(]\d+[)].\w+", @"[.]\w+" })
+                            {
+                                name = Regex.Replace(name, invalidString, "");
+                                location = Regex.Replace(location, name + invalidString, "");
+                            }
+                            OnChanged(new File(file.Name, location));
                         }
                     }
                 });
@@ -66,7 +79,14 @@ namespace MonitoringDirectory.Entities
                {
                    foreach (var file in files)
                    {
-                       OnDeleted(new File(file.Name, file.FullPath));
+                       var name = file.Name;
+                       var location = file.FullPath;
+                       foreach (var invalidString in new string[] { @"[(]\d+[)].\w+", @"[.]\w+" })
+                       {
+                           name = Regex.Replace(name, invalidString, "");
+                           location = Regex.Replace(location, name + invalidString, "");
+                       }
+                       OnDeleted(new File(file.Name, location));
                    }
                });
 
@@ -81,7 +101,18 @@ namespace MonitoringDirectory.Entities
                   {
                       if (!file.Name.StartsWith("~"))
                       {
-                          OnRenamed(new File(file.OldName, file.OldFullPath), new File(file.Name, file.FullPath));
+                          var oldName = file.OldName;
+                          var oldLocation = file.OldFullPath;
+                          var name = file.Name;
+                          var location = file.FullPath;
+                          foreach (var invalidString in new string[] { @"[(]\d+[)].\w+", @"[.]\w+" })
+                          {
+                              name = Regex.Replace(name, invalidString, "");
+                              location = Regex.Replace(location, name + invalidString, "");
+                              oldName = Regex.Replace(oldName, invalidString, "");
+                              oldLocation = Regex.Replace(oldLocation, invalidString, "");
+                          }
+                          OnRenamed(new File(file.OldName, oldLocation), new File(file.Name, location));
                       }
                   }
               });
@@ -105,17 +136,26 @@ namespace MonitoringDirectory.Entities
 
         public virtual void DeleteFile(File file)
         {
-            System.IO.File.Delete(file.FullPath());
+            filePolicys.Execute(() =>
+            {
+                System.IO.File.Delete(file.FullPath());
+            });
         }
 
         public virtual void OpenFile(File file)
         {
-            Process.Start(file.FullPath());
+            filePolicys.Execute(() =>
+            {
+                Process.Start(file.FullPath());
+            });
         }
 
-        async virtual public Task CopyFileTo(File file, string destination)
+        virtual public void CopyFileTo(File file, string destination)
         {
-            await Task.Run(() => System.IO.File.Copy(file.FullPath(), Path.Combine(destination, file.Name), true));
+              filePolicys.Execute(() => 
+                {
+                    System.IO.File.Copy(file.FullPath() ,Path.Combine(destination, file.Name), true);
+                });
         }
 
         public abstract void OnDeleted(File file);
