@@ -12,83 +12,55 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using MonitoringDirectory.Entities;
 
 namespace FileManagerApp.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged, IBaseViewModel
-    {
+    public class MainViewModel : MonitoringDirectory.Entities.FileManager, INotifyPropertyChanged
+    {   
+        public override ICollection<MonitoringDirectory.Entities.File> Files { get; set; }
         public MainViewModel()
+            : base(@"C:\Download\")
         {
-            dM = new DownloadManager(Globals.GlobalInformations.defultDownloadPath);
-            LoadFiles();
+            Files = base.GetFiles(@"C:\Download\");
         }
-
-        private ObservableCollection<FileInfo> _files;
-        public ObservableCollection<FileInfo> Files
-        {
-            get { return _files; }
-            set { _files = value; OnPropertyChanged("Files"); }
-        }
-
-        private ObservableCollection<string> _events;
-        public ObservableCollection<string> Events
-        {
-            get { return _events; }
-            set { _events = value; OnPropertyChanged("Events"); }
-        }
-
-        private DownloadManager dM;
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public string UpdateFiles
-        { get { return "Update Files"; } }
-        public string DeleteFile
+        public string OpenFiles
+        { get { return "Open File"; } }
+        public string DeleteFiles
         { get { return "Delete"; } }
 
-        public string Name
-        { get { return "Main Window"; } }
-
         //public IList fileList{ get; private set; }
-        private void LookForFiles(object obj)
-        {
-            LoadFiles();
-        }
-
-        private void LoadFiles()
-        {
-            this.Files = dM.Files;
-            this.Events = dM.Events;
-        }
 
         private void OpenCommand(object obj)
         {
             try
             {
-                if (obj is FileInfo)
+                if (obj is MonitoringDirectory.Entities.File)
                 {
-                    dM.OpenFile((obj as FileInfo).FullName);
+                    base.OpenFile(obj as MonitoringDirectory.Entities.File);
                 }
             }
-            catch
+            catch (IOException)
             {
-                MessageBox.Show("An error occured when trying to delete this file");
+                MessageBox.Show("An error occured when trying to open this file");
             }
+            catch (Exception) { }
         }
 
         private void DeleteCommand(object obj)
         {
             try
             {
-                if (obj is FileInfo)
+                if (obj is MonitoringDirectory.Entities.File)
                 {
-                    File.Delete((obj as FileInfo).FullName);
-                    this.Files = dM.Files;
-                    this.Events = dM.Events;
+                    base.DeleteFile(obj as MonitoringDirectory.Entities.File);
                 }
             }
             catch
@@ -97,8 +69,34 @@ namespace FileManagerApp.ViewModels
             }
         }
 
-        public ICommand UpdateFilesCommand
-        { get { return new RelayCommand(LookForFiles); } }
+        public override void OnDeleted(MonitoringDirectory.Entities.File file)
+        {
+            Files.Remove(file);
+        }
+
+        public override void OnChanged(MonitoringDirectory.Entities.File file)
+        {
+            var changed = Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+            if (changed != null)
+            {
+                Files.Remove(changed);
+                base.DeleteFile(changed);
+            }
+            Files.Add(file);
+            base.CopyFileTo(file, @"C:\Download_copy\");
+        }
+
+        public override void OnRenamed(MonitoringDirectory.Entities.File oldFile, MonitoringDirectory.Entities.File file)
+        {
+            var renamed = Files.FirstOrDefault(_ => _.Name.Equals(oldFile.Name));
+            if (renamed != null)
+            {
+                Files.Remove(renamed);
+                base.DeleteFile(renamed);
+            }
+            Files.Add(file);
+            base.CopyFileTo(file, @"C:\Download_copy\");
+        }
 
         public ICommand OpenFileCommand
         { get { return new RelayCommand(OpenCommand); } }

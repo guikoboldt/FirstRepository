@@ -38,9 +38,9 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn IsReadOnly="True" Header="File Name" Binding="{Binding Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Length}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastAccessTime}" />
-                <DataGridTemplateColumn Header="{Binding OpanFile}">
+                <DataGridTextColumn IsReadOnly="True" Header="Size" Binding="{Binding Size}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastChange}" />
+                <DataGridTemplateColumn Header="{Binding OpenFile}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Open" 
@@ -49,7 +49,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{Binding DeleteFile}">
+                <DataGridTemplateColumn Header="{Binding DeleteFiles}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Delete" 

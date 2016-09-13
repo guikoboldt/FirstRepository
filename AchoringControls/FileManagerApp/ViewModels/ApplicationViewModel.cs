@@ -17,7 +17,7 @@ namespace FileManagerApp.ViewModels
         public ApplicationViewModel()
         {
             // Add available pages
-            PageViewModels.Add(new MainViewModel());
+            //PageViewModels.Add(new MainViewModel());
             //PageViewModels.Add(new ProductsViewModel());
 
             // Set starting page

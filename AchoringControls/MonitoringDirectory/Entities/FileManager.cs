@@ -35,11 +35,12 @@ namespace MonitoringDirectory.Entities
             }
 
             filePolicys = Policy
-              .Handle<Exception>()
+              .Handle<IOException>()
               .WaitAndRetry(5, retryAttempt => (TimeSpan.FromSeconds(15 * retryAttempt)));
             ConfigureFileWatcher();
         }
 
+        
         private void ConfigureFileWatcher()
         {
             fileWatcher.Path = this.SourceDirectory.FullName;
@@ -122,12 +123,12 @@ namespace MonitoringDirectory.Entities
 
         public virtual ICollection<Entities.File> Files { get; set; }
 
-        public virtual IList<File> GetFiles(string path)
+        public virtual ObservableCollection<File> GetFiles(string path)
         {
-            IList<File> fileList = new List<File>();
+            ObservableCollection<File> fileList = new ObservableCollection<File>();
             foreach (var file in new DirectoryInfo(path).EnumerateFiles())
             {
-                var newFile = new File(file.Name, file.DirectoryName, file.Length);
+                var newFile = new File(file.Name, SourceDirectory.FullName, file.Length);
                 newFile.LastChange = file.LastWriteTime;
                 fileList.Add(newFile);
             }
