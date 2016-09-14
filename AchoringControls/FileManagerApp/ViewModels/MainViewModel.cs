@@ -17,12 +17,12 @@ using MonitoringDirectory.Entities;
 namespace FileManagerApp.ViewModels
 {
     public class MainViewModel : MonitoringDirectory.Entities.FileManager, INotifyPropertyChanged
-    {   
-        public override ICollection<MonitoringDirectory.Entities.File> Files { get; set; }
+    {
+        //public ObservableCollection<MonitoringDirectory.Entities.File> _Files { get; set; } = new ObservableCollection<MonitoringDirectory.Entities.File> ();
         public MainViewModel()
             : base(@"C:\Download\")
         {
-            Files = base.GetFiles(@"C:\Download\");
+            base.Files = base.GetFiles(@"C:\Download\");
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
@@ -71,30 +71,46 @@ namespace FileManagerApp.ViewModels
 
         public override void OnDeleted(MonitoringDirectory.Entities.File file)
         {
-            Files.Remove(file);
+            var deleted = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+            if (deleted != null)
+            {
+                App.Current.Dispatcher.Invoke(() => 
+                base.Files.Remove(deleted));
+            }
         }
 
         public override void OnChanged(MonitoringDirectory.Entities.File file)
         {
-            var changed = Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+            var changed = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
             if (changed != null)
             {
-                Files.Remove(changed);
+                App.Current.Dispatcher.Invoke(() =>
+                base.Files.Remove(changed));
                 base.DeleteFile(changed);
             }
-            Files.Add(file);
+            file.LastChange = DateTime.Now;
+            file.Size = changed.Size;
+            App.Current.Dispatcher.Invoke(() =>
+               base.Files.Add(file));
             base.CopyFileTo(file, @"C:\Download_copy\");
         }
 
         public override void OnRenamed(MonitoringDirectory.Entities.File oldFile, MonitoringDirectory.Entities.File file)
         {
-            var renamed = Files.FirstOrDefault(_ => _.Name.Equals(oldFile.Name));
+            var fileToSearch = oldFile.Name;
+            if (oldFile.Name.StartsWith("~"))
+                fileToSearch = file.Name;
+            var renamed = base.Files.FirstOrDefault(_ => _.Name.Equals(fileToSearch));
             if (renamed != null)
             {
-                Files.Remove(renamed);
+                App.Current.Dispatcher.Invoke(() =>
+                base.Files.Remove(renamed));
                 base.DeleteFile(renamed);
             }
-            Files.Add(file);
+            file.LastChange = DateTime.Now;
+            file.Size = renamed.Size;
+            App.Current.Dispatcher.Invoke(() =>
+               base.Files.Add(file));
             base.CopyFileTo(file, @"C:\Download_copy\");
         }
 

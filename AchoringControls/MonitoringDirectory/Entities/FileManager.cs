@@ -22,7 +22,7 @@ namespace MonitoringDirectory.Entities
 
         private FileSystemWatcher fileWatcher = new FileSystemWatcher();
 
-        private Policy filePolicys { get; set; }
+        private Policy policy { get; set; }
 
         public FileManager(string sourcePath)
         {
@@ -34,13 +34,13 @@ namespace MonitoringDirectory.Entities
                 SourceDirectory.Create();
             }
 
-            filePolicys = Policy
-              .Handle<IOException>()
-              .WaitAndRetry(5, retryAttempt => (TimeSpan.FromSeconds(15 * retryAttempt)));
+            policy = Policy
+                .Handle<IOException>()
+                .WaitAndRetry(5, retryAttempt => (TimeSpan.FromSeconds(15 * retryAttempt)));
+
             ConfigureFileWatcher();
         }
 
-        
         private void ConfigureFileWatcher()
         {
             fileWatcher.Path = this.SourceDirectory.FullName;
@@ -137,26 +137,28 @@ namespace MonitoringDirectory.Entities
 
         public virtual void DeleteFile(File file)
         {
-            filePolicys.Execute(() =>
-            {
-                System.IO.File.Delete(file.FullPath());
+             policy.Execute(() =>
+              {
+                Task.Factory.StartNew(() =>
+                System.IO.File.Delete(file.FullPath()));
             });
         }
 
         public virtual void OpenFile(File file)
         {
-            filePolicys.Execute(() =>
-            {
-                Process.Start(file.FullPath());
-            });
-        }
+            policy.Execute(() =>
+                {
+                     Task.Run(() => Process.Start(file.FullPath()));
+                });
+         }
 
         virtual public void CopyFileTo(File file, string destination)
         {
-              filePolicys.Execute(() => 
-                {
-                    System.IO.File.Copy(file.FullPath() ,Path.Combine(destination, file.Name), true);
-                });
+            policy.Execute(() =>
+            {
+                Task.Run(() =>
+                  { System.IO.File.Copy(file.FullPath(), Path.Combine(destination, file.Name), true); });
+            });
         }
 
         public abstract void OnDeleted(File file);
