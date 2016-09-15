@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace MonitoringDirectory.Entities
 {
-    public class SimpleFileManager : FileManager
+    public class WindowsFileManager : FileManager
     {
         public DirectoryInfo TargetDirectory { get; set; }
 
-        public SimpleFileManager (string sourcePath, string targetPath)
+        public WindowsFileManager (string sourcePath, string targetPath)
             : base(sourcePath)
         {
             if (!targetPath.EndsWith(@"\"))

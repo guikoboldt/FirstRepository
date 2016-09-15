@@ -106,9 +106,9 @@ namespace FileManagerApp.ViewModels
                 App.Current.Dispatcher.Invoke(() =>
                 base.Files.Remove(renamed));
                 base.DeleteFile(renamed);
+                file.Size = renamed.Size;
             }
             file.LastChange = DateTime.Now;
-            file.Size = renamed.Size;
             App.Current.Dispatcher.Invoke(() =>
                base.Files.Add(file));
             base.CopyFileTo(file, @"C:\Download_copy\");
