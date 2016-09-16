@@ -23,7 +23,7 @@ namespace MonitoringDirectory.Entities
                 TargetDirectory.Create();
             }
 
-            base.Files = base.GetFiles(TargetDirectory.FullName);
+            base.Files = base.GetFiles(base.SourceDirectory.FullName);
         }
 
 

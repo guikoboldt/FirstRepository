@@ -38,6 +38,7 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn IsReadOnly="True" Header="File Name" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="File Size" Binding="{Binding Size}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Last Modified" Binding="{Binding LastChange}" />
                 <DataGridTemplateColumn Header="{Binding OpenFile}">
                     <DataGridTemplateColumn.CellTemplate>
@@ -53,6 +54,15 @@
                         <DataTemplate>
                             <Button Content="Delete" 
                                     Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid} ,Path=DataContext.DeleteFileCommand}"
+                                    CommandParameter="{Binding}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="{Binding DeleteFiles}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Copy"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid} ,Path=DataContext.CopyFileCommand}"
                                     CommandParameter="{Binding}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

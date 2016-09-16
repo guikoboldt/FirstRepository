@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MonitoringDirectory.Interfaces
 {
-    interface IFileProvider
+    public interface IFileProvider
     {
         ICollection<Entities.File> Files { get; }
 

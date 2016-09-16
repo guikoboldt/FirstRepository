@@ -16,13 +16,18 @@ using MonitoringDirectory.Entities;
 
 namespace FileManagerApp.ViewModels
 {
-    public class MainViewModel : MonitoringDirectory.Entities.FileManager, INotifyPropertyChanged
+    public class MainViewModel :INotifyPropertyChanged
     {
-        //public ObservableCollection<MonitoringDirectory.Entities.File> _Files { get; set; } = new ObservableCollection<MonitoringDirectory.Entities.File> ();
+        public MonitoringDirectory.Interfaces.IFileProvider ftp { get; set; }
+        public ObservableCollection<MonitoringDirectory.Entities.File> Files { get; set; } = new ObservableCollection<MonitoringDirectory.Entities.File> ();
         public MainViewModel()
-            : base(@"C:\Download\")
         {
-            base.Files = base.GetFiles(@"C:\Download\");
+            //ftp = new FTPFileManager(@"FTP://179.184.113.34/test", "opp", "sindus1*");
+            ftp = new WindowsFileManager(@"C:\Download\", @"C:\Download_Copy");
+            foreach (var file in ftp.Files)
+            {
+                this.Files.Add(file);
+            }
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
@@ -40,11 +45,12 @@ namespace FileManagerApp.ViewModels
 
         private void OpenCommand(object obj)
         {
+            var opendFile = obj as MonitoringDirectory.Entities.File;
             try
             {
-                if (obj is MonitoringDirectory.Entities.File)
+                if (opendFile is MonitoringDirectory.Entities.File)
                 {
-                    base.OpenFile(obj as MonitoringDirectory.Entities.File);
+                    ftp.OpenFile(opendFile);
                 }
             }
             catch (IOException)
@@ -56,11 +62,13 @@ namespace FileManagerApp.ViewModels
 
         private void DeleteCommand(object obj)
         {
+            var deletedFile = obj as MonitoringDirectory.Entities.File;
             try
             {
-                if (obj is MonitoringDirectory.Entities.File)
+                if (deletedFile is MonitoringDirectory.Entities.File)
                 {
-                    base.DeleteFile(obj as MonitoringDirectory.Entities.File);
+                    ftp.DeleteFile(deletedFile);
+                    this.Files.Remove(deletedFile);
                 }
             }
             catch
@@ -69,55 +77,74 @@ namespace FileManagerApp.ViewModels
             }
         }
 
-        public override void OnDeleted(MonitoringDirectory.Entities.File file)
+        private void CopyCommand (object obj)
         {
-            var deleted = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
-            if (deleted != null)
+            var copiedFile = obj as MonitoringDirectory.Entities.File;
+            try
             {
-                App.Current.Dispatcher.Invoke(() => 
-                base.Files.Remove(deleted));
+                if (copiedFile is MonitoringDirectory.Entities.File)
+                {
+                    ftp.CopyFileTo(copiedFile, @"C:\Download_copy\");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("An error occured when trying to copy this file");
             }
         }
 
-        public override void OnChanged(MonitoringDirectory.Entities.File file)
-        {
-            var changed = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
-            if (changed != null)
-            {
-                App.Current.Dispatcher.Invoke(() =>
-                base.Files.Remove(changed));
-                base.DeleteFile(changed);
-            }
-            file.LastChange = DateTime.Now;
-            file.Size = changed.Size;
-            App.Current.Dispatcher.Invoke(() =>
-               base.Files.Add(file));
-            base.CopyFileTo(file, @"C:\Download_copy\");
-        }
+        //public override void OnDeleted(MonitoringDirectory.Entities.File file)
+        //{
+        //    var deleted = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+        //    if (deleted != null)
+        //    {
+        //        App.Current.Dispatcher.Invoke(() => 
+        //        base.Files.Remove(deleted));
+        //    }
+        //}
 
-        public override void OnRenamed(MonitoringDirectory.Entities.File oldFile, MonitoringDirectory.Entities.File file)
-        {
-            var fileToSearch = oldFile.Name;
-            if (oldFile.Name.StartsWith("~"))
-                fileToSearch = file.Name;
-            var renamed = base.Files.FirstOrDefault(_ => _.Name.Equals(fileToSearch));
-            if (renamed != null)
-            {
-                App.Current.Dispatcher.Invoke(() =>
-                base.Files.Remove(renamed));
-                base.DeleteFile(renamed);
-                file.Size = renamed.Size;
-            }
-            file.LastChange = DateTime.Now;
-            App.Current.Dispatcher.Invoke(() =>
-               base.Files.Add(file));
-            base.CopyFileTo(file, @"C:\Download_copy\");
-        }
+        //public override void OnChanged(MonitoringDirectory.Entities.File file)
+        //{
+        //    var changed = base.Files.FirstOrDefault(_ => _.Name.Equals(file.Name));
+        //    if (changed != null)
+        //    {
+        //        App.Current.Dispatcher.Invoke(() =>
+        //        base.Files.Remove(changed));
+        //        base.DeleteFile(changed);
+        //    }
+        //    file.LastChange = DateTime.Now;
+        //    file.Size = changed.Size;
+        //    App.Current.Dispatcher.Invoke(() =>
+        //       base.Files.Add(file));
+        //    base.CopyFileTo(file, @"C:\Download_copy\");
+        //}
+
+        //public override void OnRenamed(MonitoringDirectory.Entities.File oldFile, MonitoringDirectory.Entities.File file)
+        //{
+        //    var fileToSearch = oldFile.Name;
+        //    if (oldFile.Name.StartsWith("~"))
+        //        fileToSearch = file.Name;
+        //    var renamed = base.Files.FirstOrDefault(_ => _.Name.Equals(fileToSearch));
+        //    if (renamed != null)
+        //    {
+        //        App.Current.Dispatcher.Invoke(() =>
+        //        base.Files.Remove(renamed));
+        //        base.DeleteFile(renamed);
+        //        file.Size = renamed.Size;
+        //    }
+        //    file.LastChange = DateTime.Now;
+        //    App.Current.Dispatcher.Invoke(() =>
+        //       base.Files.Add(file));
+        //    base.CopyFileTo(file, @"C:\Download_copy\");
+        //}
 
         public ICommand OpenFileCommand
         { get { return new RelayCommand(OpenCommand); } }
 
         public ICommand DeleteFileCommand
         { get { return new RelayCommand(DeleteCommand); } }
+
+        public ICommand CopyFileCommand
+        { get { return new RelayCommand(CopyCommand); } }
     }
 }
