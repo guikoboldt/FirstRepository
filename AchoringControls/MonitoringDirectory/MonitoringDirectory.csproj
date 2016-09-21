@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Entities\File.cs" />
     <Compile Include="Entities\FileManager.cs" />
+    <Compile Include="Entities\FileManagerFactory.cs" />
     <Compile Include="Entities\FTPFileManager.cs" />
     <Compile Include="Entities\WindowsFileManager.cs" />
     <Compile Include="Interfaces\IFileProvider.cs" />

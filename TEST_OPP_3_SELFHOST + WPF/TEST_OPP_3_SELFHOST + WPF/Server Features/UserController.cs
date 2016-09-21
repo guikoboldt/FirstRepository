@@ -11,10 +11,13 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
 {
    public class UserController : ApiController
     {
-        [HttpGet]
         public HttpResponseMessage Get()
         {
-            return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent("Server is on", Encoding.Default), };
+            return new HttpResponseMessage
+            {
+                StatusCode = System.Net.HttpStatusCode.OK,
+                Content = new StringContent(string.Format("ok: {0} server is running", DateTime.Now)),
+            };
         }
 
         [HttpPost]
@@ -23,11 +26,13 @@ namespace TEST_OPP_3_SELFHOST___WPF.Server_Features
             var checkedUser = CheckUser(user);
             if (checkedUser == null)
             {
-                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.NotFound, Content = new StringContent("Invalid User") };
+                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.NotFound,
+                                                    Content = new StringContent("Invalid User") };
             }
             else
             {
-                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK, Content = new StringContent(checkedUser.username) };
+                return new HttpResponseMessage { StatusCode = System.Net.HttpStatusCode.OK,
+                                                    Content = new StringContent(checkedUser.username) };
             }
         }
 
