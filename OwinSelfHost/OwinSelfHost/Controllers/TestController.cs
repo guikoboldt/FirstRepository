@@ -26,5 +26,11 @@ namespace OwinSelfHost.Controllers
                 Content = new StringContent(string.Format("ok: {0} version: {1}", DateTime.Now, version)),
             };
         }
+
+        public HttpResponseMessage Post([FromBody] object messageFromNode)
+        {
+            LedPanel.Entities.LedPanel.SendMessage("localhost", 2034, messageFromNode.ToString(), " ", LedPanel.Entities.LedPanel.MessageType.Normal_1L).Wait();
+            return new HttpResponseMessage { Content = new StringContent("OK") };
+        }
     }
 }

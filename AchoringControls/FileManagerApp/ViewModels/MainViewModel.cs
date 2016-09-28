@@ -18,13 +18,12 @@ namespace FileManagerApp.ViewModels
 {
     public class MainViewModel :INotifyPropertyChanged
     {
-        public MonitoringDirectory.Interfaces.IFileProvider ftp { get; set; }
+        public MonitoringDirectory.Interfaces.IFileProvider Manager { get; set; }
         public ObservableCollection<MonitoringDirectory.Entities.File> Files { get; set; } = new ObservableCollection<MonitoringDirectory.Entities.File> ();
         public MainViewModel()
         {
-            //ftp = new FTPFileManager(@"FTP://179.184.113.34/test", "opp", "sindus1*");
-            ftp = new WindowsFileManager(@"C:\Download\", @"C:\Download_Copy");
-            foreach (var file in ftp.Files)
+            Manager = MonitoringDirectory.Entities.FileManagerFactory.LoadFileManager(@"FTP://179.184.113.34/test", "opp", "sindus1*");
+            foreach (var file in Manager.Files)
             {
                 this.Files.Add(file);
             }
@@ -50,7 +49,7 @@ namespace FileManagerApp.ViewModels
             {
                 if (opendFile is MonitoringDirectory.Entities.File)
                 {
-                    ftp.OpenFile(opendFile);
+                    Manager.OpenFile(opendFile);
                 }
             }
             catch (IOException)
@@ -67,7 +66,7 @@ namespace FileManagerApp.ViewModels
             {
                 if (deletedFile is MonitoringDirectory.Entities.File)
                 {
-                    ftp.DeleteFile(deletedFile);
+                    Manager.DeleteFile(deletedFile);
                     this.Files.Remove(deletedFile);
                 }
             }
@@ -84,7 +83,7 @@ namespace FileManagerApp.ViewModels
             {
                 if (copiedFile is MonitoringDirectory.Entities.File)
                 {
-                    ftp.CopyFileTo(copiedFile, @"C:\Download_copy\");
+                    Manager.CopyFileTo(copiedFile, @"C:\Download_copy\");
                 }
             }
             catch
