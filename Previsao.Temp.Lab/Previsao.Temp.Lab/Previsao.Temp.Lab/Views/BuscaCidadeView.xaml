@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Previsao.Temp.Lab.Views.BuscaCidadeView"
+             xmlns:local="clr-namespace:Previsao.Temp.Lab.Views;assembly=Previsao.Temp.Lab"
+             Padding="0,20,0,0" >
+  <StackLayout VerticalOptions="FillAndExpand"
+               HorizontalOptions="FillAndExpand"
+               Spacing="15">
+    <Entry Text="{Binding Localizacao}" />
+    <Button Text="Buscar" Command="{Binding BuscarCidadesCommand}"/>
+    <ListView x:Name="listCidades"
+              ItemsSource="{Binding Cidades}"
+              SelectedItem="{Binding SelectedCity}">
+      <ListView.Triggers>
+        <EventTrigger Event="ItemTapped">
+          <local:CommandTriggerAction Command="SelectCommand"/>
+        </EventTrigger>
+      </ListView.Triggers>
+    </ListView>
+  </StackLayout>
+
+</ContentPage>
