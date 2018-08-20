@@ -98,8 +98,10 @@ namespace CopyBackupFile.Helpers
 		private static extern  bool CloseHandle(
 			IntPtr handle);
 
-		private const int LOGON32_LOGON_INTERACTIVE = 2;
-		private const int LOGON32_PROVIDER_DEFAULT = 0;
+        //private const int LOGON32_LOGON_INTERACTIVE = 2;
+        //private const int LOGON32_PROVIDER_DEFAULT = 0;
+        private const int LOGON_TYPE_NEW_CREDENTIALS = 9;
+        private int LOGON32_PROVIDER_WINNT50 = 3;
 
 		// ------------------------------------------------------------------
 		#endregion
@@ -129,9 +131,11 @@ namespace CopyBackupFile.Helpers
 					if ( LogonUser(
 						userName, 
 						domain, 
-						password, 
-						LOGON32_LOGON_INTERACTIVE,
-						LOGON32_PROVIDER_DEFAULT, 
+						password,
+                        //LOGON32_LOGON_INTERACTIVE,
+                        //LOGON32_PROVIDER_DEFAULT, 
+                        LOGON_TYPE_NEW_CREDENTIALS,
+                        LOGON32_PROVIDER_WINNT50,
 						ref token ) != 0 )
 					{
 						if ( DuplicateToken( token, 2, ref tokenDuplicate ) != 0 )
