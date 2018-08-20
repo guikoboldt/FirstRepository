@@ -101,12 +101,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LedPanel\LedPanel.csproj">
-      <Project>{ecac69ec-6187-4f2e-a334-fc3c8babcfa0}</Project>
-      <Name>LedPanel</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
