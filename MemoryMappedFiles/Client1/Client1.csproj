@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MemoryMapped\MemoryMapped.csproj" />
+    <ProjectReference Include="..\WatchdogMemoryMapped\WatchdogMemoryMapped.csproj" />
+  </ItemGroup>
+
+</Project>
