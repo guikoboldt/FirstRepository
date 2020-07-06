@@ -1,0 +1,12 @@
+npm install -> instala pacotes no node
+npm install -D -> instala pacotes apenas para o desenvolvimento
+npm @types/pacote -D -> instala as definições de tipos (typescript), caso seja necessario (fazer isso somente em dev)
+npm ts-node-dev -D -> pacote para fazer o node observar mudanças no codigo e aplica-las automaticamente
+
+
+npx ts-node file -> executa pacote instalado (melhor que executar todo o path do bin do pacote
+npx tsc --init: inicializa o typescript, criando o arquivo de configuração do typescript
+
+package.json
+	scripts: pode-se adicionar automatizações para facilitar o dev
+				"dev": "ts-node-dev .\\src\\server.ts" -> torna a execução mais simples do node (passa a ser 'npm run dev' ao inves de 'npx ts-node-dev /src/server.ts')
