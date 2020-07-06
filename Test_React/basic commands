@@ -6,6 +6,7 @@ npm ts-node-dev -D -> pacote para fazer o node observar mudanças no codigo e ap
 
 npx ts-node file -> executa pacote instalado (melhor que executar todo o path do bin do pacote
 npx tsc --init: inicializa o typescript, criando o arquivo de configuração do typescript
+npx create-react-app nome_project --template=typescript -> baixa os pacotes e cria um projeto react com todas as configurações necesarias para rodar, o template traz as configurações necessarias para o typescript
 
 package.json
 	scripts: pode-se adicionar automatizações para facilitar o dev
