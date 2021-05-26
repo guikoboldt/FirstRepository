@@ -11,3 +11,16 @@ npx create-react-app nome_project --template=typescript -> baixa os pacotes e cr
 package.json
 	scripts: pode-se adicionar automatizações para facilitar o dev
 				"dev": "ts-node-dev .\\src\\server.ts" -> torna a execução mais simples do node (passa a ser 'npm run dev' ao inves de 'npx ts-node-dev /src/server.ts')
+
+//GET: Buscar uma ou mais informações do back-end
+//POST: Criar uma nova informação no back-end
+//PUT: Atualizar uma informação existente no back-end
+//DELETE: Remover uma informaçao do back-end
+
+//POST http://localhost:3333/users = criar um usuario
+//GET http://localhost:3333/users = Listar usuarios
+//GET http://localhost:3333/users/5 = Buscar dadods do usuario com ID 5
+
+//Request Param: Parametros que vem na propria rota que identificam um recurso
+//Query Param: Parametros que vem na propria rota geralmente opicionais para filtros, páginação
+//Request Body: Parametros para criação/atualização de informações
